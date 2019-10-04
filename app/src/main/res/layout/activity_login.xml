@@ -67,19 +67,38 @@
         android:layout_marginRight="20dp" />
 
     <TextView
+        android:id="@+id/daftar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/arial"
+        android:fontFamily="@font/arial_narrow_7"
+        android:textStyle="italic"
+        android:textColor="@color/colorBlack"
         android:text="Daftarkan Akunmu Di Sini"
         android:textSize="18sp"
-        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/anak" />
+        app:layout_constraintTop_toBottomOf="@id/anak"
+        android:layout_marginTop="15dp"/>
 
     <ImageView
-        android:layout_width="130dp"
-        android:layout_height="80dp"
+        android:id="@+id/btn_facebook"
+        android:layout_width="185dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_facebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daftar"
+        app:layout_constraintBottom_toTopOf="@+id/btn_google"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btn_google"
+        android:layout_width="185dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_facebook"
+        app:layout_constraintBottom_toTopOf="@+id/footer"
+        android:layout_marginBottom="5dp"/>
 
     <ImageView
         android:id="@+id/footer"

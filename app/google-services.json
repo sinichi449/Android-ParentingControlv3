@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "620226023898",
+    "firebase_url": "https://parenting-control-v3.firebaseio.com",
+    "project_id": "parenting-control-v3",
+    "storage_bucket": "parenting-control-v3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620226023898:android:ccea3fc2a627ddf92070e3",
+        "android_client_info": {
+          "package_name": "com.sinichi.parentingcontrolv3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620226023898-4ljvbu2u4g0o53i8ea3jfetssint45hn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sinichi.parentingcontrolv3",
+            "certificate_hash": "db4aa0551f0d0e1fbf5a35abdb4db5576e0826f6"
+          }
+        },
+        {
+          "client_id": "620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_j3r7muTf18VF4f5ApMHVte5Ig_oTFac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

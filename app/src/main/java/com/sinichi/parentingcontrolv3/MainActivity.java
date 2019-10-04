@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         if (mFirebaseUser == null) {
             // TODO: Activate if login activity exist
-//            startActivity(new Intent(MainActivity.this,
-//                    LoginActivity.class));
+            startActivity(new Intent(MainActivity.this,
+                    LoginActivity.class));
         }
     }
 }

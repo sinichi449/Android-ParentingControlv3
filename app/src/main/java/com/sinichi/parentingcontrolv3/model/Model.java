@@ -1,4 +1,4 @@
-package com.sinichi.parentingcontrolv3;
+package com.sinichi.parentingcontrolv3.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

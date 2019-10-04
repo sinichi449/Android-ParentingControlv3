@@ -1,4 +1,4 @@
-package com.sinichi.parentingcontrolv3;
+package com.sinichi.parentingcontrolv3.util;
 
 import android.app.Activity;
 import android.os.Build;

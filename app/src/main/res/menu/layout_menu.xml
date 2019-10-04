@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_overview"
+        android:title="Overview"
+        android:icon="@drawable/ic_home" />
+    <item
+        android:id="@+id/menu_map"
+        android:title="Location"
+        android:icon="@drawable/ic_map" />
+    <item
+        android:id="@+id/menu_chat"
+        android:title="Chat"
+        android:icon="@drawable/ic_chat"/>
+</menu>

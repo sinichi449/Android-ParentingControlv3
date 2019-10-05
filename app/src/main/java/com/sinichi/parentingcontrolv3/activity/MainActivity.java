@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sinichi.parentingcontrolv3.model.Model;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseRecyclerAdapter<Model, DataViewHolder> mFirebaseAdapter;
     private RecyclerView mRecyclerView;
     private DatabaseReference kegiatanRef;
+
+    private BottomNavigationView mBottomNavigation;
 
     public static class DataViewHolder extends RecyclerView.ViewHolder {
         TextView tvTanggal;
@@ -62,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Bottom navigation view
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        SetAppearance.onBottomNavigationClick(this, mBottomNavigation);
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -112,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,
                 false));
         mFirebaseAdapter.startListening();
+
+
     }
 
     @Override

@@ -46,11 +46,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SetAppearance.setStatusBarColor(this, R.color.statusbar);
+            SetAppearance.setStatusBarColor(this, R.color.colorSkyBlue);
         }
 
         // TODO: findviewbyid(R.id.btn_login)
-        mSignInButton = findViewById(R.id.btn_login);
+        mSignInButton = findViewById(R.id.btn_google);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")

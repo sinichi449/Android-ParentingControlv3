@@ -47,11 +47,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Get user
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mFirebaseUser != null) {
             startActivity(new Intent(this, MainActivity.class));
         }
 
+        // Get build version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             SetAppearance.setStatusBarColor(this, R.color.colorSkyBlue);
         }
@@ -60,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton.setEnabled(false);
         imgAnak = findViewById(R.id.btn_saya_anak);
         imgOrangTua = findViewById(R.id.btn_saya_orangtua);
+        // TODO: Get in abstract class
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
         sharedPrefsEdit = sharedPrefs.edit();
         imgAnak.setOnClickListener(new View.OnClickListener() {

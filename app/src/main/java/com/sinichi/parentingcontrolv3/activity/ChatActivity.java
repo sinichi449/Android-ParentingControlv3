@@ -57,6 +57,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
     Don't forget to get username from sharedpreference
 */
 
+// TODO: Check for stability
 
 public class ChatActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 

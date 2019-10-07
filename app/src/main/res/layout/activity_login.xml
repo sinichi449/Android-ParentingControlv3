@@ -9,9 +9,9 @@
     <ImageView
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="140dp"
         android:layout_marginTop="-30dp"
-        android:background="@drawable/ic_header"
+        android:background="@drawable/header2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,12 +43,12 @@
     <ImageView
         android:id="@+id/btn_saya_anak"
         android:layout_width="130dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:src="@drawable/btn_anak"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintEnd_toStartOf="@+id/btn_saya_orangtua"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="30dp"
         android:layout_marginEnd="-5dp"
         android:layout_marginRight="-5dp"
         android:layout_marginLeft="20dp"
@@ -57,13 +57,13 @@
     <ImageView
         android:id="@+id/btn_saya_orangtua"
         android:layout_width="130dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:src="@drawable/btn_orangtua"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintStart_toEndOf="@+id/btn_saya_anak"
         android:layout_marginStart="-5dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginLeft="-5dp"
         android:layout_marginRight="20dp"
         android:padding="3dp"/>
@@ -87,13 +87,13 @@
     <ImageView
         android:id="@+id/btn_facebook"
         android:layout_width="185dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_facebook"
+        android:layout_height="50dp"
+        android:src="@drawable/btn_fb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/daftar"
         app:layout_constraintBottom_toTopOf="@+id/btn_google"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="0dp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google"
@@ -109,8 +109,8 @@
     <ImageView
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:src="@drawable/ic_footer"
+        android:layout_height="110dp"
+        android:src="@drawable/footer2"
         android:layout_marginBottom="-30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

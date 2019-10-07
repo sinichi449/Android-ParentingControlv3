@@ -17,7 +17,7 @@ public class MakeSplash implements splash {
     }
 
     @Override
-    public void makeSplash(final Activity activity, final Context first, final Class<?> next) {
+    public void makeSplash(final Activity activity, final Context first, final Class<?> next, float detik) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -26,6 +26,6 @@ public class MakeSplash implements splash {
                 activity.startActivity(i);
                 activity.finish();
             }
-        }, 3000);
+        }, (long) (detik * 1000));
     }
 }

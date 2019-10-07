@@ -44,7 +44,7 @@
         android:id="@+id/btn_saya_anak"
         android:layout_width="130dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_anak"
+        android:src="@drawable/btn_anak"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintEnd_toStartOf="@+id/btn_saya_orangtua"
@@ -58,7 +58,7 @@
         android:id="@+id/btn_saya_orangtua"
         android:layout_width="130dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_orangtua"
+        android:src="@drawable/btn_orangtua"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
         app:layout_constraintStart_toEndOf="@+id/btn_saya_anak"
@@ -80,7 +80,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_saya_anak"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintBottom_toTopOf="@id/btn_facebook"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"/>
 
     <ImageView
         android:id="@+id/btn_facebook"
@@ -90,7 +92,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/daftar"
-        app:layout_constraintBottom_toTopOf="@+id/btn_google"/>
+        app:layout_constraintBottom_toTopOf="@+id/btn_google"
+        android:layout_marginBottom="5dp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google"

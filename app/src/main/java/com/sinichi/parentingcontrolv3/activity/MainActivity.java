@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseRecyclerAdapter<Model, DataViewHolder> mFirebaseAdapter;
     private RecyclerView mRecyclerView;
     private DatabaseReference kegiatanRef;
-
     private BottomNavigationView mBottomNavigation;
 
     public static class DataViewHolder extends RecyclerView.ViewHolder {
@@ -128,14 +127,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mFirebaseUser == null) {
-            startActivity(new Intent(MainActivity.this,
-                    LoginActivity.class));
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if (mFirebaseUser == null) {
+//            startActivity(new Intent(MainActivity.this,
+//                    LoginActivity.class));
+//        }
+//    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

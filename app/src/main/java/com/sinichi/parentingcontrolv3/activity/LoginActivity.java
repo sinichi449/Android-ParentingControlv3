@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.common.B;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -44,16 +45,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEdit;
 
+    private B b = new B();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // Get user
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (mFirebaseUser != null) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
+        b.checkUserCredential(this, this);
 
         // Status bar color
         SetAppearance.setStatusBarColor(this, R.color.colorSkyBlue);
@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        // TODO: Abstract class
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
                 .requestEmail()

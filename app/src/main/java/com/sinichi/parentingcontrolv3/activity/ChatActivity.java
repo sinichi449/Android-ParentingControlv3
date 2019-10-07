@@ -44,6 +44,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.common.B;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
@@ -51,10 +52,10 @@ import com.sinichi.parentingcontrolv3.util.Constant;
     If there are any missing data retrieve from the cloud, check in
     mDatabaseReference.child.
     ----------------------------------------------------------------
-    Take a look on mDatabaseReference.child(mFirebaseUser.getUid()).
+    Take A look on mDatabaseReference.child(mFirebaseUser.getUid()).
     child(MESSAGES_REF)
     ----------------------------------------------------------------
-    Don't forget to get username from sharedpreference
+    Don't forget to get username from SharedPreference
 */
 
 // TODO: Check for stability
@@ -95,6 +96,8 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> mFirebaseAdapter;
 
+    private B bClass = new B();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,15 +106,15 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
         // INITIALIZE FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        if (mFirebaseUser == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-        } else { // TODO: Get username from SharedPreference
-            mUsername = mFirebaseUser.getDisplayName();
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
-        }
+//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+//        if (mFirebaseUser == null) {
+////            startActivity(new Intent(this, LoginActivity.class));
+////        } else { // TODO: Get username from SharedPreference
+////            mUsername = mFirebaseUser.getDisplayName();
+////            if (mFirebaseUser.getPhotoUrl() != null) {
+////                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+////            }
+////        }
 
         // Building GoogleApiClient
         mGoogleApiClient = new GoogleApiClient.Builder(this)

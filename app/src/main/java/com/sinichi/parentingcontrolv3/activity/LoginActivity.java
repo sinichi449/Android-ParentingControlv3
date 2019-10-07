@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // Get build version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SetAppearance.setStatusBarColor(this, R.color.colorSkyBlue);
+            SetAppearance.setStatusBarColor(this, R.color.colorBlue);
         }
 
         mSignInButton = findViewById(R.id.btn_google);
@@ -125,7 +127,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 assert account != null;
                 firebaseAuthWithGoogle(account);
             } else {
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     }

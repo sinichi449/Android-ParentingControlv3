@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         // Status bar color
-        SetAppearance.setStatusBarColor(this, R.color.colorSkyBlue);
+        SetAppearance.setStatusBarColor(this, R.color.colorBlue);
 
         mSignInButton = findViewById(R.id.btn_google);
         mSignInButton.setEnabled(false);

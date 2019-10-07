@@ -1,15 +1,8 @@
 package com.sinichi.parentingcontrolv3.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +27,10 @@ import com.sinichi.parentingcontrolv3.common.B;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private SignInButton mSignInButton;
@@ -52,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Get user
+        // If user has credential, go to MainActivity
         b.checkUserCredential(this, this);
 
         // Status bar color
@@ -62,34 +59,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton.setEnabled(false);
         imgAnak = findViewById(R.id.btn_saya_anak);
         imgOrangTua = findViewById(R.id.btn_saya_orangtua);
-        // TODO: Get in abstract class
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
         sharedPrefsEdit = sharedPrefs.edit();
-        imgAnak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedPrefsEdit.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
-                mSignInButton.setEnabled(true);
-                imgAnak.setScaleX(0.8f);
-                imgAnak.setScaleY(0.8f);
-                imgOrangTua.setScaleX(1f);
-                imgOrangTua.setScaleY(1f);
-                imgOrangTua.setSelected(false);
-            }
-        });
-        imgOrangTua.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedPrefsEdit.putString(Constant.USERNAME, Constant.USER_ORANG_TUA)
-                        .apply();
-                mSignInButton.setEnabled(true);
-                imgOrangTua.setScaleX(0.8f);
-                imgOrangTua.setScaleY(0.8f);
-                imgAnak.setScaleX(1f);
-                imgAnak.setScaleY(1f);
-                imgAnak.setSelected(false);
-            }
-        });
+
+        // Set imgAnak + Ortu behaviour when clicked
+        b.setLoginButtonBehaviour(imgAnak, imgOrangTua, mSignInButton,
+                this, sharedPrefsEdit);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")

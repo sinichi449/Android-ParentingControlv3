@@ -2,14 +2,15 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,7 +24,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,10 +55,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             startActivity(new Intent(this, MainActivity.class));
         }
 
-        // Get build version
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SetAppearance.setStatusBarColor(this, R.color.colorBlue);
-        }
+        // Status bar color
+        SetAppearance.setStatusBarColor(this, R.color.colorSkyBlue);
 
         mSignInButton = findViewById(R.id.btn_google);
         mSignInButton.setEnabled(false);
@@ -93,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+        // TODO: Abstract class
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
                 .requestEmail()
@@ -127,8 +126,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 assert account != null;
                 firebaseAuthWithGoogle(account);
             } else {
-                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -154,7 +152,4 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
-
-
-
 }

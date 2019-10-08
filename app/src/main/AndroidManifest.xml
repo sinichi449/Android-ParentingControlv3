@@ -21,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.ChatActivity"
+            android:theme="@style/Theme.AppCompat.Light"/>
         <!--
              The API key for Google Maps-based APIs is defined as A string resource.
              (See the file "res/values/google_maps_api.xml").

@@ -5,4 +5,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorBlue">#218AC4</color>
     <color name="colorSkyBlue">#25AAE1</color>
+    <color name="colorGreen">#00B600</color>
+    <color name="colorDarkGreen">#009700</color>
 </resources>

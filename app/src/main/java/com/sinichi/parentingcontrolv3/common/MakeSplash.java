@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.WindowManager;
 
-import com.sinichi.parentingcontrolv3.interfaces.splash;
+import com.sinichi.parentingcontrolv3.interfaces.c;
 
-public class MakeSplash implements splash {
+public class MakeSplash implements c {
 
     @Override
     public void setToFullScreenActivity(Activity activity) {

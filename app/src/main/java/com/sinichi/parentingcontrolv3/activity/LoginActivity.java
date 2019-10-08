@@ -9,20 +9,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.common.B;
+import com.sinichi.parentingcontrolv3.common.LoginUtils;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -35,50 +27,41 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SignInButton mSignInButton;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
     private ImageView imgAnak, imgOrangTua;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEdit;
+    private LoginUtils b;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        B b = new B();
-        // If user has credential, go to MainActivity
-        b.checkUserCredential(this, this);
-
-        // Status bar color
-        SetAppearance.setStatusBarColor(this, R.color.colorBlue);
-
+    private void initComponents() {
         mSignInButton = findViewById(R.id.btn_google);
         mSignInButton.setEnabled(false);
         imgAnak = findViewById(R.id.btn_saya_anak);
         imgOrangTua = findViewById(R.id.btn_saya_orangtua);
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
         sharedPrefsEdit = sharedPrefs.edit();
+    }
 
-        // Set imgAnak + Ortu behaviour when clicked
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        b = new LoginUtils();
+
+        // If user has credential, go to MainActivity
+        b.checkUserCredential(this, this);
+
+        // Status bar color
+        SetAppearance.setStatusBarColor(this, R.color.colorBlue);
+
+        // Initializing XML Components
+        initComponents();
+
+        // Changed image when user clicked
         b.setLoginButtonBehaviour(imgAnak, imgOrangTua, mSignInButton,
                 this, sharedPrefsEdit);
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
-//                .requestEmail()
-//                .build();
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
-//
-//        // Initialize FirebaseAuth
-//        mFirebaseAuth = FirebaseAuth.getInstance();
-//        mSignInButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-//                startActivityForResult(signIntent, RC_SIGN_IN);
-//            }
-//        });
+
+        // Create GoogleApiClient
         mFirebaseAuth = FirebaseAuth.getInstance();
         mGoogleApiClient = b.buildGoogleApi(this);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -94,36 +77,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent
-        if (requestCode == Constant.RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                GoogleSignInAccount account = result.getSignInAccount();
-                assert account != null;
-                firebaseAuthWithGoogle(account);
-            } else {
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
-            }
-        }
+        b.getRequestCodeAndLogin(this, this, requestCode, data);
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mFirebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
-                        } else {
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                            finish();
-                        }
-                    }
-                });
-    }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

@@ -6,20 +6,30 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.LoginActivity;
 import com.sinichi.parentingcontrolv3.activity.MainActivity;
 import com.sinichi.parentingcontrolv3.interfaces.b;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
-public class B extends LoginActivity implements b {
+import androidx.annotation.NonNull;
+
+public class LoginUtils extends LoginActivity implements b {
 
     @Override
     public void checkUserCredential(Activity activity, Context context) {
@@ -70,5 +80,36 @@ public class B extends LoginActivity implements b {
         return new GoogleApiClient.Builder(context)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+    }
+
+    @Override
+    public void getRequestCodeAndLogin(Context context, Activity activity, int requestCode, Intent data) {
+        if (requestCode == Constant.RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                GoogleSignInAccount account = result.getSignInAccount();
+                assert account != null;
+                firebaseAuthWithGoogle(context, activity, account);
+            } else {
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(final Context context, final Activity activity, GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            context.startActivity(new Intent(context, MainActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            activity.finish();
+                        }
+                    }
+                });
     }
 }

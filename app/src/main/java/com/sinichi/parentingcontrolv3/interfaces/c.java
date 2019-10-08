@@ -3,7 +3,7 @@ package com.sinichi.parentingcontrolv3.interfaces;
 import android.app.Activity;
 import android.content.Context;
 
-public interface splash {
+public interface c {
 
     public void setToFullScreenActivity(Activity activity);
 

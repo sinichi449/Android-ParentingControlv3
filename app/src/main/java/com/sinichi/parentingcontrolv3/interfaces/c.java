@@ -5,7 +5,7 @@ import android.content.Context;
 
 public interface c {
 
-    public void setToFullScreenActivity(Activity activity);
+    void setToFullScreenActivity(Activity activity);
 
-    public void makeSplash(Activity activity, Context first, Class<?> next, float detik);
+    void makeSplash(Activity activity, Context first, Class<?> next, float detik);
 }

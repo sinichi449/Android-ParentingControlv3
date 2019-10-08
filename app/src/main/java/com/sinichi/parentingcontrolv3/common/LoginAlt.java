@@ -29,7 +29,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 
 import androidx.annotation.NonNull;
 
-public class LoginUtils extends LoginActivity implements b {
+public class LoginAlt extends LoginActivity implements b {
 
     @Override
     public void checkUserCredential(Activity activity, Context context) {

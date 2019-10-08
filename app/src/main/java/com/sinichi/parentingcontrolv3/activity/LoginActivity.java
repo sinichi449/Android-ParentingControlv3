@@ -3,6 +3,7 @@ package com.sinichi.parentingcontrolv3.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +15,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.common.LoginUtils;
+import com.sinichi.parentingcontrolv3.common.LoginAlt;
+import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -22,18 +24,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
 
     private SignInButton mSignInButton;
     private GoogleApiClient mGoogleApiClient;
-    private FirebaseAuth mFirebaseAuth;
     private ImageView imgAnak, imgOrangTua;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEdit;
-    private LoginUtils b;
+    private LoginAlt loginAlt;
 
-
-    private void initComponents() {
+    @Override
+    public void initComponents() {
         mSignInButton = findViewById(R.id.btn_google);
         mSignInButton.setEnabled(false);
         imgAnak = findViewById(R.id.btn_saya_anak);
@@ -42,28 +43,31 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         sharedPrefsEdit = sharedPrefs.edit();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        b = new LoginUtils();
+        loginAlt = new LoginAlt();
 
         // If user has credential, go to MainActivity
-        b.checkUserCredential(this, this);
+        loginAlt.checkUserCredential(this, this);
 
         // Status bar color
-        SetAppearance.setStatusBarColor(this, R.color.colorBlue);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SetAppearance.setStatusBarColor(this, R.color.colorBlue);
+        }
 
         // Initializing XML Components
         initComponents();
 
         // Changed image when user clicked
-        b.setLoginButtonBehaviour(imgAnak, imgOrangTua, mSignInButton,
+        loginAlt.setLoginButtonBehaviour(imgAnak, imgOrangTua, mSignInButton,
                 this, sharedPrefsEdit);
 
         // Create GoogleApiClient
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mGoogleApiClient = b.buildGoogleApi(this);
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        mGoogleApiClient = loginAlt.buildGoogleApi(this);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,10 +82,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent
-        b.getRequestCodeAndLogin(this, this, requestCode, data);
+        loginAlt.getRequestCodeAndLogin(this, this, requestCode, data);
     }
-
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

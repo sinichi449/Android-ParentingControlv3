@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,7 +35,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.common.LoginUtils;
+import com.sinichi.parentingcontrolv3.common.LoginAlt;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
@@ -84,7 +83,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private String mPhotoUrl;
     private SharedPreferences mSharedPreference;
     private GoogleApiClient mGoogleApiClient;
-    private Button mSendButton;
+    private ImageView mSendButton;
     private RecyclerView mMessageRecyclerView;
     private EditText mMessageEditText;
     private LinearLayoutManager mLinearLayoutManager;
@@ -96,7 +95,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> mFirebaseAdapter;
 
-    private LoginUtils bClass = new LoginUtils();
+    private LoginAlt bClass = new LoginAlt();
 
 
     @Override

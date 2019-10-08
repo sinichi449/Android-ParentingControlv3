@@ -1,139 +1,64 @@
 package com.sinichi.parentingcontrolv3.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.model.Model;
+import com.sinichi.parentingcontrolv3.common.MainAlt;
+import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
 
-    private FirebaseUser mFirebaseUser;
-    private FirebaseAuth mFirebaseAuth;
-    private DatabaseReference mDatabaseReference;
-    private FirebaseRecyclerAdapter<Model, DataViewHolder> mFirebaseAdapter;
     private RecyclerView mRecyclerView;
     private DatabaseReference kegiatanRef;
     private BottomNavigationView mBottomNavigation;
     private Button btnLogOut;
+    private MainAlt mainAlt;
 
-    public static class DataViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTanggal;
-        TextView tvHari;
-        TextView tvBulan;
-        TextView tvTahun;
-        TextView tvJumlahSholat;
-        CheckBox chkMembantuOrtu;
-        CheckBox chkSekolah;
-
-        public DataViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvTanggal = itemView.findViewById(R.id.tv_tanggal);
-            tvHari = itemView.findViewById(R.id.tv_hari);
-            tvBulan = itemView.findViewById(R.id.tv_bulan);
-            tvTahun = itemView.findViewById(R.id.tv_tahun);
-            tvJumlahSholat = itemView.findViewById(R.id.tv_jumlahSholat);
-            chkMembantuOrtu = itemView.findViewById(R.id.chkbx_membantuOrtu);
-            chkSekolah = itemView.findViewById(R.id.chkbx_sekolah);
-        }
+    @Override
+    public void initComponents() {
+        mainAlt = new MainAlt();
+        mRecyclerView = findViewById(R.id.recyclerView);
+        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
+        btnLogOut = findViewById(R.id.btn_logout);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Bottom navigation view
-        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        initComponents();
         SetAppearance.onBottomNavigationClick(this, mBottomNavigation);
 
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        // Set class Model as data container from the cloud
+        mainAlt.parseSnapShot();
 
-        SnapshotParser<Model> parser = new SnapshotParser<Model>() {
-            @NonNull
-            @Override
-            public Model parseSnapshot(@NonNull DataSnapshot snapshot) {
-                Model model = snapshot.getValue(Model.class);
-                if (model != null) {
-                    model.setId(snapshot.getKey());
-                }
-                return model;
-            }
-        };
+        // Make RecyclerView to show data
+        mainAlt.recyclerViewAdapterBuilder(this, kegiatanRef, mRecyclerView);
 
-        kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid())
-                .child("data_kegiatan");
+        // Start listening for any change from cloud
+        mainAlt.retrieveData(true);
 
-        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
-                .setQuery(kegiatanRef,parser).build();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Model, DataViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull DataViewHolder dataViewHolder, int i, @NonNull Model model) {
-                dataViewHolder.tvTanggal.setText(model.getTanggal());
-                dataViewHolder.tvHari.setText(model.getHari());
-                dataViewHolder.tvBulan.setText(model.getBulan());
-                dataViewHolder.tvTahun.setText(model.getTahun());
-                dataViewHolder.tvJumlahSholat.setText(model.getJumlahSholat());
-                dataViewHolder.chkMembantuOrtu.setChecked(model.isMembantuOrangTua());
-                dataViewHolder.chkSekolah.setChecked(model.isSekolah());
-                dataViewHolder.chkMembantuOrtu.setEnabled(false);
-                dataViewHolder.chkSekolah.setEnabled(false);
-            }
-
-            @NonNull
-            @Override
-            public DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                LayoutInflater inflater1 = LayoutInflater.from(parent.getContext());
-                return new DataViewHolder(inflater1.inflate(
-                        R.layout.layout_item, parent, false));
-            }
-        };
-
-        mRecyclerView.setAdapter(mFirebaseAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,
-                false));
-        mFirebaseAdapter.startListening();
-
-        btnLogOut = findViewById(R.id.btn_logout);
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-                finish();
-            }
-        });
-    }
+        // SignOut when user clicked btnLogOut
+        mainAlt.signOut(this, this, btnLogOut);
+     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -144,12 +69,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAdapter.startListening();
+        mainAlt.retrieveData(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mFirebaseAdapter.stopListening();
+        mainAlt.retrieveData(false);
     }
 }

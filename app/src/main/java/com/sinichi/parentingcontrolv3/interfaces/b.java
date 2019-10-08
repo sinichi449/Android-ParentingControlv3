@@ -15,5 +15,5 @@ public interface b {
                                         SignInButton signButton, Context context,
                                         SharedPreferences.Editor sharedPrefsEditor);
 
-
+    public void buildGoogleApi(Context context, SignInButton mSignInButton);
 }

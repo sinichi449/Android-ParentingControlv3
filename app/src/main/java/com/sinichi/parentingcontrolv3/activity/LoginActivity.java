@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+
         // Set username for chat;
 
     }

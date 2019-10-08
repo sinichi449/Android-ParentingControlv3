@@ -1,18 +1,11 @@
 package com.sinichi.parentingcontrolv3.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,10 +21,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.sinichi.parentingcontrolv3.model.Model;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.util.Constant;
+import com.sinichi.parentingcontrolv3.model.Model;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -42,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private RecyclerView mRecyclerView;
     private DatabaseReference kegiatanRef;
     private BottomNavigationView mBottomNavigation;
+    private Button btnLogOut;
 
     public static class DataViewHolder extends RecyclerView.ViewHolder {
         TextView tvTanggal;
@@ -124,17 +122,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 false));
         mFirebaseAdapter.startListening();
 
-
+        btnLogOut = findViewById(R.id.btn_logout);
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
     }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        if (mFirebaseUser == null) {
-//            startActivity(new Intent(MainActivity.this,
-//                    LoginActivity.class));
-//        }
-//    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

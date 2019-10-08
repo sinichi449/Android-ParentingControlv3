@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -36,19 +35,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SignInButton mSignInButton;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFirebaseAuth;
-    private static final int RC_SIGN_IN = 9001;
     private FirebaseUser mFirebaseUser;
     private ImageView imgAnak, imgOrangTua;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEdit;
 
-    private B b = new B();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        B b = new B();
         // If user has credential, go to MainActivity
         b.checkUserCredential(this, this);
 
@@ -65,27 +62,32 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Set imgAnak + Ortu behaviour when clicked
         b.setLoginButtonBehaviour(imgAnak, imgOrangTua, mSignInButton,
                 this, sharedPrefsEdit);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        // Initialize FirebaseAuth
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
+//                .requestEmail()
+//                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+//
+//        // Initialize FirebaseAuth
+//        mFirebaseAuth = FirebaseAuth.getInstance();
+//        mSignInButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//                startActivityForResult(signIntent, RC_SIGN_IN);
+//            }
+//        });
         mFirebaseAuth = FirebaseAuth.getInstance();
+        mGoogleApiClient = b.buildGoogleApi(this);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signIntent, RC_SIGN_IN);
+                startActivityForResult(signIntent, Constant.RC_SIGN_IN);
             }
         });
-
-
-        // Set username for chat;
 
     }
 
@@ -94,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == Constant.RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.widget.ImageView;
 
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 public interface b {
 
@@ -15,5 +16,5 @@ public interface b {
                                         SignInButton signButton, Context context,
                                         SharedPreferences.Editor sharedPrefsEditor);
 
-    public void buildGoogleApi(Context context, SignInButton mSignInButton);
+    public GoogleApiClient buildGoogleApi(Context context);
 }

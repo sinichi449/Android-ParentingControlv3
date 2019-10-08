@@ -19,7 +19,7 @@ import com.sinichi.parentingcontrolv3.activity.MainActivity;
 import com.sinichi.parentingcontrolv3.interfaces.b;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
-public class B implements b {
+public class B extends LoginActivity implements b {
 
     @Override
     public void checkUserCredential(Activity activity, Context context) {
@@ -62,22 +62,13 @@ public class B implements b {
     }
 
     @Override
-    public void buildGoogleApi(Context context, SignInButton mSignInButton) {
+    public GoogleApiClient buildGoogleApi(final Context context) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
-        final GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(context)
+        return new GoogleApiClient.Builder(context)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        final LoginActivity loginActivity = new LoginActivity();
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                loginActivity.startActivityForResult(signIntent, Constant.RC_SIGN_IN);
-            }
-        });
-
     }
 }

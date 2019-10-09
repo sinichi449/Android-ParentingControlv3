@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -90,28 +89,27 @@ public class LoginAlt extends LoginActivity implements b {
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 assert account != null;
-                LoginActivity loginActivity = new LoginActivity();
-                loginActivity.firebaseAuthWithGoogle(account);
+                firebaseAuthWithGoogle(context, this, account);
             } else {
                 Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-//    private void firebaseAuthWithGoogle(final Context context, final Activity activity, GoogleSignInAccount account) {
-//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-//        FirebaseAuth.getInstance().signInWithCredential(credential)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (!task.isSuccessful()) {
-//                            Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            context.startActivity(new Intent(context, MainActivity.class)
-//                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//                            activity.finish();
-//                        }
-//                    }
-//                });
-//    }
+    private void firebaseAuthWithGoogle(final Context context, final Activity activity, GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            context.startActivity(new Intent(context, MainActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            activity.finish();
+                        }
+                    }
+                });
+    }
 }

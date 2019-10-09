@@ -25,6 +25,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,8 +37,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
+import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
+import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,7 +62,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 // TODO: Check for stability
 
-public class ChatActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class ChatActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
+
+    @Override
+    public void initComponents() {
+
+    }
+
+    @Override
+    public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
+        SetAppearance.onBottomNavigationClick(context, mBottomNav);
+    }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageTextView;
@@ -141,6 +154,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         };
 
         // Add messages Database Child over the User Uid
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
         DatabaseReference messageRef = mFirebaseDatabaseReference
                 .child(mFirebaseUser.getUid())
                 .child(Constant.MESSAGES_CHILD);

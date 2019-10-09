@@ -16,6 +16,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +30,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 
 import androidx.annotation.NonNull;
 
-public class LoginAlt extends LoginActivity implements b {
+public class LoginAlt extends LoginActivity implements b{
 
     @Override
     public void checkUserCredential(Activity activity, Context context) {
@@ -111,5 +112,10 @@ public class LoginAlt extends LoginActivity implements b {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
+
     }
 }

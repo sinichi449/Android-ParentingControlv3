@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -35,23 +34,23 @@ public class SetAppearance {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.menu_overview:
-                        if (context.getClass().getSimpleName().equals("MainActivity"))
+                        if (context.getClass().getSimpleName().equals("MainActivity")) {
                             break;
-                        else
-                            btmNavView.setSelectedItemId(R.id.menu_overview);
+                        } else {
                             context.startActivity(new Intent(context, MainActivity.class));
+                        }
                     case R.id.menu_map:
-                        if (context.getClass().getSimpleName().equals("MapsActivity"))
+                        if (context.getClass().getSimpleName().equals("MapsActivity")) {
                             break;
-                        else
-                            btmNavView.setSelectedItemId(R.id.menu_map);
+                        } else {
                             context.startActivity(new Intent(context, MapsActivity.class));
+                        }
                     case R.id.menu_chat:
-                        if (context.getClass().getSimpleName().equals("ChatActivity"))
+                        if (context.getClass().getSimpleName().equals("ChatActivity")) {
                             break;
-                        else
-                            btmNavView.setSelectedItemId(R.id.menu_chat);
+                        } else {
                             context.startActivity(new Intent(context, ChatActivity.class));
+                        }
                 }
                 return true;
             }

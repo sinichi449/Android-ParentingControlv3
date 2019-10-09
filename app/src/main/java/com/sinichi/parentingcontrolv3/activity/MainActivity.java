@@ -1,5 +1,6 @@
 package com.sinichi.parentingcontrolv3.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -41,11 +42,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Override
+    public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
+        SetAppearance.onBottomNavigationClick(context, mBottomNav);
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-        SetAppearance.onBottomNavigationClick(this, mBottomNavigation);
+        setBottomNavigationAction(this, mBottomNavigation);
 
         // Set class Model as data container from the cloud
         mainAlt.parseSnapShot();

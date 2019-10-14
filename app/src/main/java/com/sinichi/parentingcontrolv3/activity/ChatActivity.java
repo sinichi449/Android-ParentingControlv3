@@ -40,6 +40,7 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
+import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -111,6 +112,8 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private BottomNavigationView mBottomNavigation;
     private LoginAlt bClass = new LoginAlt();
 
+    private UserModel userModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,15 +122,6 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
         // INITIALIZE FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
-//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        if (mFirebaseUser == null) {
-////            startActivity(new Intent(this, LoginActivity.class));
-////        } else { // TODO: Get username from SharedPreference
-////            mUsername = mFirebaseUser.getDisplayName();
-////            if (mFirebaseUser.getPhotoUrl() != null) {
-////                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-////            }
-////        }
 
         // Building GoogleApiClient
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -149,6 +143,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                 return true;
             }
         });
+
 
         // Set LayoutManager
         mMessageRecyclerView = findViewById(R.id.recyclerViewChat);
@@ -287,8 +282,9 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View view) {
                 // Send messages on click.
-                SharedPreferences mSharedPrefs = ChatActivity.this.getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
-                String username = mSharedPrefs.getString("username", ANONYMOUS);
+//                SharedPreferences mSharedPrefs = ChatActivity.this.getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
+                userModel = new UserModel();
+                String username = userModel.getUsername();
                 ChatModel friendlyMessage = new
                         ChatModel(mMessageEditText.getText().toString(),
                         username,

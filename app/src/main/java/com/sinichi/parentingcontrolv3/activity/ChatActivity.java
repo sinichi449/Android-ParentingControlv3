@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -71,7 +72,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
-        SetAppearance.onBottomNavigationClick(context, mBottomNav);
+        SetAppearance.onBottomNavigationClick(context, mBottomNavigation);
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -107,7 +108,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> mFirebaseAdapter;
-
+    private BottomNavigationView mBottomNavigation;
     private LoginAlt bClass = new LoginAlt();
 
 
@@ -132,6 +133,22 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.menu_overview) {
+                    Intent i = new Intent(ChatActivity.this, MainActivity.class);
+                    startActivity(i);
+                } else if (id == R.id.menu_map) {
+                    Intent i = new Intent(ChatActivity.this, MapsActivity.class);
+                    startActivity(i);
+                }
+                return true;
+            }
+        });
 
         // Set LayoutManager
         mMessageRecyclerView = findViewById(R.id.recyclerViewChat);

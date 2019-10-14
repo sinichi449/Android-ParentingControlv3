@@ -9,4 +9,5 @@ public class Constant {
     public static String STR_EMPTY = "Empty";
     public static final String MESSAGES_CHILD = "messages";
     public static final int RC_SIGN_IN = 9001;
+    public static final int REQUEST_LOCATION = 99;
 }

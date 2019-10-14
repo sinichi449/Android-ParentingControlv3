@@ -1,8 +1,10 @@
 package com.sinichi.parentingcontrolv3.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
-        SetAppearance.onBottomNavigationClick(context, mBottomNav);
+
     }
 
 
@@ -56,7 +58,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-        setBottomNavigationAction(this, mBottomNavigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.menu_map) {
+                    Intent i = new Intent(MainActivity.this, MapsActivity.class);
+                    startActivity(i);
+                } else if (id == R.id.menu_chat) {
+                    Intent i = new Intent(MainActivity.this, ChatActivity.class);
+                    startActivity(i);
+                }
+                return true;
+            }
+        });
 
         // Set class Model as data container from the cloud
         mainAlt.parseSnapShot();

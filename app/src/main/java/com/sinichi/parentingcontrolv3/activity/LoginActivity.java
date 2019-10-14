@@ -78,6 +78,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
                 Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (imgAnak.isSelected()) {
+                    editor.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
+                } else if (imgOrangTua.isSelected()) {
+                    editor.putString(Constant.USERNAME, Constant.USER_ORANG_TUA).apply();
+                } else {
+                    editor.putString(Constant.USERNAME, "Anonymous").apply();
+                }
                 startActivityForResult(signIntent, Constant.RC_SIGN_IN);
             }
         });

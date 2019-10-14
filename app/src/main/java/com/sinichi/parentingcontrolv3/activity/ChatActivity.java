@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -39,6 +40,7 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
+import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -71,7 +73,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
-        SetAppearance.onBottomNavigationClick(context, mBottomNav);
+        SetAppearance.onBottomNavigationClick(context, mBottomNavigation);
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -107,8 +109,10 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> mFirebaseAdapter;
-
+    private BottomNavigationView mBottomNavigation;
     private LoginAlt bClass = new LoginAlt();
+
+    private UserModel userModel;
 
 
     @Override
@@ -118,20 +122,28 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
         // INITIALIZE FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
-//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        if (mFirebaseUser == null) {
-////            startActivity(new Intent(this, LoginActivity.class));
-////        } else { // TODO: Get username from SharedPreference
-////            mUsername = mFirebaseUser.getDisplayName();
-////            if (mFirebaseUser.getPhotoUrl() != null) {
-////                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-////            }
-////        }
 
         // Building GoogleApiClient
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.menu_overview) {
+                    Intent i = new Intent(ChatActivity.this, MainActivity.class);
+                    startActivity(i);
+                } else if (id == R.id.menu_map) {
+                    Intent i = new Intent(ChatActivity.this, MapsActivity.class);
+                    startActivity(i);
+                }
+                return true;
+            }
+        });
+
 
         // Set LayoutManager
         mMessageRecyclerView = findViewById(R.id.recyclerViewChat);
@@ -270,8 +282,8 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View view) {
                 // Send messages on click.
-                SharedPreferences mSharedPrefs = ChatActivity.this.getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
-                String username = mSharedPrefs.getString("username", ANONYMOUS);
+                SharedPreferences mSharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+                String username = mSharedPrefs.getString(Constant.USERNAME, "Anonymous");
                 ChatModel friendlyMessage = new
                         ChatModel(mMessageEditText.getText().toString(),
                         username,

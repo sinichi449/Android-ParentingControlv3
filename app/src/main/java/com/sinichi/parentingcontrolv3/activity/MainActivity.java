@@ -1,6 +1,7 @@
 package com.sinichi.parentingcontrolv3.activity;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void initComponents() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SetAppearance.setExtendStatusBarWithView(this);
+        }
         mainAlt = new MainAlt();
         mRecyclerView = findViewById(R.id.recyclerView);
         FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

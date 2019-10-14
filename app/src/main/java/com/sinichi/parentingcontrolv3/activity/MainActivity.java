@@ -85,10 +85,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         String day = daysName[calendar.get(Calendar.DAY_OF_WEEK) - 1];
 
         // Get current month
-        String[] monthName = {"January", "February",
-                "March", "April", "May", "June", "July",
-                "August", "September", "Oktober", "November",
-                "December"};
+        String[] monthName = {"Januari", "Februari",
+                "Maret", "April", "Mei", "Juni", "Juli",
+                "Agustus", "September", "Oktober", "November",
+                "Desember"};
 
         Calendar cal = Calendar.getInstance();
         String month = monthName[cal.get(Calendar.MONTH)];

@@ -6,8 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private DatabaseReference kegiatanRef;
     private BottomNavigationView mBottomNavigation;
     private Button btnLogOut;
+    private ImageView imgHeaderCalendar;
     private MainAlt mainAlt;
 
     @Override
@@ -45,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mBottomNavigation = findViewById(R.id.bottom_navigation);
         kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
         btnLogOut = findViewById(R.id.btn_logout);
+        imgHeaderCalendar = findViewById(R.id.calendar);
+        Glide.with(this)
+                .load(R.drawable.calendar)
+                .into(imgHeaderCalendar);
+
     }
 
     @Override

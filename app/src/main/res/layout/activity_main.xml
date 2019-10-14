@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity"
     android:background="@color/colorWhite"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -30,6 +29,7 @@
                     android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/calendar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -39,8 +39,7 @@
                     android:layout_marginStart="-40dp"
                     android:layout_marginEnd="-40dp"
                     android:layout_marginTop="-40dp"
-                    android:layout_marginBottom="-40dp"
-                    android:src="@drawable/calendar2" />
+                    android:layout_marginBottom="-40dp" />
 
                 </LinearLayout>
 
@@ -63,7 +62,7 @@
                 <TextView
                     android:id="@+id/tv_header_date"
                     android:layout_width="wrap_content"
-                    android:layout_height="125dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="30dp"
                     android:fontFamily="@font/impact"
@@ -74,13 +73,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/day"
-                    android:layout_marginTop="5dp" />
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/tv_header_date_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Jum,at, Maret 2001"
+                    android:text="Jumat, Maret 2001"
                     android:fontFamily="@font/arial"
                     android:textStyle="bold|italic"
                     android:textColor="@color/colorWhite"

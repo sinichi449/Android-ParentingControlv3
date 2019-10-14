@@ -40,7 +40,7 @@
                     android:layout_marginEnd="-40dp"
                     android:layout_marginTop="-40dp"
                     android:layout_marginBottom="-40dp"
-                    android:src="@drawable/calendar" />
+                    android:src="@drawable/calendar2" />
 
                 </LinearLayout>
 
@@ -63,7 +63,7 @@
                 <TextView
                     android:id="@+id/tv_header_date"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="125dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="30dp"
                     android:fontFamily="@font/impact"
@@ -74,7 +74,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/day"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="5dp" />
 
                 <TextView
                     android:id="@+id/tv_header_date_details"

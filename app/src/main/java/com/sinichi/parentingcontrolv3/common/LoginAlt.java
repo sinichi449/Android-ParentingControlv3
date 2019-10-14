@@ -26,13 +26,11 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.LoginActivity;
 import com.sinichi.parentingcontrolv3.activity.MainActivity;
 import com.sinichi.parentingcontrolv3.interfaces.b;
-import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
 import androidx.annotation.NonNull;
 
 public class LoginAlt extends LoginActivity implements b{
-    private UserModel userModel;
 
     @Override
     public void checkUserCredential(Activity activity, Context context) {
@@ -50,15 +48,14 @@ public class LoginAlt extends LoginActivity implements b{
     public void setLoginButtonBehaviour(final ImageView imgAnak, final ImageView imgOrtu,
                                         final SignInButton mSignInButton, final Context context,
                                         final SharedPreferences.Editor sharedPrefsEditor) {
-        userModel = new UserModel();
         imgAnak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                sharedPrefsEditor.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
-                userModel.setUsername(Constant.USER_ANAK);
                 mSignInButton.setEnabled(true);
                 imgAnak.setImageResource(R.drawable.btn_anakblue);
                 imgOrtu.setImageResource(R.drawable.btn_orangtua);
+                imgAnak.setSelected(true);
                 imgOrtu.setSelected(false);
             }
         });
@@ -67,11 +64,11 @@ public class LoginAlt extends LoginActivity implements b{
             @Override
             public void onClick(View v) {
 //                sharedPrefsEditor.putString(Constant.USERNAME, Constant.USER_ORANG_TUA).apply();
-                userModel.setUsername(Constant.USER_ORANG_TUA);
                 mSignInButton.setEnabled(true);
                 imgOrtu.setImageResource(R.drawable.btn_orangtuablue);
                 imgAnak.setImageResource(R.drawable.btn_anak);
                 imgAnak.setSelected(false);
+                imgOrtu.setSelected(true);
             }
         });
     }

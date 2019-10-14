@@ -282,9 +282,8 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View view) {
                 // Send messages on click.
-//                SharedPreferences mSharedPrefs = ChatActivity.this.getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
-                userModel = new UserModel();
-                String username = userModel.getUsername();
+                SharedPreferences mSharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+                String username = mSharedPrefs.getString(Constant.USERNAME, "Anonymous");
                 ChatModel friendlyMessage = new
                         ChatModel(mMessageEditText.getText().toString(),
                         username,

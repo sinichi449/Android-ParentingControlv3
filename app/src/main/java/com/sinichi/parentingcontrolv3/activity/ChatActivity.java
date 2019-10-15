@@ -119,6 +119,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        initComponents();
 
         // INITIALIZE FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -136,14 +137,16 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                 if (id == R.id.menu_overview) {
                     Intent i = new Intent(ChatActivity.this, MainActivity.class);
                     startActivity(i);
+                    finish();
                 } else if (id == R.id.menu_map) {
                     Intent i = new Intent(ChatActivity.this, MapsActivity.class);
                     startActivity(i);
+                    finish();
                 }
                 return true;
             }
         });
-
+        mBottomNavigation.setSelectedItemId(R.id.menu_chat);
 
         // Set LayoutManager
         mMessageRecyclerView = findViewById(R.id.recyclerViewChat);

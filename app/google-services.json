@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "620226023898-k99g9ofaqbauf973el1e0olnef80ein1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sinichi.parentingcontrolv3",
+            "certificate_hash": "8978ef7297e6e5eec25c2d3193995eff32f9a33e"
+          }
+        },
+        {
+          "client_id": "620226023898-p91ep5p0d8ikjdqgrak36hl71bq8as9f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sinichi.parentingcontrolv3",
+            "certificate_hash": "b51b939c2988ac4c5f4fa5e01e7bc90ab79c0ec1"
+          }
+        },
+        {
           "client_id": "620226023898-4ljvbu2u4g0o53i8ea3jfetssint45hn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,7 +52,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com",
+              "client_id": "620226023898-b4udvtsk4c36042c29o1kr4rok4h082v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

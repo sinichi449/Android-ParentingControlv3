@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
@@ -41,6 +42,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         imgOrangTua = findViewById(R.id.btn_saya_orangtua);
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
         sharedPrefsEdit = sharedPrefs.edit();
+    }
+
+    @Override
+    public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
+
     }
 
 
@@ -72,6 +78,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
                 Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (imgAnak.isSelected()) {
+                    editor.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
+                } else if (imgOrangTua.isSelected()) {
+                    editor.putString(Constant.USERNAME, Constant.USER_ORANG_TUA).apply();
+                } else {
+                    editor.putString(Constant.USERNAME, "Anonymous").apply();
+                }
                 startActivityForResult(signIntent, Constant.RC_SIGN_IN);
             }
         });

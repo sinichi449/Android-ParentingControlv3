@@ -51,10 +51,11 @@ public class LoginAlt extends LoginActivity implements b{
         imgAnak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPrefsEditor.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
+//                sharedPrefsEditor.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
                 mSignInButton.setEnabled(true);
                 imgAnak.setImageResource(R.drawable.btn_anakblue);
                 imgOrtu.setImageResource(R.drawable.btn_orangtua);
+                imgAnak.setSelected(true);
                 imgOrtu.setSelected(false);
             }
         });
@@ -62,12 +63,12 @@ public class LoginAlt extends LoginActivity implements b{
         imgOrtu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPrefsEditor.putString(Constant.USERNAME, Constant.USER_ORANG_TUA)
-                        .apply();
+//                sharedPrefsEditor.putString(Constant.USERNAME, Constant.USER_ORANG_TUA).apply();
                 mSignInButton.setEnabled(true);
                 imgOrtu.setImageResource(R.drawable.btn_orangtuablue);
                 imgAnak.setImageResource(R.drawable.btn_anak);
                 imgAnak.setSelected(false);
+                imgOrtu.setSelected(true);
             }
         });
     }

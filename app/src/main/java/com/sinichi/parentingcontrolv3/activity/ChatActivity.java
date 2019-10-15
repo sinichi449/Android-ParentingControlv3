@@ -3,12 +3,14 @@ package com.sinichi.parentingcontrolv3.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -39,16 +41,17 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
+import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /*
     If there are any missing data retrieve from the cloud, check in
@@ -71,30 +74,28 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
-        SetAppearance.onBottomNavigationClick(context, mBottomNav);
+        SetAppearance.onBottomNavigationClick(context, mBottomNavigation);
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageTextView;
         ImageView messageImageView;
         TextView messengerTextView;
-        CircleImageView messengerImageView;
+        ConstraintLayout constraintLayout;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             messageTextView = itemView.findViewById(R.id.tv_message_chat);
             messageImageView = itemView.findViewById(R.id.img_message_chat);
-            messengerTextView = itemView.findViewById(R.id.tv_username_chat);
-            messengerImageView = itemView.findViewById(R.id.imgUserPhoto);
+            constraintLayout = itemView.findViewById(R.id.constraint_item_message);
+//            messengerTextView = itemView.findViewById(R.id.tv_username_chat);
         }
     }
 
     private static final String TAG = "Results";
     private static final int REQUEST_IMAGE = 2;
-    public static final String ANONYMOUS = "anonymous";
     private String mUsername;
     private String mPhotoUrl;
-    private SharedPreferences mSharedPreference;
     private GoogleApiClient mGoogleApiClient;
     private ImageView mSendButton;
     private RecyclerView mMessageRecyclerView;
@@ -107,31 +108,44 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> mFirebaseAdapter;
-
+    private BottomNavigationView mBottomNavigation;
     private LoginAlt bClass = new LoginAlt();
+
+    private UserModel userModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        initComponents();
 
         // INITIALIZE FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
-//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        if (mFirebaseUser == null) {
-////            startActivity(new Intent(this, LoginActivity.class));
-////        } else { // TODO: Get username from SharedPreference
-////            mUsername = mFirebaseUser.getDisplayName();
-////            if (mFirebaseUser.getPhotoUrl() != null) {
-////                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-////            }
-////        }
 
         // Building GoogleApiClient
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.menu_overview) {
+                    Intent i = new Intent(ChatActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                } else if (id == R.id.menu_map) {
+                    Intent i = new Intent(ChatActivity.this, MapsActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+                return true;
+            }
+        });
+        mBottomNavigation.setSelectedItemId(R.id.menu_chat);
 
         // Set LayoutManager
         mMessageRecyclerView = findViewById(R.id.recyclerViewChat);
@@ -177,10 +191,23 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             protected void onBindViewHolder(@NonNull final MessageViewHolder viewHolder,
                                             int i,
                                             @NonNull ChatModel friendlyMessage) {
+                // TODO: Set chat logic
+                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                // TODO: Inflate via view root
+                ConstraintSet set = new ConstraintSet();
+                ConstraintLayout layout = viewHolder.constraintLayout;
+                set.clone(layout);
+
                 if (friendlyMessage.getText() != null) {
                     viewHolder.messageTextView.setText(friendlyMessage.getText());
                     viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
                     viewHolder.messageImageView.setVisibility(ImageView.GONE);
+                    if (friendlyMessage.getName().equals(sharedPreferences.getString(Constant.USERNAME, "Anonymous"))) {
+                        set.connect(R.id.tv_message_chat,ConstraintSet.END, viewHolder.constraintLayout.getId(),ConstraintSet.END);
+                        viewHolder.messageTextView.setBackgroundResource(R.drawable.bg_outgoing_chat);
+                        viewHolder.messageTextView.setTextColor(Color.parseColor("#000000"));
+                        set.applyTo(layout);
+                    }
                 } else if (friendlyMessage.getImageUrl() != null) {
                     String imageUrl = friendlyMessage.getImageUrl();
                     if (imageUrl.startsWith("gs://")) {
@@ -208,17 +235,6 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                     viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
                     viewHolder.messageTextView.setVisibility(TextView.GONE);
-                }
-
-                // TODO: Set username
-                viewHolder.messengerTextView.setText(friendlyMessage.getName());
-                if (friendlyMessage.getPhotoUrl() == null) {
-                    viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(
-                            getApplicationContext(), R.drawable.ic_account_circle_black_36dp));
-                } else {
-                    Glide.with(getApplicationContext())
-                            .load(friendlyMessage.getPhotoUrl())
-                            .into(viewHolder.messengerImageView);
                 }
             }
         };
@@ -270,8 +286,8 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View view) {
                 // Send messages on click.
-                SharedPreferences mSharedPrefs = ChatActivity.this.getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
-                String username = mSharedPrefs.getString("username", ANONYMOUS);
+                SharedPreferences mSharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+                String username = mSharedPrefs.getString(Constant.USERNAME, "Anonymous");
                 ChatModel friendlyMessage = new
                         ChatModel(mMessageEditText.getText().toString(),
                         username,

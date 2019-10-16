@@ -7,106 +7,29 @@
     tools:context=".fragment.OverviewFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:text="Lorem ipsum dolor sit amet, ea essent fastidii vim, duo zril vivendum ut. Id cetero appellantur mea, ex odio appareat percipit vis. Id qui duis laudem definitiones, utinam epicurei probatus in pri. Sea quidam delenit interpretaris an, no altera essent consequuntur sea. Cu per civibus sapientem, fugit integre vis no, usu in tritani tibique.
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="?attr/colorPrimary"
-                android:fitsSystemWindows="true">
+Sea simul omnesque persecuti id, eu falli pericula vel, erant expetendis et vix. Ei sensibus convenire deseruisse sit, eos ea impedit propriae. Alterum explicari vim cu. Id vivendo gloriatur deterruisset nec. Nam adhuc verterem ex, in libris postulant eos.
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+Usu te habeo exerci impetus, his omittam verterem persequeris ne, ne aliquam fastidii qui. Perfecto necessitatibus ad eam, aperiam atomorum vis id, amet omnes ei his. In amet essent scribentur his, et per illud nonumes corrumpit. Cum ad debet ridens mediocritatem, prodesset adipiscing eu quo. Ea nec meis mazim intellegat, sed sumo brute consul no, nec inermis mandamus in. In his aeterno dolorum officiis, regione temporibus contentiones vis ea.
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+Ne quo debet omnium expetenda. Vix te nostrud reprimique. Eam vide noluisse ne. Te natum voluptaria per, te errem everti expetenda ius, quo falli iudico in. Est in alia intellegat delicatissimi, eripuit verterem mea ei.
 
-                        <ImageView
-                            android:id="@+id/calendar"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_marginStart="-40dp"
-                            android:layout_marginEnd="-40dp"
-                            android:layout_marginTop="-40dp"
-                            android:layout_marginBottom="-40dp" />
+Mei nostrud pericula urbanitas in. Qui noster conceptam at, eos altera discere et. Nam ne expetenda similique. Tantas noluisse nec in, mel ei nominati indoctum."
+            android:fontFamily="@font/arial_narrow_7"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_margin="10dp"/>
 
-                    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-                    <TextView
-                        android:id="@+id/tv1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/arial"
-                        android:text="Hari Ini"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="10dp"/>
-
-
-                    <TextView
-                        android:id="@+id/tv_header_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="30dp"
-                        android:fontFamily="@font/impact"
-                        android:text="16"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="100sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv1"
-                        android:layout_marginTop="10dp" />
-
-                    <TextView
-                        android:id="@+id/tv_header_date_details"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Jumat, Maret 2001"
-                        android:fontFamily="@font/arial"
-                        android:textStyle="bold|italic"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_header_date"
-                        android:layout_marginTop="-10dp"/>
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_gravity="bottom |center"/>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

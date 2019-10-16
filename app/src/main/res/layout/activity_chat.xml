@@ -102,12 +102,12 @@
                  android:id="@+id/sendButton"
                  android:layout_width="30dp"
                  android:layout_height="30dp"
-                 android:src="@drawable/btn_send"
+                 android:src="@drawable/send3"
                  android:tint="@color/colorDarkGreen"
-                 app:layout_constraintEnd_toEndOf="parent"
                  app:layout_constraintStart_toEndOf="@+id/messageEditText"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"/>
+                 app:layout_constraintTop_toTopOf="@+id/messageEditText"
+                 app:layout_constraintBottom_toBottomOf="@+id/messageEditText"
+                 app:layout_constraintEnd_toEndOf="parent"/>
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottom_navigation"

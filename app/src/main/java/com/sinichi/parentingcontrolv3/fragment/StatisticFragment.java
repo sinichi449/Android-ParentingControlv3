@@ -13,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.activity.MainActivity;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 
 import java.text.SimpleDateFormat;
@@ -49,7 +51,7 @@ public class StatisticFragment extends Fragment {
 
         mainAlt.parseSnapShot();
         mainAlt.recyclerViewAdapterBuilder(getContext(), kegiatanRef, mRecyclerView);
-        mainAlt.retrieveData(true);
+        mainAlt.retrieveData(true);;
 
         return root;
     }

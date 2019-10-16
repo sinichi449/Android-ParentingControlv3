@@ -35,9 +35,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity implements z {
     private BottomNavigationView mBottomNavigation;
-    private Button btnLogOut;
     private ViewPager viewPager;
-    private TabLayout tabLayout;
 
     @Override
     public void initComponents() {
@@ -45,9 +43,7 @@ public class MainActivity extends AppCompatActivity implements z {
             SetAppearance.setExtendStatusBarWithView(this);
         }
         mBottomNavigation = findViewById(R.id.bottom_navigation);
-        btnLogOut = findViewById(R.id.btn_logout);
         viewPager = findViewById(R.id.view_pager);
-        tabLayout = findViewById(R.id.tab_layout);
     }
 
     @Override
@@ -82,6 +78,44 @@ public class MainActivity extends AppCompatActivity implements z {
 
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+
+        MainAlt mainAlt = new MainAlt();
+        Button btnLogOut = findViewById(R.id.btn_logout);
+        mainAlt.signOut(this, this, btnLogOut);
+
+        ImageView imgHeaderCalendar = findViewById(R.id.calendar);
+        TextView tvDate = findViewById(R.id.tv_header_date);
+        TextView tvDateDetails = findViewById(R.id.tv_header_date_details);
+
+        Glide.with(this)
+                .load(R.drawable.calendar)
+                .into(imgHeaderCalendar);
+
+        Calendar calendar = Calendar.getInstance();
+        // Get current date
+        SimpleDateFormat formatter = new SimpleDateFormat("dd");
+        tvDate.setText(formatter.format(calendar.getTime()));
+
+        // Get current day of week
+        String[] daysName = {"Minggu", "Senin", "Selasa", "Rabu",
+                "Kamis", "Jum'at", "Sabtu"};
+        String day = daysName[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+
+        // Get current month
+        String[] monthName = {"Januari", "Februari",
+                "Maret", "April", "Mei", "Juni", "Juli",
+                "Agustus", "September", "Oktober", "November",
+                "Desember"};
+
+        String month = monthName[calendar.get(Calendar.MONTH)];
+
+        // Get current year
+        String year = new SimpleDateFormat("yyyy").format(calendar.getTime());
+
+        // Build combination header details
+        String combination = day + ", " + month + " " + year + " ";
+        tvDateDetails.setText(combination);
      }
 }

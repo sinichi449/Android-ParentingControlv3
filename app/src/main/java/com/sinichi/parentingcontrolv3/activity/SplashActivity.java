@@ -16,6 +16,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SetAppearance.setExtendStatusBarWithView(this);
         setContentView(R.layout.activity_splash);
-        a.makeSplash(this, this, LoginActivity.class, 2.8f);
+        a.makeSplash(this, this, LoginActivity.class, 2.3f);
     }
 }

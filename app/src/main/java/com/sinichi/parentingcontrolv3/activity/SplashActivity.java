@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.MakeSplash;
+import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        a.setToFullScreenActivity(this);
+        SetAppearance.setExtendStatusBarWithView(this);
         setContentView(R.layout.activity_splash);
         a.makeSplash(this, this, LoginActivity.class, 2.8f);
     }

@@ -141,6 +141,10 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                     Intent i = new Intent(ChatActivity.this, MapsActivity.class);
                     startActivity(i);
                     finish();
+                } else if (id == R.id.menu_profile) {
+                    Intent i = new Intent(ChatActivity.this, ProfileActivity.class);
+                    startActivity(i);
+                    finish();
                 }
                 return true;
             }

@@ -12,4 +12,9 @@
         android:id="@+id/menu_chat"
         android:title="Pesan"
         android:icon="@drawable/pesan"/>
+
+    <item
+        android:id="@+id/menu_profile"
+        android:title="Profil"
+        android:icon="@drawable/ic_account_circle_black_24dp" />
 </menu>

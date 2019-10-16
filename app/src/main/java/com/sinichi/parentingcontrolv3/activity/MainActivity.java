@@ -8,17 +8,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
@@ -30,7 +23,6 @@ import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity implements z {
@@ -68,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements z {
                     finish();
                 } else if (id == R.id.menu_chat) {
                     Intent i = new Intent(MainActivity.this, ChatActivity.class);
+                    startActivity(i);
+                    finish();
+                } else if (id == R.id.menu_profile) {
+                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
                     finish();
                 }

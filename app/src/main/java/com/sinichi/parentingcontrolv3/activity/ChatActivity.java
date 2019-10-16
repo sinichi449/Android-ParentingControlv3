@@ -3,6 +3,7 @@ package com.sinichi.parentingcontrolv3.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -47,10 +48,10 @@ import com.sinichi.parentingcontrolv3.util.SetAppearance;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /*
     If there are any missing data retrieve from the cloud, check in
@@ -80,23 +81,21 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         TextView messageTextView;
         ImageView messageImageView;
         TextView messengerTextView;
-        CircleImageView messengerImageView;
+        ConstraintLayout constraintLayout;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             messageTextView = itemView.findViewById(R.id.tv_message_chat);
             messageImageView = itemView.findViewById(R.id.img_message_chat);
-            messengerTextView = itemView.findViewById(R.id.tv_username_chat);
-            messengerImageView = itemView.findViewById(R.id.imgUserPhoto);
+            constraintLayout = itemView.findViewById(R.id.constraint_item_message);
+//            messengerTextView = itemView.findViewById(R.id.tv_username_chat);
         }
     }
 
     private static final String TAG = "Results";
     private static final int REQUEST_IMAGE = 2;
-    public static final String ANONYMOUS = "anonymous";
     private String mUsername;
     private String mPhotoUrl;
-    private SharedPreferences mSharedPreference;
     private GoogleApiClient mGoogleApiClient;
     private ImageView mSendButton;
     private RecyclerView mMessageRecyclerView;
@@ -192,10 +191,23 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             protected void onBindViewHolder(@NonNull final MessageViewHolder viewHolder,
                                             int i,
                                             @NonNull ChatModel friendlyMessage) {
+                // TODO: Set chat logic
+                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                // TODO: Inflate via view root
+                ConstraintSet set = new ConstraintSet();
+                ConstraintLayout layout = viewHolder.constraintLayout;
+                set.clone(layout);
+
                 if (friendlyMessage.getText() != null) {
                     viewHolder.messageTextView.setText(friendlyMessage.getText());
                     viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
                     viewHolder.messageImageView.setVisibility(ImageView.GONE);
+                    if (friendlyMessage.getName().equals(sharedPreferences.getString(Constant.USERNAME, "Anonymous"))) {
+                        set.connect(R.id.tv_message_chat,ConstraintSet.END, viewHolder.constraintLayout.getId(),ConstraintSet.END);
+                        viewHolder.messageTextView.setBackgroundResource(R.drawable.bg_outgoing_chat);
+                        viewHolder.messageTextView.setTextColor(Color.parseColor("#000000"));
+                        set.applyTo(layout);
+                    }
                 } else if (friendlyMessage.getImageUrl() != null) {
                     String imageUrl = friendlyMessage.getImageUrl();
                     if (imageUrl.startsWith("gs://")) {
@@ -223,17 +235,6 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                     }
                     viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
                     viewHolder.messageTextView.setVisibility(TextView.GONE);
-                }
-
-                // TODO: Set username
-                viewHolder.messengerTextView.setText(friendlyMessage.getName());
-                if (friendlyMessage.getPhotoUrl() == null) {
-                    viewHolder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(
-                            getApplicationContext(), R.drawable.ic_account_circle_black_36dp));
-                } else {
-                    Glide.with(getApplicationContext())
-                            .load(friendlyMessage.getPhotoUrl())
-                            .into(viewHolder.messengerImageView);
                 }
             }
         };

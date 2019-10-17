@@ -69,12 +69,12 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void initComponents() {
-
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
     }
 
     @Override
     public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
-        SetAppearance.onBottomNavigationClick(context, mBottomNavigation);
+        SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_chat);
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -119,6 +119,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initComponents();
+        setBottomNavigationAction(this, mBottomNavigation);
 
         // INITIALIZE FIREBASE
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -127,29 +128,6 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
-
-        mBottomNavigation = findViewById(R.id.bottom_navigation);
-        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id = menuItem.getItemId();
-                if (id == R.id.menu_overview) {
-                    Intent i = new Intent(ChatActivity.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                } else if (id == R.id.menu_map) {
-                    Intent i = new Intent(ChatActivity.this, MapsActivity.class);
-                    startActivity(i);
-                    finish();
-                } else if (id == R.id.menu_profile) {
-                    Intent i = new Intent(ChatActivity.this, ProfileActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-                return true;
-            }
-        });
-        mBottomNavigation.setSelectedItemId(R.id.menu_chat);
 
         // Set LayoutManager
         mMessageRecyclerView = findViewById(R.id.recyclerViewChat);
@@ -206,6 +184,8 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                     viewHolder.messageTextView.setText(friendlyMessage.getText());
                     viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
                     viewHolder.messageImageView.setVisibility(ImageView.GONE);
+
+                    // Set chat bubble to be in left or to be in right
                     if (friendlyMessage.getName().equals(sharedPreferences.getString(Constant.USERNAME, "Anonymous"))) {
                         set.connect(R.id.tv_message_chat,ConstraintSet.END, viewHolder.constraintLayout.getId(),ConstraintSet.END);
                         viewHolder.messageTextView.setBackgroundResource(R.drawable.bg_outgoing_chat);

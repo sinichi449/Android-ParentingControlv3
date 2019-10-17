@@ -13,6 +13,8 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.ChatActivity;
 import com.sinichi.parentingcontrolv3.activity.MainActivity;
 import com.sinichi.parentingcontrolv3.activity.MapsActivity;
+import com.sinichi.parentingcontrolv3.activity.ProfileActivity;
+import com.sinichi.parentingcontrolv3.fragment.OverviewFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -28,33 +30,48 @@ public class SetAppearance {
         window.setStatusBarColor(ContextCompat.getColor(activity,color));
     }
 
-    public static void onBottomNavigationClick(final Context context, final BottomNavigationView btmNavView) {
+    public static void onBottomNavigationClick(final Context context, final Activity activity, final BottomNavigationView btmNavView, int menuItemId) {
         btmNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.menu_overview:
-                        if (context.getClass().getSimpleName().equals("MainActivity")) {
-                            break;
-                        } else {
-                            context.startActivity(new Intent(context, MainActivity.class));
-                        }
-                    case R.id.menu_map:
-                        if (context.getClass().getSimpleName().equals("MapsActivity")) {
-                            break;
-                        } else {
-                            context.startActivity(new Intent(context, MapsActivity.class));
-                        }
-                    case R.id.menu_chat:
-                        if (context.getClass().getSimpleName().equals("ChatActivity")) {
-                            break;
-                        } else {
-                            context.startActivity(new Intent(context, ChatActivity.class));
-                        }
+                int id = menuItem.getItemId();
+                if (id == R.id.menu_map) {
+                    Intent i = new Intent(context, MapsActivity.class);
+                    if (context instanceof MapsActivity) {
+
+                    } else {
+                        context.startActivity(i);
+                        activity.finish();
+                    }
+                } else if (id == R.id.menu_chat) {
+                    Intent i = new Intent(context, ChatActivity.class);
+                    if (context instanceof ChatActivity) {
+
+                    } else {
+                        context.startActivity(i);
+                        activity.finish();
+                    }
+                } else if (id == R.id.menu_profile) {
+                    Intent i = new Intent(context, ProfileActivity.class);
+                    if (context instanceof ProfileActivity) {
+
+                    } else {
+                        context.startActivity(i);
+                        activity.finish();
+                    }
+                } else if (id == R.id.menu_overview) {
+                    Intent i = new Intent(context, MainActivity.class);
+                    if (context instanceof MainActivity) {
+
+                    } else {
+                        context.startActivity(i);
+                        activity.finish();
+                    }
                 }
                 return true;
             }
         });
+        btmNavView.setSelectedItemId(menuItemId);
     }
 
     public static void setExtendStatusBarWithView(Activity activity) {

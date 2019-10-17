@@ -50,27 +50,7 @@ public class MainActivity extends AppCompatActivity implements z {
         setContentView(R.layout.activity_main);
         initComponents();
 
-        mBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id = menuItem.getItemId();
-                if (id == R.id.menu_map) {
-                    Intent i = new Intent(MainActivity.this, MapsActivity.class);
-                    startActivity(i);
-                    finish();
-                } else if (id == R.id.menu_chat) {
-                    Intent i = new Intent(MainActivity.this, ChatActivity.class);
-                    startActivity(i);
-                    finish();
-                } else if (id == R.id.menu_profile) {
-                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-                return true;
-            }
-        });
-        mBottomNavigation.setSelectedItemId(R.id.menu_overview);
+        SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
 
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);

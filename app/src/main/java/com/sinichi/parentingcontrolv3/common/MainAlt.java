@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -22,6 +23,9 @@ import com.sinichi.parentingcontrolv3.model.Model;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainAlt implements d {
     private SnapshotParser<Model> parser;
@@ -94,5 +98,32 @@ public class MainAlt implements d {
                 activity.finish();
             }
         });
+    }
+
+    public void setCollapsingCalendar(TextView tvDate, TextView tvDateDetails) {
+        Calendar calendar = Calendar.getInstance();
+        // Get current date
+        SimpleDateFormat formatter = new SimpleDateFormat("dd");
+        tvDate.setText(formatter.format(calendar.getTime()));
+
+        // Get current day of week
+        String[] daysName = {"Minggu", "Senin", "Selasa", "Rabu",
+                "Kamis", "Jum'at", "Sabtu"};
+        String day = daysName[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+
+        // Get current month
+        String[] monthName = {"Januari", "Februari",
+                "Maret", "April", "Mei", "Juni", "Juli",
+                "Agustus", "September", "Oktober", "November",
+                "Desember"};
+
+        String month = monthName[calendar.get(Calendar.MONTH)];
+
+        // Get current year
+        String year = new SimpleDateFormat("yyyy").format(calendar.getTime());
+
+        // Build combination header details
+        String combination = day + ", " + month + " " + year + " ";
+        tvDateDetails.setText(combination);
     }
 }

@@ -29,7 +29,7 @@ import java.util.Calendar;
 
 public class MainAlt implements d {
     private SnapshotParser<Model> parser;
-    private static FirebaseRecyclerAdapter<Model, B.DataViewHolder> mFirebaseAdapter;
+    private static FirebaseRecyclerAdapter<Model, DataSholatViewHolder.DataViewHolder> mFirebaseAdapter;
 
     @Override
     public void parseSnapShot() {
@@ -51,9 +51,9 @@ public class MainAlt implements d {
         FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
                 .setQuery(kegiatanRef, parser).build();
         mFirebaseAdapter =
-                new FirebaseRecyclerAdapter<Model, B.DataViewHolder>(options) {
+                new FirebaseRecyclerAdapter<Model, DataSholatViewHolder.DataViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull B.DataViewHolder dataViewHolder, int i, @NonNull Model model) {
+                    protected void onBindViewHolder(@NonNull DataSholatViewHolder.DataViewHolder dataViewHolder, int i, @NonNull Model model) {
                         dataViewHolder.tvTanggal.setText(model.getTanggal());
                         dataViewHolder.tvHari.setText(model.getHari());
                         dataViewHolder.tvBulan.setText(model.getBulan());
@@ -66,9 +66,9 @@ public class MainAlt implements d {
                     }
                     @NonNull
                     @Override
-                    public B.DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    public DataSholatViewHolder.DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                         LayoutInflater inflater1 = LayoutInflater.from(parent.getContext());
-                        return new B.DataViewHolder(inflater1.inflate(
+                        return new DataSholatViewHolder.DataViewHolder(inflater1.inflate(
                                 R.layout.layout_item, parent, false));
                     }
                 };

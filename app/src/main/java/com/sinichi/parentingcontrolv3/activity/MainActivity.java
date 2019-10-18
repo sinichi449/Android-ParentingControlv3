@@ -55,6 +55,30 @@ public class MainActivity extends AppCompatActivity implements z {
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (position == 0) {
+                    // TODO: Change CollapsingToolbarLayout to CalendarView Header
+
+                } else if (position == 1) {
+                    // TODO: Change CollapsingToolbarLayout to Statistic Layout
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
 
         MainAlt mainAlt = new MainAlt();
         Button btnLogOut = findViewById(R.id.btn_logout);

@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * A simple {@link Fragment} subclass.
+ * ChatViewHolder simple {@link Fragment} subclass.
  */
 public class StatisticFragment extends Fragment {
     MainAlt mainAlt = new MainAlt();

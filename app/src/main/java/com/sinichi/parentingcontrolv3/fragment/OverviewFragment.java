@@ -24,7 +24,7 @@ import java.util.Calendar;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * ChatViewHolder simple {@link Fragment} subclass.
  */
 public class OverviewFragment extends Fragment {
 

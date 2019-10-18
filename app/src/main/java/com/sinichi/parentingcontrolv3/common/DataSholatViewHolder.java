@@ -9,18 +9,18 @@ import com.sinichi.parentingcontrolv3.R;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class B {
+class DataSholatViewHolder {
 
-    public static class DataViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvTanggal;
-        public TextView tvHari;
-        public TextView tvBulan;
-        public TextView tvTahun;
-        public TextView tvJumlahSholat;
-        public CheckBox chkMembantuOrtu;
-        public CheckBox chkSekolah;
+    static class DataViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTanggal;
+        TextView tvHari;
+        TextView tvBulan;
+        TextView tvTahun;
+        TextView tvJumlahSholat;
+        CheckBox chkMembantuOrtu;
+        CheckBox chkSekolah;
 
-        public DataViewHolder(@NonNull View itemView) {
+        DataViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTanggal = itemView.findViewById(R.id.tv_tanggal);
             tvHari = itemView.findViewById(R.id.tv_hari);

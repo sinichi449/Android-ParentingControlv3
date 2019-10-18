@@ -40,21 +40,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ChatAlt {
 
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
-        public TextView messageTextView;
-        public ImageView messageImageView;
-        public TextView messengerTextView;
-        public ConstraintLayout constraintLayout;
-
-        public MessageViewHolder(@NonNull View itemView) {
-            super(itemView);
-            messageTextView = itemView.findViewById(R.id.tv_message_chat);
-            messageImageView = itemView.findViewById(R.id.img_message_chat);
-            constraintLayout = itemView.findViewById(R.id.constraint_item_message);
-//            messengerTextView = itemView.findViewById(R.id.tv_username_chat);
-        }
-    }
-
     public void buildGoogleApiClient(Context context) {
         new GoogleApiClient.Builder(context)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
@@ -81,17 +66,17 @@ public class ChatAlt {
                 .setQuery(messageRef, parseDataFromCloud()).build();
     }
 
-    public FirebaseRecyclerAdapter<ChatModel, MessageViewHolder> makeFirebaseRecyclerViewAdapter(DatabaseReference messageRef, final Context context) {
-         return new FirebaseRecyclerAdapter<ChatModel, MessageViewHolder>(buildFirebaseRecyclerOption(messageRef)) {
+    public FirebaseRecyclerAdapter<ChatModel, ChatViewHolder.MessageViewHolder> makeFirebaseRecyclerViewAdapter(DatabaseReference messageRef, final Context context) {
+         return new FirebaseRecyclerAdapter<ChatModel, ChatViewHolder.MessageViewHolder>(buildFirebaseRecyclerOption(messageRef)) {
             @NonNull
             @Override
-            public ChatAlt.MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public ChatViewHolder.MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                return new ChatAlt.MessageViewHolder(inflater.inflate(R.layout.item_messages, parent, false));
+                return new ChatViewHolder.MessageViewHolder(inflater.inflate(R.layout.item_messages, parent, false));
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull final ChatAlt.MessageViewHolder viewHolder,
+            protected void onBindViewHolder(@NonNull final ChatViewHolder.MessageViewHolder viewHolder,
                                             int i,
                                             @NonNull ChatModel friendlyMessage) {
                 // TODO: Set chat logic
@@ -145,25 +130,6 @@ public class ChatAlt {
         };
     }
 
-    public void goToLastMessagePosition(final DatabaseReference messageRef, final Context context, final LinearLayoutManager mLinearLayoutManager
-    , final RecyclerView mMessageRecyclerView) {
-        makeFirebaseRecyclerViewAdapter(messageRef, context).registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                int friendlyMessageCount = makeFirebaseRecyclerViewAdapter(messageRef, context).getItemCount();
-                int lastVisiblePosition =
-                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-                if (lastVisiblePosition == -1 ||
-                        (positionStart >= (friendlyMessageCount - 1) &&
-                                lastVisiblePosition == (positionStart - 1))) {
-                    mMessageRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
-
-        makeFirebaseRecyclerViewAdapter(messageRef, context).startListening();
-    }
 
     public void enableSendButtonOnUserTyping(TextView mMessageEditText, final ImageView mSendButton) {
         mMessageEditText.addTextChangedListener(new TextWatcher() {

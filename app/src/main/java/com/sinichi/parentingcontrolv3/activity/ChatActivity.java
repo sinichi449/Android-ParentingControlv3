@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.ChatAlt;
+import com.sinichi.parentingcontrolv3.common.ChatViewHolder;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
@@ -38,17 +38,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-/*
-    If there are any missing data retrieve from the cloud, check in
-    mDatabaseReference.child.
-    ----------------------------------------------------------------
-    Take A look on mDatabaseReference.child(mFirebaseUser.getUid()).
-    child(MESSAGES_REF)
-    ----------------------------------------------------------------
-    Don't forget to get username from SharedPreference
-*/
-
-// TODO: Check for stability
 
 public class ChatActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
     private ChatAlt chatAlt;
@@ -66,7 +55,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private DatabaseReference mFirebaseDatabaseReference;
     private BottomNavigationView mBottomNavigation;
     private DatabaseReference messageRef;
-    FirebaseRecyclerAdapter<ChatModel, ChatAlt.MessageViewHolder> mFirebaseAdapter;
+    FirebaseRecyclerAdapter<ChatModel, ChatViewHolder.MessageViewHolder> mFirebaseAdapter;
 
     @Override
     public void initComponents() {
@@ -79,11 +68,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
         mMessageEditText = findViewById(R.id.messageEditText);
         mAddMessageImageView = findViewById(R.id.addMessageImageView);
-        messageRef = mFirebaseDatabaseReference
-                .child(chatAlt.getUserFirebaseUser().getUid())
-                .child(Constant.MESSAGES_CHILD);
-        mFirebaseAdapter = chatAlt.makeFirebaseRecyclerViewAdapter(messageRef, this);
-        chatAlt.getUserFirebaseUser();
+        mSendButton = findViewById(R.id.btn_send);
     }
 
     @Override
@@ -105,27 +90,38 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         // Building GoogleApiClient
         chatAlt.buildGoogleApiClient(this);
 
-        // TODO: Parse data from cloud to the ChatModel.class
         chatAlt.parseDataFromCloud();
 
-        // TODO: Add Messages' Database child over the User Uid
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        messageRef = mFirebaseDatabaseReference
+                .child(mFirebaseUser.getUid())
+                .child(Constant.MESSAGES_CHILD);
 
-        // TODO: Building communication between local data and cloud data
         chatAlt.buildFirebaseRecyclerOption(messageRef);
 
-        // TODO: FirebaseRecyclerView
-        mMessageRecyclerView.setAdapter(chatAlt.makeFirebaseRecyclerViewAdapter(messageRef, this));
+        mFirebaseAdapter = chatAlt.makeFirebaseRecyclerViewAdapter(messageRef, this);
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int friendlyMessageCount = mFirebaseAdapter.getItemCount();
+                int lastVisiblePosition =
+                        mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                if (lastVisiblePosition == -1 ||
+                        (positionStart >= (friendlyMessageCount - 1) &&
+                                lastVisiblePosition == (positionStart - 1))) {
+                    mMessageRecyclerView.scrollToPosition(positionStart);
+                }
+            }
+        });
 
-        // TODO: On activity launched, go to the last message position
-        chatAlt.goToLastMessagePosition(messageRef, this, mLinearLayoutManager, mMessageRecyclerView);
+        mMessageRecyclerView.setAdapter(mFirebaseAdapter);
 
-        // TODO: Enable send button when user typing
         chatAlt.enableSendButtonOnUserTyping(mMessageEditText, mSendButton);
 
-        mSendButton = findViewById(R.id.sendButton);
-        // TODO: Send button behavior
-        chatAlt.sendMessages(this, mSendButton, mMessageEditText, mPhotoUrl, mFirebaseDatabaseReference);
+        chatAlt.sendMessages(this, mSendButton, mMessageEditText,
+                mPhotoUrl, mFirebaseDatabaseReference);
 
         // TODO: When user wants to send images
         mAddMessageImageView.setOnClickListener(new View.OnClickListener() {

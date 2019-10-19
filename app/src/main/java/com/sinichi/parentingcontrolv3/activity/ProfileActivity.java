@@ -18,6 +18,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SetAppearance.setExtendStatusBarWithView(this);
         setContentView(R.layout.activity_profile);
+        SetAppearance.hideNavigationBar(this);
 
         BottomNavigationView mBottomNavigation = findViewById(R.id.bottom_navigation);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);

@@ -37,7 +37,7 @@ public class LoginAlt extends LoginActivity implements b{
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             Intent i = new Intent(context, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(i);
             activity.finish();
         }

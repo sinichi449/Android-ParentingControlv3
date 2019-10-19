@@ -82,7 +82,8 @@
             android:layout_height="140dp"
             android:src="@drawable/footer2"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-25dp"/>
+            android:layout_marginBottom="-25dp"
+            android:contentDescription="Footer" />
 
     </RelativeLayout>
 

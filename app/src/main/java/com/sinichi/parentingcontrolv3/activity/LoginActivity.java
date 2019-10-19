@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        SetAppearance.hideNavigationBar(this);
         loginAlt = new LoginAlt();
 
         // If user has credential, go to MainActivity

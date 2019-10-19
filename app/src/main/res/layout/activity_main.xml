@@ -22,77 +22,27 @@
             android:fitsSystemWindows="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout_collapsingtoolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/linear_layout_collapsingtoolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
-                        android:id="@+id/calendar"
+                        android:id="@+id/img_header_calendar"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginStart="-40dp"
-                        android:layout_marginEnd="-40dp"
-                        android:layout_marginTop="-40dp"
-                        android:layout_marginBottom="-40dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="header" />
 
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/arial"
-                    android:text="Hari Ini"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="10dp"/>
-
-
-                <TextView
-                    android:id="@+id/tv_header_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/arial_rounded"
-                    android:text="16"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="120sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv1"
-                    app:layout_constraintBottom_toTopOf="@id/tv_header_date_details" />
-
-                <TextView
-                    android:id="@+id/tv_header_date_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jumat, Maret 2001"
-                    android:fontFamily="@font/arial"
-                    android:textStyle="bold|italic"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_header_date"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="10dp"/>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -103,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/bg_tablayout_rounded"
-            app:tabTextColor="#000"/>
+            app:tabTextColor="#000"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -127,13 +78,5 @@
         android:background="@color/colorSkyBlue"
         app:itemTextColor="@color/colorWhite"
         app:itemIconTint="@color/colorWhite"/>
-
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:layout_gravity="bottom |center"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

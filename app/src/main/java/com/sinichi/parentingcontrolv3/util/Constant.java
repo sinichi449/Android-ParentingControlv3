@@ -3,6 +3,7 @@ package com.sinichi.parentingcontrolv3.util;
 public class Constant {
 
     public static final String TAG = "Result";
+    public static final int GPS_REQUEST = 98;
     public static String SHARED_PREFS = "SHARED_PREFS";
     public static String USER_ANAK = "Anak";
     public static String USER_ORANG_TUA = "Orangtua";

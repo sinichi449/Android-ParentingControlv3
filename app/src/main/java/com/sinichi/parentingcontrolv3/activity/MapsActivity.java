@@ -3,47 +3,57 @@ package com.sinichi.parentingcontrolv3.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.util.Constant;
+import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProvider;
+    private SupportMapFragment mapFragment;
+    private BottomNavigationView bottomNavigationView;
     private LatLng currentLocation;
+    private boolean isGPS = false;
+
+    private void initComponents() {
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetAppearance.setExtendStatusBarWithView(this);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         checkLocationPermission();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        turnOnGPS();
+        initComponents();
         mapFragment.getMapAsync(this);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         SetAppearance.onBottomNavigationClick(this, this, bottomNavigationView, R.id.menu_map);
     }
 
@@ -79,17 +89,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        // Add getCollapsingToolbarLayoutView marker in Sydney and move the camera
-        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(this);
-        mFusedLocationProvider.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+        mMap.setMyLocationEnabled(true);
+        animateToUserLocation();
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                animateToUserLocation();
+                return true;
+            }
+        });
+    }
+
+    private void animateToUserLocation() {
+        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
+        mFusedLocationProvider.getLastLocation().addOnSuccessListener(MapsActivity.this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(currentLocation).title("Lorem ipsum"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+                    float zoomLevel = 19.0f;
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+                } else {
+                    Snackbar.make(findViewById(R.id.constraint_layout_maps), "Current location not available, turn on GPS.",
+                            Snackbar.LENGTH_LONG).show();
+                    turnOnGPS();
                 }
             }
         });
     }
+
+    private void turnOnGPS() {
+        new GpsUtil(MapsActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
+            @Override
+            public void gpsStatus(boolean isGPSEnable) {
+                isGPS = isGPSEnable;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_OK) {
+            if (requestCode == Constant.GPS_REQUEST) {
+                isGPS = true;
+            }
+        }
+    }
 }
+
+

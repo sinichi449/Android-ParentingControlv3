@@ -51,7 +51,7 @@ public class StatisticFragment extends Fragment {
 
         mainAlt.parseSnapShot();
         mainAlt.recyclerViewAdapterBuilder(getContext(), kegiatanRef, mRecyclerView);
-        mainAlt.retrieveData(true);;
+        mainAlt.retrieveData(true);
 
         return root;
     }

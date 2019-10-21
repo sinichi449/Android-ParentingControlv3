@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -89,6 +90,19 @@ public class MainAlt implements d {
     @Override
     public void signOut(final Activity activity, final Context context, Button btnLogOut) {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(context, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(i);
+                activity.finish();
+            }
+        });
+    }
+
+    public void signOut(final Activity activity, final Context context, ImageView imgSignOut) {
+        imgSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();

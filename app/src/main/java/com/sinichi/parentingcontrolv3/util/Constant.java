@@ -4,6 +4,11 @@ public class Constant {
 
     public static final String TAG = "Result";
     public static final int GPS_REQUEST = 98;
+    public static final String DATA_NAMA = "USER_NAMA";
+    public static final String DATA_ALAMAT = "USER_ALAMAT";
+    public static final String DATA_NOMOR_TELEPON = "USER_NOMOR_TELEPON";
+    public static final String DATA_TANGGAL_LAHIR = "USER_TANGGAL_LAHIR";
+    public static final String DATA_SEKOLAH = "USER_SEKOLAH";
     public static String SHARED_PREFS = "SHARED_PREFS";
     public static String USER_ANAK = "Anak";
     public static String USER_ORANG_TUA = "Orangtua";

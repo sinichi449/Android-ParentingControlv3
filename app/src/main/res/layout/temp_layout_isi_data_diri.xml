@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/temp_linear_layout_isi_data"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/txt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Masukkan nama"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/txt_alamat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="Masukkan alamat"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/txt_no_telp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="Masukkan nomor telepon"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/txt_tanggal_lahir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="Masukkkan tanggal lahir"
+        android:layout_marginTop="8dp"/>
+
+
+</LinearLayout>

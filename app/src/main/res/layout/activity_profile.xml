@@ -37,6 +37,7 @@
         app:layout_constraintBottom_toTopOf="@id/guideline2"/>
 
     <ImageView
+        android:id="@+id/btn_signout"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/pensil"
@@ -58,7 +59,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/nama"
+        android:id="@+id/tv_nama"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fulan"
@@ -70,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/anak"
+        android:id="@+id/tv_anak_ortu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Anak"
@@ -79,21 +80,21 @@
         android:textColor="@color/colorGrey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nama"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_nama"/>
 
     <ImageView
         android:id="@+id/alamat"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/alamat"
-        app:layout_constraintTop_toBottomOf="@+id/anak"
+        app:layout_constraintTop_toBottomOf="@+id/tv_anak_ortu"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="25dp"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"/>
 
     <TextView
-        android:id="@+id/tv_alamat"
+        android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Alamat"
@@ -102,13 +103,13 @@
         android:textColor="@color/colorBlack"
         app:layout_constraintStart_toEndOf="@+id/alamat"
         app:layout_constraintTop_toTopOf="@+id/alamat"
-        app:layout_constraintBottom_toTopOf="@+id/edt_alamat"
+        app:layout_constraintBottom_toTopOf="@+id/tv_alamat"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"/>
 
     <TextView
-        android:id="@+id/edt_alamat"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_alamat"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Sumbermanjing Wetan, Malang"
         android:fontFamily="@font/arial_rounded"
@@ -116,9 +117,13 @@
         android:textColor="@color/colorGrey"
         app:layout_constraintStart_toEndOf="@+id/alamat"
         app:layout_constraintBottom_toBottomOf="@+id/alamat"
-        app:layout_constraintTop_toBottomOf="@+id/tv_alamat"
+        app:layout_constraintTop_toBottomOf="@+id/tv1"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"/>
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="5dp"/>
 
     <View
         android:id="@+id/div1"
@@ -142,7 +147,7 @@
         android:layout_marginLeft="25dp"/>
 
     <TextView
-        android:id="@+id/tv_sekolah"
+        android:id="@+id/tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sekolah"
@@ -151,19 +156,19 @@
         android:textColor="@color/colorBlack"
         app:layout_constraintTop_toTopOf="@+id/sekolah"
         app:layout_constraintStart_toEndOf="@+id/sekolah"
-        app:layout_constraintBottom_toTopOf="@+id/edt_sekolah"
+        app:layout_constraintBottom_toTopOf="@+id/tv_sekolah"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"/>
 
     <TextView
-        android:id="@+id/edt_sekolah"
+        android:id="@+id/tv_sekolah"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SMK Negeri 1 Turen"
         android:fontFamily="@font/arial_rounded"
         android:textSize="18sp"
         android:textColor="@color/colorGrey"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sekolah"
+        app:layout_constraintTop_toBottomOf="@+id/tv2"
         app:layout_constraintStart_toEndOf="@+id/sekolah"
         app:layout_constraintBottom_toBottomOf="@+id/sekolah"
         android:layout_marginStart="15dp"
@@ -191,7 +196,7 @@
         android:layout_marginLeft="25dp"/>
 
     <TextView
-        android:id="@+id/tv_telepon"
+        android:id="@+id/tv3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Telepon"
@@ -204,7 +209,7 @@
         android:layout_marginLeft="15dp"/>
 
     <TextView
-        android:id="@+id/edt_telepon"
+        android:id="@+id/tv_nomor_telepon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+6285234507711"
@@ -213,7 +218,7 @@
         android:textColor="@color/colorGrey"
         app:layout_constraintBottom_toBottomOf="@+id/telepon"
         app:layout_constraintStart_toEndOf="@+id/telepon"
-        app:layout_constraintTop_toBottomOf="@+id/tv_telepon"
+        app:layout_constraintTop_toBottomOf="@+id/tv3"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"/>
 
@@ -239,7 +244,7 @@
         android:layout_marginTop="15dp"/>
 
     <TextView
-        android:id="@+id/tv_ultah"
+        android:id="@+id/tv4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tangal Lahir"
@@ -248,12 +253,12 @@
         android:textColor="@color/colorBlack"
         app:layout_constraintStart_toEndOf="@+id/ultah"
         app:layout_constraintTop_toTopOf="@+id/ultah"
-        app:layout_constraintBottom_toTopOf="@+id/edt_ultah"
+        app:layout_constraintBottom_toTopOf="@+id/tv_tanggal_lahir"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"/>
 
     <TextView
-        android:id="@+id/edt_ultah"
+        android:id="@+id/tv_tanggal_lahir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="16 Maret 2001"
@@ -262,7 +267,7 @@
         android:textColor="@color/colorGrey"
         app:layout_constraintStart_toEndOf="@+id/ultah"
         app:layout_constraintBottom_toBottomOf="@+id/ultah"
-        app:layout_constraintTop_toBottomOf="@+id/tv_ultah"
+        app:layout_constraintTop_toBottomOf="@+id/tv4"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"/>
 

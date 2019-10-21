@@ -1,12 +1,14 @@
 package com.sinichi.parentingcontrolv3.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -14,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
@@ -23,6 +26,7 @@ import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
@@ -33,6 +37,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEdit;
     private LoginAlt loginAlt;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void initComponents() {
@@ -78,9 +84,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                editor = sharedPreferences.edit();
                 if (imgAnak.isSelected()) {
                     editor.putString(Constant.USERNAME, Constant.USER_ANAK).apply();
                 } else if (imgOrangTua.isSelected()) {
@@ -88,10 +93,48 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else {
                     editor.putString(Constant.USERNAME, "Anonymous").apply();
                 }
-                startActivityForResult(signIntent, Constant.RC_SIGN_IN);
+                // TODO: Launch custom alertdialog
+                launchAlerDialog();
             }
         });
 
+    }
+
+    private void launchAlerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View dialogView = getLayoutInflater().inflate(R.layout.temp_layout_isi_data_diri, null);
+        builder.setView(dialogView)
+                .setCancelable(false)
+                .setTitle("Isi data diri");
+        final TextView tvNama = dialogView.findViewById(R.id.txt_name);
+        final TextView tvAlamat = dialogView.findViewById(R.id.txt_alamat);
+        final TextView tvNomorTelepon = dialogView.findViewById(R.id.txt_no_telp);
+        final TextView tvTanggalLahir = dialogView.findViewById(R.id.txt_tanggal_lahir);
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String nama = tvNama.getText().toString();
+                String alamat = tvAlamat.getText().toString();
+                String nomorTelpon = tvNomorTelepon.getText().toString();
+                String tanggalLahir = tvTanggalLahir.getText().toString();
+                // TODO: Check user input
+                if (nama.equals("")) {
+                    tvNama.setError("Harap isi form yang kosong");
+                } else if (alamat.equals("")) {
+                    tvAlamat.setError("Harap isi form yang kosong");
+                } else {
+                    editor.putString(Constant.DATA_NAMA, nama);
+                    editor.putString(Constant.DATA_ALAMAT, alamat);
+                    editor.putString(Constant.DATA_NOMOR_TELEPON, nomorTelpon);
+                    editor.putString(Constant.DATA_TANGGAL_LAHIR, tanggalLahir);
+                    editor.apply();
+                    Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                    startActivityForResult(signIntent, Constant.RC_SIGN_IN);
+                }
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override

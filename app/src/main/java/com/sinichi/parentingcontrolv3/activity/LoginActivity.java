@@ -11,23 +11,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import static com.sinichi.parentingcontrolv3.activity.ProfileActivity.isValidTextView;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
 
@@ -118,11 +118,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 String nomorTelpon = tvNomorTelepon.getText().toString();
                 String tanggalLahir = tvTanggalLahir.getText().toString();
                 // TODO: Check user input
-                if (nama.equals("")) {
-                    tvNama.setError("Harap isi form yang kosong");
-                } else if (alamat.equals("")) {
-                    tvAlamat.setError("Harap isi form yang kosong");
-                } else {
+                if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
+                        && isValidTextView(tvNomorTelepon) && isValidTextView(tvTanggalLahir)) {
                     editor.putString(Constant.DATA_NAMA, nama);
                     editor.putString(Constant.DATA_ALAMAT, alamat);
                     editor.putString(Constant.DATA_NOMOR_TELEPON, nomorTelpon);
@@ -130,6 +127,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     editor.apply();
                     Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     startActivityForResult(signIntent, Constant.RC_SIGN_IN);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Mohon isi kolom yang kosong", Toast.LENGTH_LONG)
+                            .show();
                 }
             }
         });

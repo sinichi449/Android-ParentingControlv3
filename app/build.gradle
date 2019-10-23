@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -44,4 +46,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    compile "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

@@ -133,6 +133,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         });
+        builder.setNegativeButton("Admin Mode", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
+                        Constant.RC_SIGN_IN);
+            }
+        });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

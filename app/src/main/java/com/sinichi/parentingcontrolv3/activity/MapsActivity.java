@@ -1,32 +1,45 @@
 package com.sinichi.parentingcontrolv3.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.util.Log;
 
+import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.common.ChatAlt;
+import com.sinichi.parentingcontrolv3.model.LocationModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -42,11 +55,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private BottomNavigationView bottomNavigationView;
     private LatLng currentLocation;
     private boolean isGPS = false;
+    private ChatAlt chatAlt;
+    private FirebaseAuth mFirebaseAuth;
+    private DatabaseReference mFirebaseDatabaseReference;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference locationRef;
+    private LocationModel locationModel;
 
     private void initComponents() {
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        chatAlt = new ChatAlt();
+        chatAlt.buildGoogleApiClient(MapsActivity.this);
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        locationRef = mFirebaseDatabaseReference
+                .child(mFirebaseUser.getUid())
+                .child(Constant.LOCATION_CHILD);
     }
 
     @Override
@@ -55,63 +83,72 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SetAppearance.setExtendStatusBarWithView(this);
         SetAppearance.hideNavigationBar(this);
         setContentView(R.layout.activity_maps);
-        checkLocationPermission();
         turnOnGPS();
         initComponents();
         mapFragment.getMapAsync(this);
         SetAppearance.onBottomNavigationClick(this, this, bottomNavigationView, R.id.menu_map);
     }
 
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new AlertDialog.Builder(this)
-                        .setTitle("Lorem ipsum")
-                        .setMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-                        .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(MapsActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        Constant.REQUEST_LOCATION);
-                            }
-                        })
-                        .create()
-                        .show();
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        Constant.REQUEST_LOCATION);
-            }
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    Constant.REQUEST_LOCATION);
+            return false;
         }
+        return true;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        String username = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE).getString(Constant.USERNAME, null);
         mMap = googleMap;
-        checkLocationPermission();
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(true);
-        animateToUserLocation();
+        if (username.equals(Constant.USER_ANAK)) {
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.getUiSettings().setCompassEnabled(true);
+            mMap.getUiSettings().setMapToolbarEnabled(true);
+            animateToUserLocation();
+            if (checkPermission()) {
+                mMap.setMyLocationEnabled(true);
+            }
+        } else if (username.equals(Constant.USER_ORANG_TUA)) {
+            mMap.getUiSettings().setCompassEnabled(true);
+            ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    LocationModel locationModel = dataSnapshot.getValue(LocationModel.class);
+                    if (locationModel != null) {
+                        currentLocation = new LatLng(locationModel.getLatitude(), locationModel.getLongitude());
+                        mMap.clear();
+                        mMap.addMarker(new MarkerOptions().position(currentLocation)
+                                .title("Lokasi Anak"));
+                        float zoomLevel = 16.0f;
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+            locationRef.addValueEventListener(valueEventListener);
+        }
     }
 
     private void animateToUserLocation() {
-        mFusedLocationProvider = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
         mFusedLocationProvider.getLastLocation().addOnSuccessListener(MapsActivity.this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                    float zoomLevel = 19.0f;
+                    float zoomLevel = 20.0f;
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+                    requestLocationUpdates();
                 } else {
                     Snackbar.make(findViewById(R.id.constraint_layout_maps), "Current location not available, turn on GPS.",
                             Snackbar.LENGTH_LONG).show();
@@ -128,6 +165,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 isGPS = isGPSEnable;
             }
         });
+    }
+
+    private void requestLocationUpdates() {
+        LocationRequest request = new LocationRequest();
+        request.setInterval(5000);
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        int permission = ContextCompat.checkSelfPermission(MapsActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationProvider.requestLocationUpdates(request, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    Location location = locationResult.getLastLocation();
+                    if (location != null) {
+                        locationModel = new LocationModel(location.getLatitude(), location.getLongitude());
+                        locationRef.setValue(locationModel);
+                        Log.d("CurrentLocation", String.valueOf(locationModel.getLongitude()));
+                    }
+                }
+            }, null);
+        }
     }
 
     @Override

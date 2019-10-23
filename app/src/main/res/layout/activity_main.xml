@@ -40,8 +40,7 @@
                         android:id="@+id/img_header_calendar"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        android:contentDescription="header" />
-
+                        android:contentDescription="header"/>
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -196,30 +196,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLineChartView() {
-        chart = new LineChartView(this);
-        chart.setId(ViewCompat.generateViewId());
-        constraintSet.constrainWidth(chart.getId(), ConstraintSet.MATCH_CONSTRAINT);
-        constraintSet.constrainHeight(chart.getId(), setDp(this, 250));
-        chart.setInteractive(true);
-        List<PointValue> values = new ArrayList<>();
-        values.add(new PointValue(0, 2));
-        values.add(new PointValue(1, 4));
-        values.add(new PointValue(2, 3));
-        values.add(new PointValue(3, 4));
-        Line line = new Line(values).setColor(getResources().getColor(R.color.colorSkyBlue))
-                .setCubic(true);
-
-        List<Line> lines = new ArrayList<>();
-        lines.add(line);
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-        chart.setLineChartData(data);
-        constraintSet.connect(chart.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        constraintSet.connect(chart.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        constraintSet.connect(chart.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        constraintSet.connect(chart.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        constraintSet.applyTo(constraintLayout);
-        constraintLayout.addView(chart);
+//        chart = new LineChartView(this);
+//        chart.setId(ViewCompat.generateViewId());
+//        constraintSet.constrainWidth(chart.getId(), ConstraintSet.MATCH_CONSTRAINT);
+//        constraintSet.constrainHeight(chart.getId(), setDp(this, 250));
+//        chart.setInteractive(true);
+//        List<PointValue> values = new ArrayList<>();
+//        values.add(new PointValue(0, 2));
+//        values.add(new PointValue(1, 4));
+//        values.add(new PointValue(2, 3));
+//        values.add(new PointValue(3, 4));
+//        Line line = new Line(values).setColor(getResources().getColor(R.color.colorSkyBlue))
+//                .setCubic(true);
+//
+//        List<Line> lines = new ArrayList<>();
+//        lines.add(line);
+//        LineChartData data = new LineChartData();
+//        data.setLines(lines);
+//        chart.setLineChartData(data);
+//        constraintSet.connect(chart.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+//        constraintSet.connect(chart.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+//        constraintSet.connect(chart.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.BOTTOM);
+//        constraintSet.connect(chart.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+//        constraintSet.applyTo(constraintLayout);
+//        constraintLayout.addView(chart);
     }
 
     private void setBackgroundReferToDays(ImageView imgTarget) {

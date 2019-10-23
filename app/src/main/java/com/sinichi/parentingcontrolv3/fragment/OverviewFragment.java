@@ -51,7 +51,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private void initComponents() {
-        root = inflater.inflate(R.layout.layout_item, container, false);
+        root = inflater.inflate(R.layout.fragment_overview, container, false);
         tvTanggal = root.findViewById(R.id.tv_tanggal);
         tvHari = root.findViewById(R.id.tv_hari);
         tvBulan = root.findViewById(R.id.tv_bulan);

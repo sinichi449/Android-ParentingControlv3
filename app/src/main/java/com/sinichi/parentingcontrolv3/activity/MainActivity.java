@@ -5,11 +5,15 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.sinichi.parentingcontrolv3.R;
@@ -24,6 +28,16 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
+
+import static com.sinichi.parentingcontrolv3.common.MainAlt.getCurrentDay;
+
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigation;
     private ViewPager viewPager;
@@ -35,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHariIni;
     private TextView tvHeaderDate;
     private TextView tvHeaderDetails;
+    private LineChartView chart;
+    private int lastPosition = 0;
+    private static final int SWIPE_MIN_DISTANCE = 10;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -63,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        attachImage(R.drawable.calendar, imgHeaderCollapsingToolbar);
+        setBackgroundReferToDays();
 
         makeView();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -72,14 +91,16 @@ public class MainActivity extends AppCompatActivity {
                 int position = tab.getPosition();
                 if (position == 0) {
                     // TODO: Set Calendar Header
-                    attachImage(R.drawable.calendar, imgHeaderCollapsingToolbar);
+//                    constraintLayout.removeView(chart);
+                    setBackgroundReferToDays();
                     makeView();
                 } else if (position == 1) {
                     // TODO: Statistic Header
                     constraintLayout.removeView(tvHariIni);
                     constraintLayout.removeView(tvHeaderDate);
                     constraintLayout.removeView(tvHeaderDetails);
-                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
+//                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
+                    setLineChartView();
                 }
             }
 
@@ -93,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 int position = tab.getPosition();
                 if (position == 0) {
                     // TODO: Set Calendar Header
-                    attachImage(R.drawable.calendar, imgHeaderCollapsingToolbar);
+//                    constraintLayout.removeView(chart);
+                    setBackgroundReferToDays();
                     makeView();
                 } else if (position == 1) {
                     // TODO: Statistic Header
@@ -101,12 +123,12 @@ public class MainActivity extends AppCompatActivity {
                     constraintLayout.removeView(tvHariIni);
                     constraintLayout.removeView(tvHeaderDate);
                     constraintLayout.removeView(tvHeaderDetails);
-                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
+//                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
+                    setLineChartView();
                 }
             }
         });
-
-     }
+    }
 
     public static int setDp(Context context, int dp) {
         float density = context.getResources().getDisplayMetrics().density;
@@ -116,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     private void attachImage(int resid, ImageView imageTarget) {
         Glide.with(MainActivity.this)
                 .load(resid)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageTarget);
     }
 
@@ -175,5 +198,49 @@ public class MainActivity extends AppCompatActivity {
         constraintSet.connect(tvHeaderDetails.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         constraintSet.connect(tvHeaderDetails.getId(), ConstraintSet.TOP, tvHeaderDate.getId(), ConstraintSet.BOTTOM);
         constraintSet.connect(tvHeaderDetails.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM, setDp(MainActivity.this, 10));
+    }
+
+    private void setLineChartView() {
+        chart = new LineChartView(this);
+        chart.setId(ViewCompat.generateViewId());
+        constraintSet.constrainWidth(chart.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        constraintSet.constrainHeight(chart.getId(), setDp(this, 250));
+        chart.setInteractive(true);
+        List<PointValue> values = new ArrayList<>();
+        values.add(new PointValue(0, 2));
+        values.add(new PointValue(1, 4));
+        values.add(new PointValue(2, 3));
+        values.add(new PointValue(3, 4));
+        Line line = new Line(values).setColor(getResources().getColor(R.color.colorSkyBlue))
+                .setCubic(true);
+
+        List<Line> lines = new ArrayList<>();
+        lines.add(line);
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+        chart.setLineChartData(data);
+        constraintSet.connect(chart.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        constraintSet.connect(chart.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        constraintSet.connect(chart.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        constraintSet.connect(chart.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        constraintSet.applyTo(constraintLayout);
+        constraintLayout.addView(chart);
+    }
+
+    private void setBackgroundReferToDays() {
+        switch (getCurrentDay()) {
+            case "Senin":
+                attachImage(R.drawable.back1, imgHeaderCollapsingToolbar);
+                break;
+            case "Selasa":
+                attachImage(R.drawable.back2, imgHeaderCollapsingToolbar);
+                break;
+            case "Rabu":
+                attachImage(R.drawable.back3, imgHeaderCollapsingToolbar);
+                break;
+            case "Kamis":
+                attachImage(R.drawable.back4, imgHeaderCollapsingToolbar);
+                break;
+        }
     }
 }

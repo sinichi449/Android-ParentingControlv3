@@ -38,7 +38,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ChatAlt {
+public class ChatAlt extends ChatViewHolder {
 
     public void buildGoogleApiClient(Context context) {
         new GoogleApiClient.Builder(context)

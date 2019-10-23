@@ -1,12 +1,10 @@
 package com.sinichi.parentingcontrolv3.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,16 +19,15 @@ import com.sinichi.parentingcontrolv3.util.SetAppearance;
 public class ProfileActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private TextView tvNama, tvAnakOrOrtu, tvAlamat,
+    private TextView tvNama, tvTipeAkun, tvAlamat,
             tvSekolah, tvNomorTelepon, tvTanggalLahir;
     private BottomNavigationView mBottomNavigation;
     private ImageView imgSignOut;
 
     private void initComponents() {
         sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-//        editor = sharedPreferences.edit();
         tvNama = findViewById(R.id.tv_nama);
-        tvAnakOrOrtu = findViewById(R.id.tv_anak_ortu);
+        tvTipeAkun = findViewById(R.id.tv_anak_ortu);
         tvAlamat = findViewById(R.id.tv_alamat);
         tvSekolah = findViewById(R.id.tv_sekolah);
         tvNomorTelepon = findViewById(R.id.tv_nomor_telepon);
@@ -50,23 +47,39 @@ public class ProfileActivity extends AppCompatActivity {
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);
         mBottomNavigation.setSelectedItemId(R.id.menu_profile);
 
+        final MainAlt mainAlt = new MainAlt();
         String nama = sharedPreferences.getString(Constant.DATA_NAMA, null);
         String tipeAkun = sharedPreferences.getString(Constant.USERNAME, null);
         String alamat = sharedPreferences.getString(Constant.DATA_ALAMAT, null);
         String sekolah = sharedPreferences.getString(Constant.DATA_SEKOLAH, "SMK Negeri 1 Turen");
         String nomorTelepon = sharedPreferences.getString(Constant.DATA_NOMOR_TELEPON, null);
         String tanggalLahir = sharedPreferences.getString(Constant.DATA_TANGGAL_LAHIR, null);
-        final MainAlt mainAlt = new MainAlt();
-        if (nama == null && tipeAkun == null && alamat == null &&
-                sekolah == null && nomorTelepon == null && tanggalLahir  == null) {
-            mainAlt.signOut(ProfileActivity.this, ProfileActivity.this, imgSignOut);
-        } else {
-            tvNama.setText(nama);
-            tvAnakOrOrtu.setText(tipeAkun);
-            tvAlamat.setText(alamat);
-            tvSekolah.setText(sekolah);
-            tvNomorTelepon.setText(nomorTelepon);
-            tvTanggalLahir.setText(tanggalLahir);
+        // If sharedpreference is null
+//        if (nama.equals("") && tip) {
+//            Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+//            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(i);
+//        } else {
+        try {
+            if (nama.equals("") && tipeAkun.equals("") && alamat.equals("")
+                    && sekolah.equals("") && nomorTelepon.equals("") && tanggalLahir.equals("")) {
+                Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else {
+                tvNama.setText(nama);
+                tvTipeAkun.setText(tipeAkun);
+                tvAlamat.setText(alamat);
+                tvSekolah.setText(sekolah);
+                tvNomorTelepon.setText(nomorTelepon);
+                tvTanggalLahir.setText(tanggalLahir);
+            }
+        } catch (NullPointerException npe) {
+            Toast.makeText(ProfileActivity.this, "The user data is empty. You must relogin.", Toast.LENGTH_SHORT)
+                    .show();
+            Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         }
         imgSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,5 +87,9 @@ public class ProfileActivity extends AppCompatActivity {
                 mainAlt.signOut(ProfileActivity.this, ProfileActivity.this, imgSignOut);
             }
         });
+    }
+
+    public static boolean isValidTextView(TextView textView) {
+        return !textView.getText().toString().equals("");
     }
 }

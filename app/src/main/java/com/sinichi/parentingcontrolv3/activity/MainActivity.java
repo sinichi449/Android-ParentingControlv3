@@ -50,10 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHeaderDate;
     private TextView tvHeaderDetails;
     private LineChartView chart;
-    private int lastPosition = 0;
-    private static final int SWIPE_MIN_DISTANCE = 10;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -230,16 +226,25 @@ public class MainActivity extends AppCompatActivity {
     private void setBackgroundReferToDays() {
         switch (getCurrentDay()) {
             case "Senin":
-                attachImage(R.drawable.back1, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_senin, imgHeaderCollapsingToolbar);
                 break;
             case "Selasa":
-                attachImage(R.drawable.back2, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_selasa, imgHeaderCollapsingToolbar);
                 break;
             case "Rabu":
-                attachImage(R.drawable.back3, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_rabu, imgHeaderCollapsingToolbar);
                 break;
             case "Kamis":
-                attachImage(R.drawable.back4, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_kamis, imgHeaderCollapsingToolbar);
+                break;
+            case "Jumat":
+                attachImage(R.drawable.bg_colapse_jumat, imgHeaderCollapsingToolbar);
+                break;
+            case "Sabtu":
+                attachImage(R.drawable.bg_colapse_sabtu, imgHeaderCollapsingToolbar);
+                break;
+            case "Minggu":
+                attachImage(R.drawable.bg_colapse_minggu, imgHeaderCollapsingToolbar);
                 break;
         }
     }

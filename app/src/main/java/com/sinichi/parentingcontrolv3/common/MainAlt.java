@@ -144,7 +144,7 @@ public class MainAlt implements d {
     public static String getCurrentDay() {
         Calendar calendar = Calendar.getInstance();
         String[] days = {"Minggu", "Senin", "Selasa", "Rabu",
-                "Kamis", "Jum'at", "Sabtu"};
+                "Kamis", "Jumat", "Sabtu"};
         return days[calendar.get(Calendar.DAY_OF_WEEK) - 1];
     }
 }

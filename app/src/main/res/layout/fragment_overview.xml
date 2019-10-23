@@ -12,26 +12,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <TextView
-            android:id="@+id/tv_lorem_ipsum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:fontFamily="@font/arial_narrow_7"
-            android:gravity="center"
-            android:text="Lorem ipsum dolor sit amet, ea essent fastidii vim, duo zril vivendum ut. Id cetero appellantur mea, ex odio appareat percipit vis. Id qui duis laudem definitiones, utinam epicurei probatus in pri. Sea quidam delenit interpretaris an, no altera essent consequuntur sea. Cu per civibus sapientem, fugit integre vis no, usu in tritani tibique.
 
-Sea simul omnesque persecuti id, eu falli pericula vel, erant expetendis et vix. Ei sensibus convenire deseruisse sit, eos ea impedit propriae. Alterum explicari vim cu. Id vivendo gloriatur deterruisset nec. Nam adhuc verterem ex, in libris postulant eos.
-
-Usu te habeo exerci impetus, his omittam verterem persequeris ne, ne aliquam fastidii qui. Perfecto necessitatibus ad eam, aperiam atomorum vis id, amet omnes ei his. In amet essent scribentur his, et per illud nonumes corrumpit. Cum ad debet ridens mediocritatem, prodesset adipiscing eu quo. Ea nec meis mazim intellegat, sed sumo brute consul no, nec inermis mandamus in. In his aeterno dolorum officiis, regione temporibus contentiones vis ea.
-
-Ne quo debet omnium expetenda. Vix te nostrud reprimique. Eam vide noluisse ne. Te natum voluptaria per, te errem everti expetenda ius, quo falli iudico in. Est in alia intellegat delicatissimi, eripuit verterem mea ei.
-
-Mei nostrud pericula urbanitas in. Qui noster conceptam at, eos altera discere et. Nam ne expetenda similique. Tantas noluisse nec in, mel ei nominati indoctum."
-            android:textSize="20sp" />
 
     </androidx.core.widget.NestedScrollView>
 

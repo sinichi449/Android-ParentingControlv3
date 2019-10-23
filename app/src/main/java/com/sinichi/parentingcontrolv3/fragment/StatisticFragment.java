@@ -93,11 +93,9 @@ public class StatisticFragment extends Fragment {
                     models.add(model);
                 }
                 for (DataModel dataModel : models) {
-                    if (!dataModel.getTanggal().equals(date)) {
-                        available = false;
-                    } else {
-                        available = true;
-                    }
+                    available = dataModel.getTanggal().equals(date)
+                            && dataModel.getBulan().equals(month)
+                            && dataModel.getTahun().equals(year);
                 }
                 if (!available) {
                     // TODO: Add new data

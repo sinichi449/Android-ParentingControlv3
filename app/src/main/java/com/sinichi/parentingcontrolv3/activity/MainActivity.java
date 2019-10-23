@@ -14,23 +14,23 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.blurry.Blurry;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
@@ -73,13 +73,12 @@ public class MainActivity extends AppCompatActivity {
         initComponents();
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
-
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        setBackgroundReferToDays();
-
+        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+        
         makeView();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                    setBackgroundReferToDays();
+                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
                     makeView();
                 } else if (position == 1) {
                     // TODO: Statistic Header
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                    setBackgroundReferToDays();
+                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
                     makeView();
                 } else if (position == 1) {
                     // TODO: Statistic Header
@@ -223,28 +222,28 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout.addView(chart);
     }
 
-    private void setBackgroundReferToDays() {
+    private void setBackgroundReferToDays(ImageView imgTarget) {
         switch (getCurrentDay()) {
             case "Senin":
-                attachImage(R.drawable.bg_colapse_senin, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_senin, imgTarget);
                 break;
             case "Selasa":
-                attachImage(R.drawable.bg_colapse_selasa, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_selasa, imgTarget);
                 break;
             case "Rabu":
-                attachImage(R.drawable.bg_colapse_rabu, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_rabu, imgTarget);
                 break;
             case "Kamis":
-                attachImage(R.drawable.bg_colapse_kamis, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_kamis, imgTarget);
                 break;
             case "Jumat":
-                attachImage(R.drawable.bg_colapse_jumat, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_jumat, imgTarget);
                 break;
             case "Sabtu":
-                attachImage(R.drawable.bg_colapse_sabtu, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_sabtu, imgTarget);
                 break;
             case "Minggu":
-                attachImage(R.drawable.bg_colapse_minggu, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_minggu, imgTarget);
                 break;
         }
     }

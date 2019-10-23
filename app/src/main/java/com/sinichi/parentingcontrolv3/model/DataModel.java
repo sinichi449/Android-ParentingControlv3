@@ -3,7 +3,7 @@ package com.sinichi.parentingcontrolv3.model;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
-public class Model {
+public class DataModel {
 
     private String id;
     private String tanggal;
@@ -14,10 +14,10 @@ public class Model {
     private boolean membantuOrangTua;
     private boolean sekolah;
 
-    public Model() {
+    public DataModel() {
     }
 
-    public Model(String tanggal, String hari, String bulan, String tahun, String jumlahSholat, boolean membantuOrangTua, boolean sekolah) {
+    public DataModel(String tanggal, String hari, String bulan, String tahun, String jumlahSholat, boolean membantuOrangTua, boolean sekolah) {
         this.tanggal = tanggal;
         this.hari = hari;
         this.bulan = bulan;

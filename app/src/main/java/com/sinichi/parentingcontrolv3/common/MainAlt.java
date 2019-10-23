@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.LoginActivity;
 import com.sinichi.parentingcontrolv3.interfaces.d;
-import com.sinichi.parentingcontrolv3.model.Model;
+import com.sinichi.parentingcontrolv3.model.DataModel;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,39 +29,39 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class MainAlt implements d {
-    private SnapshotParser<Model> parser;
-    private static FirebaseRecyclerAdapter<Model, DataSholatViewHolder.DataViewHolder> mFirebaseAdapter;
+    private SnapshotParser<DataModel> parser;
+    private static FirebaseRecyclerAdapter<DataModel, DataSholatViewHolder.DataViewHolder> mFirebaseAdapter;
 
     @Override
     public void parseSnapShot() {
-        parser = new SnapshotParser<Model>() {
+        parser = new SnapshotParser<DataModel>() {
             @NonNull
             @Override
-            public Model parseSnapshot(@NonNull DataSnapshot snapshot) {
-                Model model = snapshot.getValue(Model.class);
-                if (model != null) {
-                    model.setId(snapshot.getKey());
+            public DataModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                DataModel dataModel = snapshot.getValue(DataModel.class);
+                if (dataModel != null) {
+                    dataModel.setId(snapshot.getKey());
                 }
-                return model;
+                return dataModel;
             }
         };
     }
 
     @Override
     public void recyclerViewAdapterBuilder(Context context, DatabaseReference kegiatanRef, RecyclerView localRecyclerView) {
-        FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>()
+        FirebaseRecyclerOptions<DataModel> options = new FirebaseRecyclerOptions.Builder<DataModel>()
                 .setQuery(kegiatanRef, parser).build();
         mFirebaseAdapter =
-                new FirebaseRecyclerAdapter<Model, DataSholatViewHolder.DataViewHolder>(options) {
+                new FirebaseRecyclerAdapter<DataModel, DataSholatViewHolder.DataViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull DataSholatViewHolder.DataViewHolder dataViewHolder, int i, @NonNull Model model) {
-                        dataViewHolder.tvTanggal.setText(model.getTanggal());
-                        dataViewHolder.tvHari.setText(model.getHari());
-                        dataViewHolder.tvBulan.setText(model.getBulan());
-                        dataViewHolder.tvTahun.setText(model.getTahun());
-                        dataViewHolder.tvJumlahSholat.setText(model.getJumlahSholat());
-                        dataViewHolder.chkMembantuOrtu.setChecked(model.isMembantuOrangTua());
-                        dataViewHolder.chkSekolah.setChecked(model.isSekolah());
+                    protected void onBindViewHolder(@NonNull DataSholatViewHolder.DataViewHolder dataViewHolder, int i, @NonNull DataModel dataModel) {
+                        dataViewHolder.tvTanggal.setText(dataModel.getTanggal());
+                        dataViewHolder.tvHari.setText(dataModel.getHari());
+                        dataViewHolder.tvBulan.setText(dataModel.getBulan());
+                        dataViewHolder.tvTahun.setText(dataModel.getTahun());
+                        dataViewHolder.tvJumlahSholat.setText(dataModel.getJumlahSholat());
+                        dataViewHolder.chkMembantuOrtu.setChecked(dataModel.isMembantuOrangTua());
+                        dataViewHolder.chkSekolah.setChecked(dataModel.isSekolah());
                         dataViewHolder.chkMembantuOrtu.setEnabled(false);
                         dataViewHolder.chkSekolah.setEnabled(false);
                     }
@@ -75,7 +75,7 @@ public class MainAlt implements d {
                 };
         localRecyclerView.setAdapter(mFirebaseAdapter);
         localRecyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL,
-                false));
+                true));
     }
 
     @Override

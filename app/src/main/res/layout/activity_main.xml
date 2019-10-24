@@ -56,7 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/bg_tablayout_rounded"
-            app:tabTextColor="#000"
+            android:backgroundTint="@color/colorSkyBlue"
+            app:tabTextColor="@color/colorWhite"
             />
 
     </com.google.android.material.appbar.AppBarLayout>

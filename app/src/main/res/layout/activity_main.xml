@@ -77,6 +77,6 @@
         app:menu="@menu/layout_menu"
         android:background="@color/colorSkyBlue"
         app:itemTextColor="@color/colorWhite"
-        app:itemIconTint="@color/colorWhite"/>
+        app:itemIconTint="@color/colorWhite" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,15 +16,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.firebase.ui.database.SnapshotParser;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
 import com.sinichi.parentingcontrolv3.interfaces.z;
+import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 import static com.sinichi.parentingcontrolv3.activity.ProfileActivity.isValidTextView;
@@ -133,9 +141,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         });
+        builder.setNegativeButton("Admin Mode", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
+                        Constant.RC_SIGN_IN);
+            }
+        });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

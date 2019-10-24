@@ -14,23 +14,23 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.blurry.Blurry;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
@@ -50,10 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHeaderDate;
     private TextView tvHeaderDetails;
     private LineChartView chart;
-    private int lastPosition = 0;
-    private static final int SWIPE_MIN_DISTANCE = 10;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -77,13 +73,12 @@ public class MainActivity extends AppCompatActivity {
         initComponents();
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
-
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        setBackgroundReferToDays();
-
+        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+        
         makeView();
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -92,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                    setBackgroundReferToDays();
+                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
                     makeView();
                 } else if (position == 1) {
                     // TODO: Statistic Header
@@ -115,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                    setBackgroundReferToDays();
+                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
                     makeView();
                 } else if (position == 1) {
                     // TODO: Statistic Header
@@ -201,45 +196,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLineChartView() {
-        chart = new LineChartView(this);
-        chart.setId(ViewCompat.generateViewId());
-        constraintSet.constrainWidth(chart.getId(), ConstraintSet.MATCH_CONSTRAINT);
-        constraintSet.constrainHeight(chart.getId(), setDp(this, 250));
-        chart.setInteractive(true);
-        List<PointValue> values = new ArrayList<>();
-        values.add(new PointValue(0, 2));
-        values.add(new PointValue(1, 4));
-        values.add(new PointValue(2, 3));
-        values.add(new PointValue(3, 4));
-        Line line = new Line(values).setColor(getResources().getColor(R.color.colorSkyBlue))
-                .setCubic(true);
-
-        List<Line> lines = new ArrayList<>();
-        lines.add(line);
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-        chart.setLineChartData(data);
-        constraintSet.connect(chart.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        constraintSet.connect(chart.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        constraintSet.connect(chart.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        constraintSet.connect(chart.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        constraintSet.applyTo(constraintLayout);
-        constraintLayout.addView(chart);
+//        chart = new LineChartView(this);
+//        chart.setId(ViewCompat.generateViewId());
+//        constraintSet.constrainWidth(chart.getId(), ConstraintSet.MATCH_CONSTRAINT);
+//        constraintSet.constrainHeight(chart.getId(), setDp(this, 250));
+//        chart.setInteractive(true);
+//        List<PointValue> values = new ArrayList<>();
+//        values.add(new PointValue(0, 2));
+//        values.add(new PointValue(1, 4));
+//        values.add(new PointValue(2, 3));
+//        values.add(new PointValue(3, 4));
+//        Line line = new Line(values).setColor(getResources().getColor(R.color.colorSkyBlue))
+//                .setCubic(true);
+//
+//        List<Line> lines = new ArrayList<>();
+//        lines.add(line);
+//        LineChartData data = new LineChartData();
+//        data.setLines(lines);
+//        chart.setLineChartData(data);
+//        constraintSet.connect(chart.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+//        constraintSet.connect(chart.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+//        constraintSet.connect(chart.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.BOTTOM);
+//        constraintSet.connect(chart.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+//        constraintSet.applyTo(constraintLayout);
+//        constraintLayout.addView(chart);
     }
 
-    private void setBackgroundReferToDays() {
+    private void setBackgroundReferToDays(ImageView imgTarget) {
         switch (getCurrentDay()) {
             case "Senin":
-                attachImage(R.drawable.back1, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_senin, imgTarget);
                 break;
             case "Selasa":
-                attachImage(R.drawable.back2, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_selasa, imgTarget);
                 break;
             case "Rabu":
-                attachImage(R.drawable.back3, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_rabu, imgTarget);
                 break;
             case "Kamis":
-                attachImage(R.drawable.back4, imgHeaderCollapsingToolbar);
+                attachImage(R.drawable.bg_colapse_kamis, imgTarget);
+                break;
+            case "Jumat":
+                attachImage(R.drawable.bg_colapse_jumat, imgTarget);
+                break;
+            case "Sabtu":
+                attachImage(R.drawable.bg_colapse_sabtu, imgTarget);
+                break;
+            case "Minggu":
+                attachImage(R.drawable.bg_colapse_minggu, imgTarget);
                 break;
         }
     }

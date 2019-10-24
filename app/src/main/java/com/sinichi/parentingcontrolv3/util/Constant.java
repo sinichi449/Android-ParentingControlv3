@@ -9,6 +9,7 @@ public class Constant {
     public static final String DATA_NOMOR_TELEPON = "USER_NOMOR_TELEPON";
     public static final String DATA_TANGGAL_LAHIR = "USER_TANGGAL_LAHIR";
     public static final String DATA_SEKOLAH = "USER_SEKOLAH";
+    public static final String LOCATION_CHILD = "location_anak";
     public static String SHARED_PREFS = "SHARED_PREFS";
     public static String USER_ANAK = "Anak";
     public static String USER_ORANG_TUA = "Orangtua";

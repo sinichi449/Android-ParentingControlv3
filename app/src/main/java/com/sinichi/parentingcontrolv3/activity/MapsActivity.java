@@ -19,6 +19,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -124,7 +126,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (locationModel != null) {
                         currentLocation = new LatLng(locationModel.getLatitude(), locationModel.getLongitude());
                         mMap.clear();
-                        mMap.addMarker(new MarkerOptions().position(currentLocation)
+                        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)).position(currentLocation)
                                 .title("Lokasi Anak"));
                         float zoomLevel = 16.0f;
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));

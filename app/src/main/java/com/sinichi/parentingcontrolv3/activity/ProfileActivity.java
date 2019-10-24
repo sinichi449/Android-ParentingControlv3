@@ -1,7 +1,5 @@
 package com.sinichi.parentingcontrolv3.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,7 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.Constant;
@@ -21,11 +24,18 @@ public class ProfileActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private TextView tvNama, tvTipeAkun, tvAlamat,
             tvSekolah, tvNomorTelepon, tvTanggalLahir;
+    private ImageView imgHeaderProfile;
     private BottomNavigationView mBottomNavigation;
     private ImageView imgSignOut;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private void initComponents() {
         sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+        imgHeaderProfile = findViewById(R.id.img_profile_header);
+        Glide.with(this)
+                .load(R.drawable.headprofile)
+                .into(imgHeaderProfile);
         tvNama = findViewById(R.id.tv_nama);
         tvTipeAkun = findViewById(R.id.tv_anak_ortu);
         tvAlamat = findViewById(R.id.tv_alamat);
@@ -34,6 +44,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvTanggalLahir = findViewById(R.id.tv_tanggal_lahir);
         mBottomNavigation = findViewById(R.id.bottom_navigation);
         imgSignOut = findViewById(R.id.btn_signout);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
     }
 
     @Override
@@ -54,12 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
         String sekolah = sharedPreferences.getString(Constant.DATA_SEKOLAH, "SMK Negeri 1 Turen");
         String nomorTelepon = sharedPreferences.getString(Constant.DATA_NOMOR_TELEPON, null);
         String tanggalLahir = sharedPreferences.getString(Constant.DATA_TANGGAL_LAHIR, null);
-        // If sharedpreference is null
-//        if (nama.equals("") && tip) {
-//            Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
-//            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(i);
-//        } else {
         try {
             if (nama.equals("") && tipeAkun.equals("") && alamat.equals("")
                     && sekolah.equals("") && nomorTelepon.equals("") && tanggalLahir.equals("")) {
@@ -77,9 +83,11 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (NullPointerException npe) {
             Toast.makeText(ProfileActivity.this, "The user data is empty. You must relogin.", Toast.LENGTH_SHORT)
                     .show();
+            mFirebaseAuth.signOut();
             Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
+            finish();
         }
         imgSignOut.setOnClickListener(new View.OnClickListener() {
             @Override

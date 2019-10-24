@@ -10,6 +10,7 @@ public class Constant {
     public static final String DATA_TANGGAL_LAHIR = "USER_TANGGAL_LAHIR";
     public static final String DATA_SEKOLAH = "USER_SEKOLAH";
     public static final String LOCATION_CHILD = "location_anak";
+    public static final int LOKASI_JADWAL_SHOLAT_REQUEST = 97;
     public static String SHARED_PREFS = "SHARED_PREFS";
     public static String USER_ANAK = "Anak";
     public static String USER_ORANG_TUA = "Orangtua";
@@ -17,4 +18,5 @@ public class Constant {
     public static final String MESSAGES_CHILD = "messages";
     public static final int RC_SIGN_IN = 9001;
     public static final int REQUEST_LOCATION = 99;
+    public static final String JADWAL_SHOLAT_URL = "http://muslimsalat.com/";
 }

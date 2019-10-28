@@ -2,41 +2,30 @@ package com.sinichi.parentingcontrolv3.fragment;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.activity.MainActivity;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
-import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * ChatViewHolder simple {@link Fragment} subclass.
@@ -48,6 +37,7 @@ public class StatisticFragment extends Fragment {
     private FirebaseUser mFirebaseUser;
     private List<DataModel> models;
     private boolean available;
+    private ProgressBar progressBar;
 
     public StatisticFragment() {
         // Required empty public constructor
@@ -60,6 +50,7 @@ public class StatisticFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_statistic, container, false);
 
+        progressBar = root.findViewById(R.id.progress_circular);
 
         RecyclerView mRecyclerView = root.findViewById(R.id.recyclerView);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -89,6 +80,7 @@ public class StatisticFragment extends Fragment {
                     DataModel model = snapshot.getValue(DataModel.class);
                     if (model != null) {
                         model.setId(snapshot.getKey());
+                        progressBar.setVisibility(View.GONE);
                     }
                     models.add(model);
                 }

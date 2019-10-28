@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -104,6 +105,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void launchAlerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.temp_layout_isi_data_diri, null);
+        ImageView imgDataDiri = dialogView.findViewById(R.id.head);
+        Glide.with(dialogView)
+                .load(R.drawable.datadiri)
+                .into(imgDataDiri);
         builder.setView(dialogView)
                 .setCancelable(false)
                 .setTitle("Isi data diri");

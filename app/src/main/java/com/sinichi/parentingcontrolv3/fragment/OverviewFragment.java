@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,7 @@ public class OverviewFragment extends Fragment {
     private String lokasi;
     private List<JadwalSholatModel> jadwal;
     private String subuh, dhuhr, ashar, maghrib, isya;
+    private ProgressBar progressBar;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -86,6 +88,7 @@ public class OverviewFragment extends Fragment {
         tvJumlahSholat = root.findViewById(R.id.tv_jumlahSholat);
         chkMembantuOrtu = root.findViewById(R.id.chkbx_membantuOrtu);
         chkSekolah = root.findViewById(R.id.chkbx_sekolah);
+        progressBar = root.findViewById(R.id.progress_circular);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -128,13 +131,9 @@ public class OverviewFragment extends Fragment {
                     models.add(model);
                 }
                 for (DataModel dataModel : models) {
-                    if (!dataModel.getTanggal().equals(date)
-                            && !dataModel.getBulan().equals(month)
-                            && !dataModel.getTahun().equals(year)) {
-                        available = false;
-                    } else {
-                        available = true;
-                    }
+                    available = dataModel.getTanggal().equals(date)
+                            || dataModel.getBulan().equals(month)
+                            || dataModel.getTahun().equals(year);
                 }
                 if (available) {
                     int index = models.size() - 1;
@@ -148,6 +147,7 @@ public class OverviewFragment extends Fragment {
                     tvJumlahSholat.setEnabled(false);
                     chkMembantuOrtu.setEnabled(false);
                     chkSekolah.setEnabled(false);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

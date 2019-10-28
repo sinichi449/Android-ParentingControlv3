@@ -6,6 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.OverviewFragment">
 
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp" />
+
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

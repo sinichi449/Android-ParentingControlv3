@@ -21,17 +21,15 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.LoginAlt;
-import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import static com.sinichi.parentingcontrolv3.activity.ProfileActivity.isValidTextView;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private SignInButton mSignInButton;
     private GoogleApiClient mGoogleApiClient;
@@ -42,7 +40,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-    @Override
     public void initComponents() {
         mSignInButton = findViewById(R.id.btn_google);
         mSignInButton.setEnabled(false);
@@ -50,11 +47,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         imgOrangTua = findViewById(R.id.btn_saya_orangtua);
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
         sharedPrefsEdit = sharedPrefs.edit();
-    }
-
-    @Override
-    public void setBottomNavigationAction(Context context, BottomNavigationView mBottomNav) {
-
     }
 
 

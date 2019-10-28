@@ -2,11 +2,11 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.MakeSplash;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
     private MakeSplash a = new MakeSplash();

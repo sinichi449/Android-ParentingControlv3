@@ -11,6 +11,12 @@ public class Constant {
     public static final String DATA_SEKOLAH = "USER_SEKOLAH";
     public static final String LOCATION_CHILD = "location_anak";
     public static final int LOKASI_JADWAL_SHOLAT_REQUEST = 97;
+    public static final String NOTIFICATION_ID = "notification";
+    public static final String WAKTU_SUBUH = "Subuh";
+    public static final String WAKTU_DHUHR = "Dhuhr";
+    public static final String WAKTU_ASHAR = "Ashar";
+    public static final String WAKTU_MAGHRIB = "Maghrib";
+    public static final String WAKTU_ISYA = "Isya";
     public static String SHARED_PREFS = "SHARED_PREFS";
     public static String USER_ANAK = "Anak";
     public static String USER_ORANG_TUA = "Orangtua";

@@ -1,39 +1,35 @@
 package com.sinichi.parentingcontrolv3.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
-import com.sinichi.parentingcontrolv3.common.MainAlt;
-import com.sinichi.parentingcontrolv3.util.SetAppearance;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
-import java.util.ArrayList;
-import java.util.List;
 
-import jp.wasabeef.blurry.Blurry;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
+import com.sinichi.parentingcontrolv3.common.MainAlt;
+import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
+import com.sinichi.parentingcontrolv3.util.SetAppearance;
+
+import java.util.Calendar;
+
 import lecho.lib.hellocharts.view.LineChartView;
 
 import static com.sinichi.parentingcontrolv3.common.MainAlt.getCurrentDay;
@@ -66,11 +62,30 @@ public class MainActivity extends AppCompatActivity {
         constraintSet.clone(constraintLayout);
     }
 
+    private void makeJadwalSholat(int jam, int menit) {
+        AlarmManager alarmManager;
+        PendingIntent pendingIntent;
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmNotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        // Set alarm
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, jam);
+        calendar.set(Calendar.MINUTE, menit);
+        calendar.set(Calendar.SECOND, 0);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
+        makeJadwalSholat( 20, 30);
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());

@@ -46,6 +46,10 @@
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.MainActivity" />
+
+        <receiver
+            android:name=".util.AlarmNotificationReceiver"
+            android:enabled="true"/>
     </application>
 
 </manifest>

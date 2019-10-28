@@ -1,11 +1,6 @@
 package com.sinichi.parentingcontrolv3.fragment;
 
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,24 +20,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.interfaces.ApiInterface;
 import com.sinichi.parentingcontrolv3.model.DataModel;
 import com.sinichi.parentingcontrolv3.model.JadwalSholatModel;
-import com.sinichi.parentingcontrolv3.network.ApiClient;
-import com.sinichi.parentingcontrolv3.network.Items;
-import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-
-import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -156,70 +135,5 @@ public class OverviewFragment extends Fragment {
 
             }
         });
-    }
-
-    private void ambilDataSholat() {
-        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-        if (!EasyPermissions.hasPermissions(getContext(), perms)) {
-            EasyPermissions.requestPermissions(getActivity(), "Butuh izin lokasi untuk mengakses jadwal sholat",
-                    Constant.LOKASI_JADWAL_SHOLAT_REQUEST, perms);
-        } else {
-            FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(getContext());
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-            }
-            mFusedLocation.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-                        List<Address> addresses;
-                        try {
-                            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                            if (addresses.size() > 0) {
-                                lokasi = addresses.get(0).getLocality();
-                                if (lokasi != null) {
-                                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                                    Call<Items> call = apiInterface.getJadwalSholat(lokasi);
-                                    call.enqueue(new Callback<Items>() {
-                                        @Override
-                                        public void onResponse(Call<Items> call, Response<Items> response) {
-                                            jadwal = response.body().getItems();
-                                            if (jadwal != null) {
-                                                subuh = jadwal.get(0).getSubuh();
-                                                dhuhr = jadwal.get(0).getZuhur();
-                                                ashar = jadwal.get(0).getAshar();
-                                                maghrib = jadwal.get(0).getMaghrib();
-                                                isya = jadwal.get(0).getIsya();
-
-                                                tvSubuh.setText(subuh);
-                                                tvDhuhr.setText(dhuhr);
-                                                tvAshar.setText(ashar);
-                                                tvMaghrib.setText(maghrib);
-                                                tvIsya.setText(isya);
-                                            } else {
-                                                Toast.makeText(getContext(), "Error network", Toast.LENGTH_SHORT)
-                                                        .show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<Items> call, Throwable t) {
-                                            Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT)
-                                                    .show();
-                                        }
-                                    });
-                                }
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
     }
 }

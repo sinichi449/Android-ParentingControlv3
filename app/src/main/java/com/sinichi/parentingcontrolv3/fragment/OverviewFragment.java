@@ -60,6 +60,8 @@ public class OverviewFragment extends Fragment {
     private CheckBox chkMembantuOrtu, chkSekolah;
     private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
     private ProgressBar progressBar;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -103,7 +105,7 @@ public class OverviewFragment extends Fragment {
     }
 
     private String getLocalityName() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+        sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getString(Constant.NAMA_KOTA, "Jakarta");
     }
 
@@ -169,6 +171,14 @@ public class OverviewFragment extends Fragment {
                 tvAshar.setText(jadwalSholat.getAshar());
                 tvMaghrib.setText(jadwalSholat.getMaghrib());
                 tvIsya.setText(jadwalSholat.getIsya());
+                sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString(Constant.WAKTU_SUBUH, jadwalSholat.getSubuh());
+                editor.putString(Constant.WAKTU_DHUHR, jadwalSholat.getDhuhr());
+                editor.putString(Constant.WAKTU_ASHAR, jadwalSholat.getAshar());
+                editor.putString(Constant.WAKTU_MAGHRIB, jadwalSholat.getMaghrib());
+                editor.putString(Constant.WAKTU_ISYA, jadwalSholat.getIsya());
+                editor.apply();
             }
 
             @Override

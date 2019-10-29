@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHeaderDetails;
     private LineChartView chart;
     private boolean isGPS = false;
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor edit;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -122,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
                             Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
                                     location.getLongitude(), 1);
-                            SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                            SharedPreferences.Editor edit = sharedPrefs.edit();
+                            sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                            edit = sharedPrefs.edit();
                             edit.putString(Constant.NAMA_KOTA, addresses.get(0).getLocality());
                             edit.apply();
                             Log.e("Locality", addresses.get(0).getLocality());
@@ -136,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-
             MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
@@ -188,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
     }
 
     private boolean isLocationPermissionGranted() {

@@ -1,33 +1,25 @@
-package com.sinichi.parentingcontrolv3.model;
+package com.sinichi.parentingcontrolv3.retrofit;
 
 import com.google.gson.annotations.SerializedName;
 
 public class JadwalSholat {
-    @SerializedName("fajr")
+    @SerializedName("Fajr")
     private String subuh;
 
-    @SerializedName("dhuhr")
+    @SerializedName("Dhuhr")
     private String dhuhr;
 
-    @SerializedName("asr")
+    @SerializedName("Asr")
     private String ashar;
 
-    @SerializedName("maghrib")
+    @SerializedName("Maghrib")
     private String maghrib;
 
-    @SerializedName("isha")
+    @SerializedName("Isha")
     private String isya;
 
     public JadwalSholat() {
 
-    }
-
-    public JadwalSholat(String subuh, String dhuhr, String ashar, String maghrib, String isya) {
-        this.subuh = subuh;
-        this.dhuhr = dhuhr;
-        this.ashar = ashar;
-        this.maghrib = maghrib;
-        this.isya = isya;
     }
 
     public String getSubuh() {

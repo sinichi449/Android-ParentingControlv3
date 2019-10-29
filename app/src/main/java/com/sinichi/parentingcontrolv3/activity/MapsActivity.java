@@ -91,7 +91,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SetAppearance.onBottomNavigationClick(this, this, bottomNavigationView, R.id.menu_map);
     }
 
-    private boolean checkPermission() {
+    public boolean checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -184,7 +184,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    private void turnOnGPS() {
+    public void turnOnGPS() {
         new GpsUtil(MapsActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
             @Override
             public void gpsStatus(boolean isGPSEnable) {

@@ -1,6 +1,8 @@
 package com.sinichi.parentingcontrolv3.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +21,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sinichi.parentingcontrolv3.ApiService;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.DataModel;
-import com.sinichi.parentingcontrolv3.model.Item;
-import com.sinichi.parentingcontrolv3.model.JadwalSholat;
+import com.sinichi.parentingcontrolv3.retrofit.ApiService;
+import com.sinichi.parentingcontrolv3.retrofit.Data;
+import com.sinichi.parentingcontrolv3.retrofit.JadwalSholat;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 
@@ -53,13 +55,10 @@ public class OverviewFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private Calendar calendar;
     private String date, day, month, year;
-    private TextView tvTanggal, tvHari, tvBulan, tvTahun,
+    private TextView tvLokasi, tvTanggal, tvHari, tvBulan, tvTahun,
             tvJumlahSholat;
     private CheckBox chkMembantuOrtu, chkSekolah;
-    private List<JadwalSholat> jadwalSholats;
     private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
-    private String lokasi;
-    private String subuh, dhuhr, ashar, maghrib, isya;
     private ProgressBar progressBar;
 
     public OverviewFragment() {
@@ -68,6 +67,7 @@ public class OverviewFragment extends Fragment {
 
     private void initComponents() {
         root = inflater.inflate(R.layout.fragment_overview, container, false);
+        tvLokasi = root.findViewById(R.id.tv_lokasi);
         tvTanggal = root.findViewById(R.id.tv_tanggal);
         tvHari = root.findViewById(R.id.tv_hari);
         tvBulan = root.findViewById(R.id.tv_bulan);
@@ -94,11 +94,17 @@ public class OverviewFragment extends Fragment {
         this.inflater = inflater;
         this.container = container;
         initComponents();
-
         showTodayData();
-        getJadwalSholat();
+
+        tvLokasi.setText(getLocalityName());
+        getJadwalSholat(getLocalityName());
 
         return root;
+    }
+
+    private String getLocalityName() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(Constant.NAMA_KOTA, "Jakarta");
     }
 
     private void showTodayData() {
@@ -146,33 +152,29 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    private void getJadwalSholat() {
+    private void getJadwalSholat(String kota) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.JADWAL_SHOLAT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        ApiService api = retrofit.create(ApiService.class);
-        Call<Item> call = api.getJadwalSholat();
-        call.enqueue(new Callback<Item>() {
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<Data> call = apiService.getData(kota);
+        call.enqueue(new Callback<Data>() {
             @Override
-            public void onResponse(Call<Item> call, Response<Item> response) {
-                jadwalSholats = response.body().getItems();
-                writeToTextViews(jadwalSholats);
-
+            public void onResponse(Call<Data> call, Response<Data> response) {
+                Data data = response.body();
+                JadwalSholat jadwalSholat = data.getJadwalSholat();
+                tvSubuh.setText(jadwalSholat.getSubuh());
+                tvDhuhr.setText(jadwalSholat.getDhuhr());
+                tvAshar.setText(jadwalSholat.getAshar());
+                tvMaghrib.setText(jadwalSholat.getMaghrib());
+                tvIsya.setText(jadwalSholat.getIsya());
             }
 
             @Override
-            public void onFailure(Call<Item> call, Throwable t) {
+            public void onFailure(Call<Data> call, Throwable t) {
 
             }
         });
-    }
-
-    private void writeToTextViews(List<JadwalSholat> jadwalSholatList) {
-        tvSubuh.setText(jadwalSholatList.get(0).getSubuh());
-        tvDhuhr.setText(jadwalSholatList.get(0).getDhuhr());
-        tvAshar.setText(jadwalSholatList.get(0).getAshar());
-        tvMaghrib.setText(jadwalSholatList.get(0).getMaghrib());
-        tvIsya.setText(jadwalSholatList.get(0).getIsya());
     }
 }

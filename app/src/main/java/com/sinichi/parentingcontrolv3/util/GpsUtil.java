@@ -7,7 +7,9 @@ import android.content.IntentSender;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.OverviewFragment">
+    tools:context=".fragment.OverviewFragment"
+    android:layout_marginBottom="?attr/actionBarSize">
 
     <ProgressBar
         android:id="@+id/progress_circular"
@@ -25,6 +26,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_lokasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jakarta"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Lorem ipsum"
+                    android:text="00:00 am"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -70,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Lorem ipsum"
+                    android:text="00:00 am"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -94,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Lorem ipsum"
+                    android:text="00:00 am"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -118,7 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Lorem ipsum"
+                    android:text="00:00 am"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -142,7 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Lorem ipsum"
+                    android:text="00:00 am"
                     android:gravity="center"/>
 
             </LinearLayout>

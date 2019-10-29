@@ -1,12 +1,21 @@
 package com.sinichi.parentingcontrolv3.activity;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,21 +23,29 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
+import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import lecho.lib.hellocharts.view.LineChartView;
 
@@ -46,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHeaderDate;
     private TextView tvHeaderDetails;
     private LineChartView chart;
+    private boolean isGPS = false;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -85,59 +103,98 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-        makeJadwalSholat( 20, 30);
+        makeJadwalSholat(20, 30);
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
-        MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (isLocationPermissionGranted()) {
+                FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
+                mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        try {
+                            Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                    location.getLongitude(), 1);
+                            SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor edit = sharedPrefs.edit();
+                            edit.putString(Constant.NAMA_KOTA, addresses.get(0).getLocality());
+                            edit.apply();
+                            Log.e("Locality", addresses.get(0).getLocality());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
-        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-        
-        makeView();
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                if (position == 0) {
-                    // TODO: Set Calendar Header
+                MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
+                viewPager.setAdapter(adapter);
+                tabLayout.setupWithViewPager(viewPager);
+
+                setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+
+                makeView();
+                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        int position = tab.getPosition();
+                        if (position == 0) {
+                            // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-                    makeView();
-                } else if (position == 1) {
-                    // TODO: Statistic Header
-                    constraintLayout.removeView(tvHariIni);
-                    constraintLayout.removeView(tvHeaderDate);
-                    constraintLayout.removeView(tvHeaderDetails);
+                            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+                            makeView();
+                        } else if (position == 1) {
+                            // TODO: Statistic Header
+                            constraintLayout.removeView(tvHariIni);
+                            constraintLayout.removeView(tvHeaderDate);
+                            constraintLayout.removeView(tvHeaderDetails);
 //                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
-                    setLineChartView();
-                }
-            }
+                            setLineChartView();
+                        }
+                    }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                Glide.get(MainActivity.this).clearMemory();
-            }
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                        Glide.get(MainActivity.this).clearMemory();
+                    }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                if (position == 0) {
-                    // TODO: Set Calendar Header
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+                        int position = tab.getPosition();
+                        if (position == 0) {
+                            // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-                    makeView();
-                } else if (position == 1) {
-                    // TODO: Statistic Header
-                    // TODO: Remove Header date
-                    constraintLayout.removeView(tvHariIni);
-                    constraintLayout.removeView(tvHeaderDate);
-                    constraintLayout.removeView(tvHeaderDetails);
+                            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+                            makeView();
+                        } else if (position == 1) {
+                            // TODO: Statistic Header
+                            // TODO: Remove Header date
+                            constraintLayout.removeView(tvHariIni);
+                            constraintLayout.removeView(tvHeaderDate);
+                            constraintLayout.removeView(tvHeaderDetails);
 //                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
-                    setLineChartView();
-                }
+                            setLineChartView();
+                        }
+                    }
+                });
             }
-        });
+        } else {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+    }
+
+    private boolean isLocationPermissionGranted() {
+        String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (ContextCompat.checkSelfPermission(this, permission[0])
+                != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, permission[1])
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permission, Constant.GPS_REQUEST);
+            return false;
+        }
+        return true;
     }
 
     public static int setDp(Context context, int dp) {
@@ -262,4 +319,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

@@ -19,14 +19,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sinichi.parentingcontrolv3.ApiService;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.DataModel;
-import com.sinichi.parentingcontrolv3.model.JadwalSholatModel;
+import com.sinichi.parentingcontrolv3.model.Item;
+import com.sinichi.parentingcontrolv3.model.JadwalSholat;
+import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -47,10 +56,9 @@ public class OverviewFragment extends Fragment {
     private TextView tvTanggal, tvHari, tvBulan, tvTahun,
             tvJumlahSholat;
     private CheckBox chkMembantuOrtu, chkSekolah;
-
+    private List<JadwalSholat> jadwalSholats;
     private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
     private String lokasi;
-    private List<JadwalSholatModel> jadwal;
     private String subuh, dhuhr, ashar, maghrib, isya;
     private ProgressBar progressBar;
 
@@ -88,6 +96,7 @@ public class OverviewFragment extends Fragment {
         initComponents();
 
         showTodayData();
+        getJadwalSholat();
 
         return root;
     }
@@ -135,5 +144,35 @@ public class OverviewFragment extends Fragment {
 
             }
         });
+    }
+
+    private void getJadwalSholat() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.JADWAL_SHOLAT_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService api = retrofit.create(ApiService.class);
+        Call<Item> call = api.getJadwalSholat();
+        call.enqueue(new Callback<Item>() {
+            @Override
+            public void onResponse(Call<Item> call, Response<Item> response) {
+                jadwalSholats = response.body().getItems();
+                writeToTextViews(jadwalSholats);
+
+            }
+
+            @Override
+            public void onFailure(Call<Item> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void writeToTextViews(List<JadwalSholat> jadwalSholatList) {
+        tvSubuh.setText(jadwalSholatList.get(0).getSubuh());
+        tvDhuhr.setText(jadwalSholatList.get(0).getDhuhr());
+        tvAshar.setText(jadwalSholatList.get(0).getAshar());
+        tvMaghrib.setText(jadwalSholatList.get(0).getMaghrib());
+        tvIsya.setText(jadwalSholatList.get(0).getIsya());
     }
 }

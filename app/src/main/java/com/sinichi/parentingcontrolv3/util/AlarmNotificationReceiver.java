@@ -19,8 +19,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, createNotificationChannel(context));
-        Intent i = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_ONE_SHOT);
+        Intent intent1 = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_ONE_SHOT);
         builder.setAutoCancel(false)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)

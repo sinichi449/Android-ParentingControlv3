@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-        makeJadwalSholat(20, 30);
+        makeJadwalSholat(20, 24);
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
         if (isLocationPermissionGranted()) {
@@ -190,6 +190,25 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+        if (sharedPrefs.getString(Constant.WAKTU_SUBUH, null) != null) {
+            makeJadwalSholat(getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+            makeJadwalSholat(getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+            makeJadwalSholat(getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+            makeJadwalSholat(getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+            makeJadwalSholat(getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
+            Log.e("Jam", String.valueOf(getJam(Constant.WAKTU_MAGHRIB)));
+            Log.e("Menit", String.valueOf(getMenit(Constant.WAKTU_MAGHRIB)));
+        }
+    }
+
+    private int getJam(String keyWaktu) {
+        String strJam = sharedPrefs.getString(keyWaktu, "Kosong").substring(0, 2);
+        return Integer.parseInt(strJam);
+    }
+
+    private int getMenit(String keyMenit) {
+        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3,5);
+        return Integer.parseInt(strMenit);
     }
 
     private boolean isLocationPermissionGranted() {

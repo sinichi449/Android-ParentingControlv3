@@ -11,14 +11,13 @@ import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -40,6 +39,7 @@ import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
+import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import java.io.IOException;
@@ -106,13 +106,18 @@ public class MainActivity extends AppCompatActivity {
         makeJadwalSholat(20, 30);
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            if (isLocationPermissionGranted()) {
-                FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
-                mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
+        if (isLocationPermissionGranted()) {
+            new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
+                @Override
+                public void gpsStatus(boolean isGPSEnable) {
+                    isGPS = true;
+                }
+            });
+            FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
+            mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
                         try {
                             Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
@@ -125,63 +130,63 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        Toast.makeText(MainActivity.this, "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
+                                Toast.LENGTH_LONG).show();
                     }
-                });
+                }
+            });
 
-                MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-                viewPager.setAdapter(adapter);
-                tabLayout.setupWithViewPager(viewPager);
+            MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
+            viewPager.setAdapter(adapter);
+            tabLayout.setupWithViewPager(viewPager);
 
-                setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
 
-                makeView();
-                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        int position = tab.getPosition();
-                        if (position == 0) {
-                            // TODO: Set Calendar Header
+            makeView();
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    int position = tab.getPosition();
+                    if (position == 0) {
+                        // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-                            makeView();
-                        } else if (position == 1) {
-                            // TODO: Statistic Header
-                            constraintLayout.removeView(tvHariIni);
-                            constraintLayout.removeView(tvHeaderDate);
-                            constraintLayout.removeView(tvHeaderDetails);
+                        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+                        makeView();
+                    } else if (position == 1) {
+                        // TODO: Statistic Header
+                        constraintLayout.removeView(tvHariIni);
+                        constraintLayout.removeView(tvHeaderDate);
+                        constraintLayout.removeView(tvHeaderDetails);
 //                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
-                            setLineChartView();
-                        }
+                        setLineChartView();
                     }
+                }
 
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                        Glide.get(MainActivity.this).clearMemory();
-                    }
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    Glide.get(MainActivity.this).clearMemory();
+                }
 
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                        int position = tab.getPosition();
-                        if (position == 0) {
-                            // TODO: Set Calendar Header
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                    int position = tab.getPosition();
+                    if (position == 0) {
+                        // TODO: Set Calendar Header
 //                    constraintLayout.removeView(chart);
-                            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-                            makeView();
-                        } else if (position == 1) {
-                            // TODO: Statistic Header
-                            // TODO: Remove Header date
-                            constraintLayout.removeView(tvHariIni);
-                            constraintLayout.removeView(tvHeaderDate);
-                            constraintLayout.removeView(tvHeaderDetails);
+                        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+                        makeView();
+                    } else if (position == 1) {
+                        // TODO: Statistic Header
+                        // TODO: Remove Header date
+                        constraintLayout.removeView(tvHariIni);
+                        constraintLayout.removeView(tvHeaderDate);
+                        constraintLayout.removeView(tvHeaderDetails);
 //                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
-                            setLineChartView();
-                        }
+                        setLineChartView();
                     }
-                });
-            }
-        } else {
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
+                }
+            });
         }
     }
 

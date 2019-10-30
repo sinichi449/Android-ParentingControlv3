@@ -22,13 +22,12 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, createNotificationChannel(context));
 //        Intent intent1 = new Intent(context, MainActivity.class);
         Intent intent1 = new Intent(context, NotificationOnClick.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
-                .setContentTitle("Waktunya sholat")
+                .setContentTitle("Waktunya sholat " + intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT))
                 .setContentIntent(pendingIntent)
-                .setContentText("Klik notifikasi ini apabila sudah sholat")
+                .setContentText("Klik notifikasi ini apabila sudah sholat " + intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT))
                 .setDefaults(Notification.DEFAULT_LIGHTS |
                         Notification.DEFAULT_SOUND)
                 .setContentInfo("Info")

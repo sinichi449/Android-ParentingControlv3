@@ -18,6 +18,7 @@ public class Constant {
     public static final String WAKTU_MAGHRIB = "Maghrib";
     public static final String WAKTU_ISYA = "Isya";
     public static final String NAMA_KOTA = "NAMA_KOTA";
+    public static final String INTENT_WAKTU_SHOLAT = "waktu_sholat";
     public static String SHARED_PREFS = "SHARED_PREFS";
     public static String USER_ANAK = "Anak";
     public static String USER_ORANG_TUA = "Orangtua";

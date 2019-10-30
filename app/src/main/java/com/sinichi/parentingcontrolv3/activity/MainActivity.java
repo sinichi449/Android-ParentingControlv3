@@ -37,6 +37,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
+import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
@@ -79,24 +80,6 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.constraint_layout_collapsingtoolbar);
         constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
-    }
-
-    private void makeJadwalSholat(int jam, int menit, Class<?> klass) {
-        AlarmManager alarmManager;
-        PendingIntent pendingIntent;
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, klass);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        // Set alarm
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, jam);
-        calendar.set(Calendar.MINUTE, menit);
-        calendar.set(Calendar.SECOND, 0);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override
@@ -200,8 +183,27 @@ public class MainActivity extends AppCompatActivity {
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         if (sharedPrefs.getString(Constant.WAKTU_ISYA, null) != null) {
             // TODO: Buat alarm jadwal sholat
-
+            makeNotification(Constant.WAKTU_SUBUH, 1, 3, 53);
+            makeNotification(Constant.WAKTU_DHUHR, 2, 3, 54);
+            makeNotification(Constant.WAKTU_ASHAR, 3, 3, 55);
+            makeNotification(Constant.WAKTU_MAGHRIB, 4, 3, 56);
+            makeNotification(Constant.WAKTU_ISYA, 5,3, 57);
         }
+    }
+
+    private void makeNotification(String waktuSholat, int requestCode, int jam, int menit) {
+        Intent intent = new Intent(MainActivity.this, AlarmNotificationReceiver.class);
+        intent.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, jam);
+        calendar.set(Calendar.MINUTE, menit);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     private int getJam(String keyWaktu) {

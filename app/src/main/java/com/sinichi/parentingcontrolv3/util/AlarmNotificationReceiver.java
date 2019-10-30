@@ -12,16 +12,18 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import com.sinichi.parentingcontrolv3.R;
-import com.sinichi.parentingcontrolv3.activity.MainActivity;
+import com.sinichi.parentingcontrolv3.activity.NotificationOnClick;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, createNotificationChannel(context));
-        Intent intent1 = new Intent(context, MainActivity.class);
+//        Intent intent1 = new Intent(context, MainActivity.class);
+        Intent intent1 = new Intent(context, NotificationOnClick.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_ONE_SHOT);
-        builder.setAutoCancel(false)
+        builder.setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
                 .setContentTitle("Waktunya sholat")

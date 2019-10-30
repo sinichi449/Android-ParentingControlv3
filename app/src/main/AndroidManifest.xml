@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/FullScreen">
-        <activity android:name=".activity.ProfileActivity"></activity>
+        <activity android:name=".activity.NotificationOnClick"></activity>
+        <activity android:name=".activity.ProfileActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as getCollapsingToolbarLayoutView string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,8 +35,7 @@
 
         <activity
             android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
+            android:label="@string/title_activity_maps"></activity>
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,7 +49,7 @@
 
         <receiver
             android:name=".util.AlarmNotificationReceiver"
-            android:enabled="true"/>
+            android:enabled="true" />
     </application>
 
 </manifest>

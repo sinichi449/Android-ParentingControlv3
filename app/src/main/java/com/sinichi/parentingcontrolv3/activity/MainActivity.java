@@ -37,7 +37,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
-import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
@@ -82,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
         constraintSet.clone(constraintLayout);
     }
 
-    private void makeJadwalSholat(int jam, int menit) {
+    private void makeJadwalSholat(int jam, int menit, Class<?> klass) {
         AlarmManager alarmManager;
         PendingIntent pendingIntent;
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmNotificationReceiver.class);
+        Intent intent = new Intent(this, klass);
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         // Set alarm
@@ -105,22 +104,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-        makeJadwalSholat(20, 24);
+
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
-        if (isLocationPermissionGranted()) {
+
+        if (isLocationPermissionGranted()) { // Cek izin lokasi
+            //  Aktifkan GPS
             new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
                 @Override
                 public void gpsStatus(boolean isGPSEnable) {
                     isGPS = true;
                 }
             });
+
+            // Dapatkan lokasi
             FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
             mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
                         try {
+                            // Dapatkan nama daerah
                             Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
                                     location.getLongitude(), 1);
@@ -138,12 +142,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            // Setting ViewPager
             MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
 
+            // Set header background berdasarkan hari
             setBackgroundReferToDays(imgHeaderCollapsingToolbar);
 
+            // Setting layout
             makeView();
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
@@ -190,14 +198,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-        if (sharedPrefs.getString(Constant.WAKTU_SUBUH, null) != null) {
-            makeJadwalSholat(getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
-            makeJadwalSholat(getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
-            makeJadwalSholat(getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
-            makeJadwalSholat(getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
-            makeJadwalSholat(getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
-            Log.e("Jam", String.valueOf(getJam(Constant.WAKTU_MAGHRIB)));
-            Log.e("Menit", String.valueOf(getMenit(Constant.WAKTU_MAGHRIB)));
+        if (sharedPrefs.getString(Constant.WAKTU_ISYA, null) != null) {
+            // TODO: Buat alarm jadwal sholat
+
         }
     }
 

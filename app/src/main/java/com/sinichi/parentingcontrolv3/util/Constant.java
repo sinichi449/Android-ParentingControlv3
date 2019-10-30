@@ -19,9 +19,9 @@ public class Constant {
     public static final String WAKTU_ISYA = "Isya";
     public static final String NAMA_KOTA = "NAMA_KOTA";
     public static final String INTENT_WAKTU_SHOLAT = "waktu_sholat";
-    public static String SHARED_PREFS = "SHARED_PREFS";
-    public static String USER_ANAK = "Anak";
-    public static String USER_ORANG_TUA = "Orangtua";
+    public static final String SHARED_PREFS = "SHARED_PREFS";
+    public static final String USER_ANAK = "Anak";
+    public static final String USER_ORANG_TUA = "Orangtua";
     public static final String USERNAME = "USERNAME";
     public static final String MESSAGES_CHILD = "messages";
     public static final int RC_SIGN_IN = 9001;

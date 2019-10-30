@@ -16,18 +16,19 @@ import com.sinichi.parentingcontrolv3.activity.NotificationOnClick;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, createNotificationChannel(context));
 //        Intent intent1 = new Intent(context, MainActivity.class);
+        String waktuSholat = intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT);
         Intent intent1 = new Intent(context, NotificationOnClick.class);
+        intent1.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
-                .setContentTitle("Waktunya sholat " + intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT))
+                .setContentTitle("Waktunya sholat " + waktuSholat)
                 .setContentIntent(pendingIntent)
-                .setContentText("Klik notifikasi ini apabila sudah sholat " + intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT))
+                .setContentText("Klik notifikasi ini apabila sudah sholat " + waktuSholat)
                 .setDefaults(Notification.DEFAULT_LIGHTS |
                         Notification.DEFAULT_SOUND)
                 .setContentInfo("Info")

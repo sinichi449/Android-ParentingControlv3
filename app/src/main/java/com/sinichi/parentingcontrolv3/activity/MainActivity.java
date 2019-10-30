@@ -183,18 +183,18 @@ public class MainActivity extends AppCompatActivity {
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         if (sharedPrefs.getString(Constant.WAKTU_ISYA, null) != null) {
             // TODO: Buat alarm jadwal sholat
-            makeNotification(Constant.WAKTU_SUBUH, 1, 3, 53);
-            makeNotification(Constant.WAKTU_DHUHR, 2, 3, 54);
-            makeNotification(Constant.WAKTU_ASHAR, 3, 3, 55);
-            makeNotification(Constant.WAKTU_MAGHRIB, 4, 3, 56);
-            makeNotification(Constant.WAKTU_ISYA, 5,3, 57);
+            makeNotification(Constant.WAKTU_SUBUH, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+            makeNotification(Constant.WAKTU_DHUHR, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+            makeNotification(Constant.WAKTU_ASHAR, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+            makeNotification(Constant.WAKTU_MAGHRIB, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+            makeNotification(Constant.WAKTU_ISYA, 50,getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
         }
     }
 
     private void makeNotification(String waktuSholat, int requestCode, int jam, int menit) {
         Intent intent = new Intent(MainActivity.this, AlarmNotificationReceiver.class);
         intent.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();

@@ -27,4 +27,5 @@ public class Constant {
     public static final int RC_SIGN_IN = 9001;
     public static final int REQUEST_LOCATION = 99;
     public static final String JADWAL_SHOLAT_URL = "https://time.siswadi.com/";
+    public static final String INTENT_NOTIFICATION_ID = "notification_id";
 }

@@ -19,8 +19,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, createNotificationChannel(context));
-//        Intent intent1 = new Intent(context, MainActivity.class);
         String waktuSholat = intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT);
+        int notificationId = intent.getIntExtra(Constant.INTENT_NOTIFICATION_ID, 1);
         Intent intent1 = new Intent(context, NotificationOnClick.class);
         intent1.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -35,7 +35,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                 .setOngoing(true);
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(notificationId, builder.build());
     }
 
     public static String createNotificationChannel(Context context) {

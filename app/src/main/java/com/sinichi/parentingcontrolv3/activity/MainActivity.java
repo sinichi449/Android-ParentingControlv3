@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -36,8 +37,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
@@ -49,6 +53,7 @@ import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -102,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
 
-        if (isLocationPermissionGranted()) { // Cek izin lokasi
+        // Get nama kota
+        if (isLocationPermissionGranted()) {
             //  Aktifkan GPS
             new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
                 @Override
@@ -124,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                                     location.getLongitude(), 1);
                             sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
                             edit = sharedPrefs.edit();
-                            edit.putString(Constant.NAMA_KOTA, addresses.get(0).getLocality());
+                            edit.putString(Constant.NAMA_KOTA, addresses.get(0).getSubAdminArea());
                             edit.apply();
                             Log.e("Locality", addresses.get(0).getLocality());
                         } catch (IOException e) {
@@ -192,57 +198,99 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-        if (sharedPrefs.getString(Constant.WAKTU_ISYA, null) != null) {
-            // TODO: Check di database jika user belum melakukan sholat, munculkan notifikasi
-            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
-            mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-            kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
-            Calendar calendar = Calendar.getInstance();
-            date = String.valueOf(calendar.get(Calendar.DATE));
-            day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
-            month = CurrentDimension.defineMonth(calendar.get(Calendar.MONTH));
-            year = String.valueOf(calendar.get(Calendar.YEAR));
-//            kegiatanRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    models = new ArrayList<>();
-//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        DataModel model = snapshot.getValue(DataModel.class);
-//                        if (model != null) {
-//                            model.setId(snapshot.getKey());
-//                        }
-//                        models.add(model);
-//                    }
-//                    // TODO:
-//                    for (DataModel dataModel : models) {
-//                        isAvailableTodayData = dataModel.getTanggal().equals(date)
-//                                || dataModel.getHari().equals(day)
-//                                || dataModel.getBulan().equals(month)
-//                                || dataModel.getTahun().equals(year);
-//                    }
-//                    if (!isAvailableTodayData) {
-//
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
-            makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
-            makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
-            makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
-            makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
-            makeNotification(Constant.WAKTU_ISYA, 5, 50,getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
-        }
+
+        // TODO: Check di database jika user belum melakukan sholat, munculkan notifikasi
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
+        Calendar calendar = Calendar.getInstance();
+        date = String.valueOf(calendar.get(Calendar.DATE));
+        day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
+        month = CurrentDimension.defineMonth(calendar.get(Calendar.MONTH));
+        year = String.valueOf(calendar.get(Calendar.YEAR));
+        kegiatanRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                models = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DataModel model = snapshot.getValue(DataModel.class);
+                    if (model != null) {
+                        model.setId(snapshot.getKey());
+                    }
+                    models.add(model);
+                }
+
+                for (DataModel dataModel : models) {
+                    isAvailableTodayData = dataModel.getTanggal().equals(date)
+                            || dataModel.getHari().equals(day)
+                            || dataModel.getBulan().equals(month)
+                            || dataModel.getTahun().equals(year);
+                }
+
+                if (isAvailableTodayData) {
+                    int index = models.size() - 1;
+                    boolean sudahSholatSubuh = models.get(index).isSholatSubuh();
+                    boolean sudahSholatDhuhr = models.get(index).isSholatDhuhr();
+                    boolean sudahSholatAshar = models.get(index).isSholatAshar();
+                    boolean sudahSholatMaghrib = models.get(index).isSholatMaghrib();
+                    boolean sudahSholatIsya = models.get(index).isSholatIsya();
+                    Calendar cal = Calendar.getInstance();
+                    String jamSekarang = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+                    String menitSekarang = String.valueOf(cal.get(Calendar.MINUTE));
+                    String waktuSekarang = jamSekarang + ":" + menitSekarang;
+                    // TODO: Jika user belum melakukan sholat DAN waktunya sholat telah tiba, maka beri notifikasi
+                    SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                    String waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
+                    String waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
+                    String waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");
+                    String waktuMaghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, "kosong");
+                    String waktuIsya = sharedPrefs.getString(Constant.WAKTU_ISYA, "kosong");
+                        /*
+                        Jika waktu sholat sudah tersedia, user belum melakukan sholat,
+                        dan waktu sudah masuk waktu sholat tertentu, buat notifikasi
+                         */
+                    if (!waktuSubuh.equals("kosong")
+                            && !sudahSholatSubuh) {
+                        makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_SUBUH);
+                    }
+                    if (!waktuDhuhr.equals("kosong")
+                            && !sudahSholatDhuhr) {
+                        makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_DHUHR);
+                    }
+                    if (!waktuAshar.equals("kosong")
+                            && !sudahSholatAshar) {
+                        makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
+                    }
+                    if (!waktuMaghrib.equals("kosong")
+                            && !sudahSholatMaghrib) {
+                        makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
+                    }
+                    if (!waktuIsya.equals("kosong")
+                            && !sudahSholatIsya) {
+                        makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
+                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void makeNotification(String waktuSholat, int notificationId, int requestCode, int jam, int menit) {
         Intent intent = new Intent(MainActivity.this, AlarmNotificationReceiver.class);
         intent.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
         intent.putExtra(Constant.INTENT_NOTIFICATION_ID, notificationId);
+        // TODO: Change request code
+        intent.putExtra("request_code", requestCode);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 

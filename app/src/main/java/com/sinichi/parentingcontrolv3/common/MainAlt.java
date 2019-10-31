@@ -31,7 +31,6 @@ import java.util.Calendar;
 public class MainAlt implements d {
     private SnapshotParser<DataModel> parser;
     private static FirebaseRecyclerAdapter<DataModel, DataSholatViewHolder.DataViewHolder> mFirebaseAdapter;
-    private int jumlahSholat = 0;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
 
     @Override

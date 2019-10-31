@@ -16,14 +16,14 @@ public class NotificationOnClick extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_on_click);
 
+        String waktuSholat = getIntent().getStringExtra("notif_sholat");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Lorem ipsum")
-                .setMessage("Lorem ipsum dolor sit amet consectetur adipiscing elit")
+                .setMessage("Apakah Anda sudah melakukan sholat " + waktuSholat + " ?\n\n WARNING: Apabila Anda klik cancel, maka data Anda tidak akan ditulis lagi dan dianggap tidak melakukan sholat tertentu!")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: Change the database
-
                         Intent intent = new Intent(NotificationOnClick.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);

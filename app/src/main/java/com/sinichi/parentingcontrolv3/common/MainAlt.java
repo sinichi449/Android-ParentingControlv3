@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -21,16 +25,14 @@ import com.sinichi.parentingcontrolv3.activity.LoginActivity;
 import com.sinichi.parentingcontrolv3.interfaces.d;
 import com.sinichi.parentingcontrolv3.model.DataModel;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class MainAlt implements d {
     private SnapshotParser<DataModel> parser;
     private static FirebaseRecyclerAdapter<DataModel, DataSholatViewHolder.DataViewHolder> mFirebaseAdapter;
+    private int jumlahSholat = 0;
+    private boolean subuh, dhuhr, ashar, maghrib, isya;
 
     @Override
     public void parseSnapShot() {
@@ -59,7 +61,18 @@ public class MainAlt implements d {
                         dataViewHolder.tvHari.setText(dataModel.getHari());
                         dataViewHolder.tvBulan.setText(dataModel.getBulan());
                         dataViewHolder.tvTahun.setText(dataModel.getTahun());
-                        dataViewHolder.tvJumlahSholat.setText(dataModel.getJumlahSholat());
+                        subuh = dataModel.isSholatSubuh();
+                        dhuhr = dataModel.isSholatDhuhr();
+                        ashar = dataModel.isSholatAshar();
+                        maghrib = dataModel.isSholatMaghrib();
+                        isya = dataModel.isSholatIsya();
+                        boolean[] rekap = {subuh, dhuhr, ashar, maghrib, isya};
+                        for (boolean adaYangTrue : rekap) {
+                            if (adaYangTrue) {
+                                jumlahSholat++;
+                            }
+                        }
+                        dataViewHolder.tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                         dataViewHolder.chkMembantuOrtu.setChecked(dataModel.isMembantuOrangTua());
                         dataViewHolder.chkSekolah.setChecked(dataModel.isSekolah());
                         dataViewHolder.chkMembantuOrtu.setEnabled(false);

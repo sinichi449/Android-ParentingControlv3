@@ -10,21 +10,29 @@ public class DataModel {
     private String hari;
     private String bulan;
     private String tahun;
-    private String jumlahSholat;
+    private boolean isSholatSubuh;
+    private boolean isSholatDhuhr;
+    private boolean isSholatAshar;
+    private boolean isSholatMaghrib;
+    private boolean isSholatIsya;
     private boolean membantuOrangTua;
     private boolean sekolah;
 
     public DataModel() {
     }
 
-    public DataModel(String tanggal, String hari, String bulan, String tahun, String jumlahSholat, boolean membantuOrangTua, boolean sekolah) {
+    public DataModel(String tanggal, String hari, String bulan, String tahun, boolean isSholatSubuh, boolean isSholatDhuhr, boolean isSholatAshar, boolean isSholatMaghrib, boolean isSholatIsya, boolean membantuOrangTua, boolean sekolah) {
         this.tanggal = tanggal;
         this.hari = hari;
         this.bulan = bulan;
         this.tahun = tahun;
-        this.jumlahSholat = jumlahSholat;
-        this.sekolah = sekolah;
+        this.isSholatSubuh = isSholatSubuh;
+        this.isSholatDhuhr = isSholatDhuhr;
+        this.isSholatAshar = isSholatAshar;
+        this.isSholatMaghrib = isSholatMaghrib;
+        this.isSholatIsya = isSholatIsya;
         this.membantuOrangTua = membantuOrangTua;
+        this.sekolah = sekolah;
     }
 
     public String getId() {
@@ -67,12 +75,44 @@ public class DataModel {
         this.tahun = tahun;
     }
 
-    public String getJumlahSholat() {
-        return jumlahSholat;
+    public boolean isSholatSubuh() {
+        return isSholatSubuh;
     }
 
-    public void setJumlahSholat(String jumlahSholat) {
-        this.jumlahSholat = jumlahSholat;
+    public void setSholatSubuh(boolean sholatSubuh) {
+        isSholatSubuh = sholatSubuh;
+    }
+
+    public boolean isSholatDhuhr() {
+        return isSholatDhuhr;
+    }
+
+    public void setSholatDhuhr(boolean sholatDhuhr) {
+        isSholatDhuhr = sholatDhuhr;
+    }
+
+    public boolean isSholatAshar() {
+        return isSholatAshar;
+    }
+
+    public void setSholatAshar(boolean sholatAshar) {
+        isSholatAshar = sholatAshar;
+    }
+
+    public boolean isSholatMaghrib() {
+        return isSholatMaghrib;
+    }
+
+    public void setSholatMaghrib(boolean sholatMaghrib) {
+        isSholatMaghrib = sholatMaghrib;
+    }
+
+    public boolean isSholatIsya() {
+        return isSholatIsya;
+    }
+
+    public void setSholatIsya(boolean sholatIsya) {
+        isSholatIsya = sholatIsya;
     }
 
     public boolean isMembantuOrangTua() {

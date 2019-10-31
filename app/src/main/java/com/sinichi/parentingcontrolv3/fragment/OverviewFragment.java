@@ -62,6 +62,8 @@ public class OverviewFragment extends Fragment {
     private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private boolean subuh, dhuhr, ashar, maghrib, isya;
+    private int jumlahSholat = 0;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -137,7 +139,18 @@ public class OverviewFragment extends Fragment {
                     tvHari.setText(models.get(index).getHari());
                     tvBulan.setText(models.get(index).getBulan());
                     tvTahun.setText(models.get(index).getTahun());
-                    tvJumlahSholat.setText(models.get(index).getJumlahSholat());
+                    subuh = models.get(index).isSholatSubuh();
+                    dhuhr = models.get(index).isSholatDhuhr();
+                    ashar = models.get(index).isSholatAshar();
+                    maghrib = models.get(index).isSholatMaghrib();
+                    isya = models.get(index).isSholatIsya();
+                    boolean[] rekap = {subuh, dhuhr, ashar, maghrib, isya};
+                    for (boolean adaYangTrue : rekap) {
+                        if (adaYangTrue) {
+                            jumlahSholat++;
+                        }
+                    }
+                    tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                     chkMembantuOrtu.setChecked(models.get(index).isMembantuOrangTua());
                     chkSekolah.setChecked(models.get(index).isSekolah());
                     tvJumlahSholat.setEnabled(false);

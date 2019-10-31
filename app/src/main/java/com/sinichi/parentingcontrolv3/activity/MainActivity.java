@@ -377,25 +377,25 @@ public class MainActivity extends AppCompatActivity {
     private void setBackgroundReferToDays(ImageView imgTarget) {
         switch (getCurrentDay()) {
             case "Senin":
-                attachImage(R.drawable.bg_colapse_senin, imgTarget);
+                attachImage(R.drawable.back2, imgTarget);
                 break;
             case "Selasa":
-                attachImage(R.drawable.bg_colapse_selasa, imgTarget);
+                attachImage(R.drawable.back3, imgTarget);
                 break;
             case "Rabu":
-                attachImage(R.drawable.bg_colapse_rabu, imgTarget);
+                attachImage(R.drawable.back4, imgTarget);
                 break;
             case "Kamis":
-                attachImage(R.drawable.bg_colapse_kamis, imgTarget);
+                attachImage(R.drawable.back1, imgTarget);
                 break;
             case "Jumat":
-                attachImage(R.drawable.bg_colapse_jumat, imgTarget);
+                attachImage(R.drawable.back5, imgTarget);
                 break;
             case "Sabtu":
-                attachImage(R.drawable.bg_colapse_sabtu, imgTarget);
+                attachImage(R.drawable.back6, imgTarget);
                 break;
             case "Minggu":
-                attachImage(R.drawable.bg_colapse_minggu, imgTarget);
+                attachImage(R.drawable.back7, imgTarget);
                 break;
         }
     }

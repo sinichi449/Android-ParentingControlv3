@@ -19,10 +19,11 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, createNotificationChannel(context));
-        String waktuSholat = intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT);
-        int notificationId = intent.getIntExtra(Constant.INTENT_NOTIFICATION_ID, 1);
+        String waktuSholat = intent.getStringExtra(Constant.INTENT_WAKTU_SHOLAT); // Get nama sholat dari MainActivity
+        int notificationId = intent.getIntExtra(Constant.INTENT_NOTIFICATION_ID, 1); // Get notification id dari MainActivity
+
         Intent intent1 = new Intent(context, NotificationOnClick.class);
-        intent1.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
+        intent1.putExtra("notif_sholat", waktuSholat); // Passing data menuju NotificationOnClick bersisi nama waktu sholat
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)

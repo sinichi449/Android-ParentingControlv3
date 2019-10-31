@@ -34,11 +34,17 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
+import com.sinichi.parentingcontrolv3.model.DataModel;
 import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
+import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -66,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean isGPS = false;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor edit;
+    private DatabaseReference mDatabaseReference;
+    private DatabaseReference kegiatanRef;
+    private String date, day, month, year;
+    private List<DataModel> models;
+    private boolean isAvailableTodayData;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -182,12 +193,49 @@ public class MainActivity extends AppCompatActivity {
         }
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         if (sharedPrefs.getString(Constant.WAKTU_ISYA, null) != null) {
-            // TODO: Buat alarm jadwal sholat
-            makeNotification(Constant.WAKTU_SUBUH, 1,10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
-            makeNotification(Constant.WAKTU_DHUHR, 2,20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
-            makeNotification(Constant.WAKTU_ASHAR, 3,30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
-            makeNotification(Constant.WAKTU_MAGHRIB, 4,40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
-            makeNotification(Constant.WAKTU_ISYA, 5,50,getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
+            // TODO: Check di database jika user belum melakukan sholat, munculkan notifikasi
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+            kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
+            Calendar calendar = Calendar.getInstance();
+            date = String.valueOf(calendar.get(Calendar.DATE));
+            day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
+            month = CurrentDimension.defineMonth(calendar.get(Calendar.MONTH));
+            year = String.valueOf(calendar.get(Calendar.YEAR));
+//            kegiatanRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    models = new ArrayList<>();
+//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        DataModel model = snapshot.getValue(DataModel.class);
+//                        if (model != null) {
+//                            model.setId(snapshot.getKey());
+//                        }
+//                        models.add(model);
+//                    }
+//                    // TODO:
+//                    for (DataModel dataModel : models) {
+//                        isAvailableTodayData = dataModel.getTanggal().equals(date)
+//                                || dataModel.getHari().equals(day)
+//                                || dataModel.getBulan().equals(month)
+//                                || dataModel.getTahun().equals(year);
+//                    }
+//                    if (!isAvailableTodayData) {
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+            makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+            makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+            makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+            makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+            makeNotification(Constant.WAKTU_ISYA, 5, 50,getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
         }
     }
 
@@ -257,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
         tvHariIni.setId(ViewCompat.generateViewId());
         constraintSet.constrainWidth(tvHariIni.getId(), ConstraintSet.WRAP_CONTENT);
         constraintSet.constrainHeight(tvHariIni.getId(), ConstraintSet.WRAP_CONTENT);
+        constraintSet.setMargin(tvHariIni.getId(), ConstraintSet.TOP, setDp(MainActivity.this, 10));
         tvHariIni.setText("Hari ini");
         tvHariIni.setTypeface(ResourcesCompat.getFont(this, R.font.arial));
         tvHariIni.setTextColor(getResources().getColor(R.color.colorWhite));

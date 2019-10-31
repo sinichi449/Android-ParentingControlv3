@@ -145,11 +145,20 @@ public class OverviewFragment extends Fragment {
                     maghrib = models.get(index).isSholatMaghrib();
                     isya = models.get(index).isSholatIsya();
                     boolean[] rekap = {subuh, dhuhr, ashar, maghrib, isya};
-                    for (boolean adaYangTrue : rekap) {
-                        if (adaYangTrue) {
+                    for (boolean adaYgTrue : rekap) {
+                        if (!adaYgTrue) { // Jika tidak ada sholat yang dijalani
+                            jumlahSholat--; // Jika data sholat diganti false
+                            if (jumlahSholat < 0) {
+                                jumlahSholat = 0;
+                            }
+                        } else if (adaYgTrue) {
                             jumlahSholat++;
+                            if (jumlahSholat > 6) {
+                                jumlahSholat = 5;
+                            }
                         }
                     }
+
                     tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                     chkMembantuOrtu.setChecked(models.get(index).isMembantuOrangTua());
                     chkSekolah.setChecked(models.get(index).isSekolah());

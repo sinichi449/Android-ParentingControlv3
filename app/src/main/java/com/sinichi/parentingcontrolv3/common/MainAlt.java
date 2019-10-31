@@ -67,9 +67,14 @@ public class MainAlt implements d {
                         maghrib = dataModel.isSholatMaghrib();
                         isya = dataModel.isSholatIsya();
                         boolean[] rekap = {subuh, dhuhr, ashar, maghrib, isya};
-                        for (boolean adaYangTrue : rekap) {
-                            if (adaYangTrue) {
+                        for (boolean adaYgTrue : rekap) {
+                            if (!adaYgTrue) {
+                                jumlahSholat = 0;
+                            } else if (adaYgTrue) {
                                 jumlahSholat++;
+                                if (!adaYgTrue) {
+                                    jumlahSholat--;
+                                }
                             }
                         }
                         dataViewHolder.tvJumlahSholat.setText(String.valueOf(jumlahSholat));

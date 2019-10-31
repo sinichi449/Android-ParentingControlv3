@@ -305,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
         tvHariIni.setId(ViewCompat.generateViewId());
         constraintSet.constrainWidth(tvHariIni.getId(), ConstraintSet.WRAP_CONTENT);
         constraintSet.constrainHeight(tvHariIni.getId(), ConstraintSet.WRAP_CONTENT);
+        constraintSet.setMargin(tvHariIni.getId(), ConstraintSet.TOP, setDp(MainActivity.this, 10));
         tvHariIni.setText("Hari ini");
         tvHariIni.setTypeface(ResourcesCompat.getFont(this, R.font.arial));
         tvHariIni.setTextColor(getResources().getColor(R.color.colorWhite));

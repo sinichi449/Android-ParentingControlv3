@@ -183,7 +183,7 @@
             <TextView
                 android:id="@+id/tv_bulan"
                 android:layout_width="wrap_content"
-                android:l ayout_height="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
                 tools:text="Maret"

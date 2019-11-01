@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private String date, day, month, year;
     private List<DataModel> models;
     private boolean isAvailableTodayData;
+    private List<Address> a;
 
     public void initComponents() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.constraint_layout_collapsingtoolbar);
         constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
+        sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
     }
 
     @Override
@@ -107,6 +109,61 @@ public class MainActivity extends AppCompatActivity {
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
 
+        // Setting ViewPager
+        MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.TabLayoutSelectedIndicator));
+
+        // Set header background berdasarkan hari
+        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+
+        // Setting layout
+        makeView();
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (position == 0) {
+                    // TODO: Set Calendar Header
+//                    constraintLayout.removeView(chart);
+                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+                    makeView();
+                } else if (position == 1) {
+                    // TODO: Statistic Header
+                    constraintLayout.removeView(tvHariIni);
+                    constraintLayout.removeView(tvHeaderDate);
+                    constraintLayout.removeView(tvHeaderDetails);
+//                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
+                    setLineChartView();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Glide.get(MainActivity.this).clearMemory();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (position == 0) {
+                    // TODO: Set Calendar Header
+//                    constraintLayout.removeView(chart);
+                    setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+                    makeView();
+                } else if (position == 1) {
+                    // TODO: Statistic Header
+                    // TODO: Remove Header date
+                    constraintLayout.removeView(tvHariIni);
+                    constraintLayout.removeView(tvHeaderDate);
+                    constraintLayout.removeView(tvHeaderDetails);
+//                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
+                    setLineChartView();
+                }
+            }
+        });
+
         // Get nama kota
         if (isLocationPermissionGranted()) {
             //  Aktifkan GPS
@@ -117,170 +174,149 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // Dapatkan lokasi
-            FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
-            mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        try {
-                            // Dapatkan nama daerah
-                            Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                    location.getLongitude(), 1);
-                            sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                            edit = sharedPrefs.edit();
-                            edit.putString(Constant.NAMA_KOTA, addresses.get(0).getSubAdminArea());
-                            edit.apply();
-                            Log.e("Locality", addresses.get(0).getLocality());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(MainActivity.this, "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+            boolean flag = true;
+            int lama_pencarian = 30;
+//            while(flag) {
+                /*
+                cek lokasi
+                if ketemu
+                    flag = false
+                else
+                    sleep 10 detik
+                    lama += 1
+                    if lama = 30
+                        flag = false
+                 */
+//            }
 
-            // Setting ViewPager
-            MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
-            viewPager.setAdapter(adapter);
-            tabLayout.setupWithViewPager(viewPager);
-
-            // Set header background berdasarkan hari
-            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-
-            // Setting layout
-            makeView();
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    int position = tab.getPosition();
-                    if (position == 0) {
-                        // TODO: Set Calendar Header
-//                    constraintLayout.removeView(chart);
-                        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-                        makeView();
-                    } else if (position == 1) {
-                        // TODO: Statistic Header
-                        constraintLayout.removeView(tvHariIni);
-                        constraintLayout.removeView(tvHeaderDate);
-                        constraintLayout.removeView(tvHeaderDetails);
-//                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
-                        setLineChartView();
-                    }
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-                    Glide.get(MainActivity.this).clearMemory();
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-                    int position = tab.getPosition();
-                    if (position == 0) {
-                        // TODO: Set Calendar Header
-//                    constraintLayout.removeView(chart);
-                        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-                        makeView();
-                    } else if (position == 1) {
-                        // TODO: Statistic Header
-                        // TODO: Remove Header date
-                        constraintLayout.removeView(tvHariIni);
-                        constraintLayout.removeView(tvHeaderDate);
-                        constraintLayout.removeView(tvHeaderDetails);
-//                    attachImage(R.drawable.background_yellow, imgHeaderCollapsingToolbar);
-                        setLineChartView();
-                    }
-                }
-            });
         }
-        sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
 
-        // TODO: Check di database jika user belum melakukan sholat, munculkan notifikasi
+        // Get user
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
+
+        // Get database
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
+
+        // Get tanggal, hari, bulan, tahun hari ini
         Calendar calendar = Calendar.getInstance();
         date = String.valueOf(calendar.get(Calendar.DATE));
         day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
         month = CurrentDimension.defineMonth(calendar.get(Calendar.MONTH));
         year = String.valueOf(calendar.get(Calendar.YEAR));
-        kegiatanRef.addValueEventListener(new ValueEventListener() {
+
+        getLokasi();
+
+        // Lakukan operasi berikut jika username = anak
+        String username = sharedPrefs.getString(Constant.USERNAME, null);
+        if (username != null
+                && username.equals(Constant.USER_ANAK)) {
+            kegiatanRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // Get data dari Firebase, lalu dimasukkan ke dalam List<DataModel>
+                    models = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        DataModel model = snapshot.getValue(DataModel.class);
+                        if (model != null) {
+                            model.setId(snapshot.getKey());
+                        }
+                        models.add(model);
+                    }
+
+                    // Cek apakah data untuk hari ini sudah tersedia
+                    for (DataModel dataModel : models) {
+                        isAvailableTodayData = dataModel.getTanggal().equals(date)
+                                || dataModel.getHari().equals(day)
+                                || dataModel.getBulan().equals(month)
+                                || dataModel.getTahun().equals(year);
+                    }
+
+                    if (isAvailableTodayData) {
+                        // Get data terbaru
+                        int index = models.size() - 1;
+                        boolean sudahSholatSubuh = models.get(index).isSholatSubuh();
+                        boolean sudahSholatDhuhr = models.get(index).isSholatDhuhr();
+                        boolean sudahSholatAshar = models.get(index).isSholatAshar();
+                        boolean sudahSholatMaghrib = models.get(index).isSholatMaghrib();
+                        boolean sudahSholatIsya = models.get(index).isSholatIsya();
+
+                        Calendar cal = Calendar.getInstance();
+                        String jamSekarang = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+                        String menitSekarang = String.valueOf(cal.get(Calendar.MINUTE));
+                        String waktuSekarang = jamSekarang + ":" + menitSekarang;
+
+                        SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                        String waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
+                        String waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
+                        String waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");
+                        String waktuMaghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, "kosong");
+                        String waktuIsya = sharedPrefs.getString(Constant.WAKTU_ISYA, "kosong");
+
+                        // Hanya user anak yang akan mendapatkan notifikasi
+                        // Jika user anak belum sholat, beri notifikasi
+                        if (!waktuSubuh.equals("kosong")
+                                && !sudahSholatSubuh) {
+                            makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+                            Log.e("Msg", "Belum sholat " + Constant.WAKTU_SUBUH);
+                        }
+                        if (!waktuDhuhr.equals("kosong")
+                                && !sudahSholatDhuhr) {
+                            makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+                            Log.e("Msg", "Belum sholat " + Constant.WAKTU_DHUHR);
+                        }
+                        if (!waktuAshar.equals("kosong")
+                                && !sudahSholatAshar) {
+                            makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+                            Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
+                        }
+                        if (!waktuMaghrib.equals("kosong")
+                                && !sudahSholatMaghrib) {
+                            makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+                            Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
+                        }
+                        if (!waktuIsya.equals("kosong")
+                                && !sudahSholatIsya) {
+                            makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
+                            Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void getLokasi() {
+        // Dapatkan lokasi
+        FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
+        a = new ArrayList<>();
+        mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                models = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DataModel model = snapshot.getValue(DataModel.class);
-                    if (model != null) {
-                        model.setId(snapshot.getKey());
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    try {
+                        // Get nama kota
+                        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                        a = geocoder.getFromLocation(location.getLatitude(),
+                                location.getLongitude(), 1);
+                        sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                        edit = sharedPrefs.edit();
+                        edit.putString(Constant.NAMA_KOTA, a.get(0).getSubAdminArea());
+                        edit.apply();
+                        Log.e("Locality", a.get(0).getSubAdminArea());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    models.add(model);
+                } else {
+                    Toast.makeText(MainActivity.this, "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
+                            Toast.LENGTH_LONG).show();
                 }
-
-                for (DataModel dataModel : models) {
-                    isAvailableTodayData = dataModel.getTanggal().equals(date)
-                            || dataModel.getHari().equals(day)
-                            || dataModel.getBulan().equals(month)
-                            || dataModel.getTahun().equals(year);
-                }
-
-                if (isAvailableTodayData) {
-                    int index = models.size() - 1;
-                    boolean sudahSholatSubuh = models.get(index).isSholatSubuh();
-                    boolean sudahSholatDhuhr = models.get(index).isSholatDhuhr();
-                    boolean sudahSholatAshar = models.get(index).isSholatAshar();
-                    boolean sudahSholatMaghrib = models.get(index).isSholatMaghrib();
-                    boolean sudahSholatIsya = models.get(index).isSholatIsya();
-                    Calendar cal = Calendar.getInstance();
-                    String jamSekarang = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
-                    String menitSekarang = String.valueOf(cal.get(Calendar.MINUTE));
-                    String waktuSekarang = jamSekarang + ":" + menitSekarang;
-                    // TODO: Jika user belum melakukan sholat DAN waktunya sholat telah tiba, maka beri notifikasi
-                    SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                    String waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
-                    String waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
-                    String waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");
-                    String waktuMaghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, "kosong");
-                    String waktuIsya = sharedPrefs.getString(Constant.WAKTU_ISYA, "kosong");
-                        /*
-                        Jika waktu sholat sudah tersedia, user belum melakukan sholat,
-                        dan waktu sudah masuk waktu sholat tertentu, buat notifikasi
-                         */
-                    if (!waktuSubuh.equals("kosong")
-                            && !sudahSholatSubuh) {
-                        makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
-                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_SUBUH);
-                    }
-                    if (!waktuDhuhr.equals("kosong")
-                            && !sudahSholatDhuhr) {
-                        makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
-                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_DHUHR);
-                    }
-                    if (!waktuAshar.equals("kosong")
-                            && !sudahSholatAshar) {
-                        makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
-                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
-                    }
-                    if (!waktuMaghrib.equals("kosong")
-                            && !sudahSholatMaghrib) {
-                        makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
-                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
-                    }
-                    if (!waktuIsya.equals("kosong")
-                            && !sudahSholatIsya) {
-                        makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
-                        Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

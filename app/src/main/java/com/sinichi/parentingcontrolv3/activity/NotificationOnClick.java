@@ -18,15 +18,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.DataModel;
-import com.sinichi.parentingcontrolv3.util.CurrentDimension;
-
-import java.util.Calendar;
 
 public class NotificationOnClick extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private DatabaseReference kegiatanRef;
-    boolean isAvailableTodayData;
-    private String date, day, month, year;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private String waktuSholat;
@@ -40,11 +35,7 @@ public class NotificationOnClick extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
-        final Calendar calendar = Calendar.getInstance();
-        date = String.valueOf(calendar.get(Calendar.DATE));
-        day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
-        month = CurrentDimension.defineMonth(calendar.get(Calendar.MONTH));
-        year = String.valueOf(calendar.get(Calendar.YEAR));
+
         waktuSholat = getIntent().getStringExtra("notif_sholat");
         Log.e("Waktu", waktuSholat);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -58,10 +49,6 @@ public class NotificationOnClick extends AppCompatActivity {
                         kegiatanRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
-                                String date = String.valueOf(calendar.get(Calendar.DATE));
-                                String month = String.valueOf(calendar.get(Calendar.MONTH));
-                                String year = String.valueOf(calendar.get(Calendar.YEAR));
                                 DataModel model = new DataModel();
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     model = snapshot.getValue(DataModel.class);
@@ -69,7 +56,7 @@ public class NotificationOnClick extends AppCompatActivity {
                                         model.setId(snapshot.getKey());
                                     }
                                 }
-                                switch (waktuSholat.replace(" ", "")) {
+                                switch (waktuSholat.replace(" ", "")) { // Remove whitespace
                                     case "Subuh":
                                         kegiatanRef.child(model.getId()).child("sholatSubuh").setValue(true);
                                         break;

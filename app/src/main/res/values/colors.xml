@@ -7,4 +7,5 @@
     <color name="colorSkyBlue">#25AAE1</color>
     <color name="colorDarkGreen">#009700</color>
     <color name="colorGrey">#727272</color>
+    <color name="TabLayoutSelectedIndicator">#8A8A8A</color>
 </resources>

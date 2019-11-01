@@ -113,7 +113,7 @@
                     android:id="@+id/bottom_navigation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorDarkGreen"
+                    android:background="@color/colorSkyBlue"
                     app:itemIconTint="#fff"
                     app:itemTextColor="#fff"
                     app:layout_constraintBottom_toBottomOf="parent"

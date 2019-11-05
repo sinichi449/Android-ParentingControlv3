@@ -30,7 +30,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent1, PendingIntent.FLAG_ONE_SHOT);
         builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
-                .setContentTitle("Waktunya sholat " + waktuSholat)
+                .setContentTitle("Kamu belum " + waktuSholat + "?")
                 .setContentIntent(pendingIntent)
                 .setContentText("Klik notifikasi ini apabila sudah sholat " + waktuSholat)
                 .setDefaults(Notification.DEFAULT_LIGHTS |
@@ -53,7 +53,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
             CharSequence channelName = "Application_name";
             // The user-visible description of the channel.
             String channelDescription = "Application_name Alert";
-            int channelImportance = NotificationManager.IMPORTANCE_DEFAULT;
+            int channelImportance = NotificationManager.IMPORTANCE_LOW;
             boolean channelEnableVibrate = true;
             //            int channelLockscreenVisibility = Notification.;
 

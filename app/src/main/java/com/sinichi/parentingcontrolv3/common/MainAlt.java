@@ -3,6 +3,7 @@ package com.sinichi.parentingcontrolv3.common;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,10 @@ public class MainAlt implements d {
                 new FirebaseRecyclerAdapter<DataModel, DataSholatViewHolder.DataViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull DataSholatViewHolder.DataViewHolder dataViewHolder, int i, @NonNull DataModel dataModel) {
+                        int tanggal = Integer.parseInt(dataModel.getTanggal());
+                        if (tanggal < 10) {
+                            dataViewHolder.tvTanggal.setGravity(Gravity.CENTER);
+                        }
                         dataViewHolder.tvTanggal.setText(dataModel.getTanggal());
                         dataViewHolder.tvHari.setText(dataModel.getHari());
                         dataViewHolder.tvBulan.setText(dataModel.getBulan());

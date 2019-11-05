@@ -100,47 +100,45 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         setContentView(R.layout.activity_main);
         initComponents();
 
+        Intent intent = getIntent();
+        boolean isDiperbarui = intent.getBooleanExtra("after_notification", false);
+        if (isDiperbarui) {
+            Toast.makeText(MainActivity.this, "Data berhasil diperbarui",
+                    Toast.LENGTH_LONG).show();
+        }
+
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
-
         // Setting ViewPager
         MainViewPagerAdapter adapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.TabLayoutSelectedIndicator));
-
         // Set header background berdasarkan hari
         setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-
         // Setting layout
         makeView();
-
         tabLayout.addOnTabSelectedListener(this);
-
         getNamaKota();
-
+        startLocationService();
         // Get user
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
-
         // Get database
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
-
         // Get tanggal, hari, bulan, tahun hari ini
         Calendar calendar = Calendar.getInstance();
         date = String.valueOf(calendar.get(Calendar.DATE));
         day = CurrentDimension.defineDays(calendar.get(Calendar.DAY_OF_WEEK));
         month = CurrentDimension.defineMonth(calendar.get(Calendar.MONTH));
         year = String.valueOf(calendar.get(Calendar.YEAR));
-
         // Lakukan operasi berikut jika username == anak
         String username = sharedPrefs.getString(Constant.USERNAME, null); // Get nama username
         if (username != null
                 && username.equals(Constant.USER_ANAK)) {
             kegiatanRef.addValueEventListener(this);
         }
-
         flbAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +225,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                 location.getLongitude(), 1);
                         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
                         edit = sharedPrefs.edit();
-                        edit.putString(Constant.NAMA_KOTA, a.get(0).getSubAdminArea());
+                        String locality = a.get(0).getSubAdminArea();
+                        edit.putString(Constant.NAMA_KOTA, locality);
                         edit.apply();
                         Log.e("Locality", a.get(0).getSubAdminArea());
                     } catch (IOException e) {
@@ -242,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void getNamaKota() {
-        // Get nama kota
         if (isLocationPermissionGranted()) {
             //  Aktifkan GPS
             new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
@@ -252,13 +250,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 }
             });
             getLokasi();
-            if (sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK)) {
-                Intent intent = new Intent(this, LocationService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
+
+        }
+    }
+
+    private void startLocationService() {
+        if (sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK)) {
+            Intent intent = new Intent(this, LocationService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
             }
         }
     }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -77,10 +78,12 @@ public class NotificationOnClick extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                Toast.makeText(NotificationOnClick.this, "Error occured, hubungi developer untuk mendapatkan bantuan."
+                                        , Toast.LENGTH_SHORT).show();
                             }
                         });
                         Intent intent = new Intent(NotificationOnClick.this, MainActivity.class);
+                        intent.putExtra("after_notification", true);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         finish();

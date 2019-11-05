@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/header2"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:src="@drawable/header2"
         android:layout_marginTop="-25dp"/>
 
     <ImageView
@@ -80,9 +80,9 @@
         android:layout_height="fill_parent">
 
         <ImageView
+            android:id="@+id/footer2"
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:src="@drawable/footer2"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="-25dp"
             android:contentDescription="Footer" />

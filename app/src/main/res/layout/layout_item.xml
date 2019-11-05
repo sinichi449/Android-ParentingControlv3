@@ -125,7 +125,6 @@
                 tools:text="Sabtu"
                 android:textColor="#000000"
                 app:fontFamily="@font/arial_rounded"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/tv_bulan"
                 app:layout_constraintStart_toEndOf="@+id/tv_tanggal"
                 app:layout_constraintTop_toTopOf="@+id/tv_tanggal" />
@@ -174,7 +173,6 @@
                 android:layout_marginTop="20dp"
                 android:textColor="#000000"
                 android:textSize="30sp"
-                android:textStyle="bold"
                 app:fontFamily="@font/arial_rounded"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -189,7 +187,6 @@
                 tools:text="Maret"
                 android:textColor="#000000"
                 app:fontFamily="@font/arial_rounded"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_tanggal"
                 app:layout_constraintStart_toEndOf="@+id/tv_tanggal" />
 
@@ -202,7 +199,6 @@
                 tools:text="2018"
                 android:textColor="#000000"
                 app:fontFamily="@font/arial_rounded"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_bulan"
                 app:layout_constraintStart_toEndOf="@+id/tv_bulan"
                 app:layout_constraintTop_toTopOf="@+id/tv_bulan" />

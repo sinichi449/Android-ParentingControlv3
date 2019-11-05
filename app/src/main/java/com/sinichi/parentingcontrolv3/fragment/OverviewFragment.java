@@ -4,6 +4,7 @@ package com.sinichi.parentingcontrolv3.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +137,10 @@ public class OverviewFragment extends Fragment {
                 }
                 if (available) {
                     int index = models.size() - 1;
+                    int tanggal = Integer.parseInt(models.get(index).getTanggal());
+                    if (tanggal < 10) {
+                        tvTanggal.setGravity(Gravity.CENTER);
+                    }
                     tvTanggal.setText(models.get(index).getTanggal());
                     tvHari.setText(models.get(index).getHari());
                     tvBulan.setText(models.get(index).getBulan());

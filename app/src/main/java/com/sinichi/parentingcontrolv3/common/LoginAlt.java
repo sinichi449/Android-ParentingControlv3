@@ -107,7 +107,8 @@ public class LoginAlt extends LoginActivity implements b{
                             Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
                         } else {
                             context.startActivity(new Intent(context, MainActivity.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                            Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK));
                             activity.finish();
                         }
                     }

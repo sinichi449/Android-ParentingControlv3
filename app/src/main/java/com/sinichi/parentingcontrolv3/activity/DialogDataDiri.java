@@ -1,5 +1,6 @@
 package com.sinichi.parentingcontrolv3.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +24,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 
 import static com.sinichi.parentingcontrolv3.activity.ProfileActivity.isValidTextView;
 
-class DialogDataDiri {
+public class DialogDataDiri {
     private Context context;
     private LayoutInflater layoutInflater;
     private LoginActivity loginActivity;
@@ -36,6 +37,11 @@ class DialogDataDiri {
             tvSekolahPekerjaan;
     private Spinner spinner;
     private AlertDialog.Builder builder;
+    public ProgressDialog progressDialog;
+
+    public DialogDataDiri(Context context) {
+        this.context = context;
+    }
 
     DialogDataDiri(Context context, LayoutInflater layoutInflater, LoginActivity loginActivity, GoogleApiClient mGoogleApiClient) {
         this.context = context;
@@ -106,6 +112,9 @@ class DialogDataDiri {
                 if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
                         && isValidTextView(tvNomorTelepon) && isValidTextView(tvTanggalLahir) && isValidTextView(tvSekolahPekerjaan)) {
                     putDataToSharedPrefs();
+                    progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage("Connecting to Cloud...");
+                    progressDialog.show();
                     Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     loginActivity.startActivityForResult(signIntent, Constant.RC_SIGN_IN);
                 } else {
@@ -122,6 +131,9 @@ class DialogDataDiri {
             public void onClick(DialogInterface dialog, int which) {
                 loginActivity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
                         Constant.RC_SIGN_IN);
+                ProgressDialog progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("Connecting to Cloud...");
+                progressDialog.show();
             }
         });
     }

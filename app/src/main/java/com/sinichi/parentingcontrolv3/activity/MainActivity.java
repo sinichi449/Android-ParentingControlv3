@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private boolean isAvailableTodayData;
     private boolean sudahSholatSubuh, sudahSholatDhuhr, sudahSholatAshar,
             sudahSholatMaghrib, sudahSholatIsya;
+    private boolean flag;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor edit;
     private DatabaseReference mDatabaseReference;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private String jamSekarang, menitSekarang, waktuSekarang;
     private List<DataModel> models;
     private List<Address> a;
+    private int lama_pencarian = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,21 +123,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     isGPS = true;
                 }
             });
-
-            boolean flag = true;
-            int lama_pencarian = 30;
-//            while(flag) {
-                /*
-                cek lokasi
-                if ketemu
-                    flag = false
-                else
-                    sleep 10 detik
-                    lama += 1
-                    if lama = 30
-                        flag = false
-                 */
-//            }
             getLokasi();
         }
 

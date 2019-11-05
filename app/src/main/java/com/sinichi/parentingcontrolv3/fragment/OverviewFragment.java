@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -63,6 +64,7 @@ public class OverviewFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
+    private boolean isGotJson = false;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -179,11 +181,25 @@ public class OverviewFragment extends Fragment {
             public void onResponse(Call<Data> call, Response<Data> response) {
                 Data data = response.body();
                 JadwalSholat jadwalSholat = data.getJadwalSholat();
-                tvSubuh.setText(jadwalSholat.getSubuh());
-                tvDhuhr.setText(jadwalSholat.getDhuhr());
-                tvAshar.setText(jadwalSholat.getAshar());
-                tvMaghrib.setText(jadwalSholat.getMaghrib());
-                tvIsya.setText(jadwalSholat.getIsya());
+                int percobaan = 0;
+                while(!isGotJson) {
+                    if (jadwalSholat != null) {
+                        tvSubuh.setText(jadwalSholat.getSubuh());
+                        tvDhuhr.setText(jadwalSholat.getDhuhr());
+                        tvAshar.setText(jadwalSholat.getAshar());
+                        tvMaghrib.setText(jadwalSholat.getMaghrib());
+                        tvIsya.setText(jadwalSholat.getIsya());
+                        isGotJson = true;
+                    } else {
+                        isGotJson = false;
+                        percobaan++;
+                        if (percobaan > 3) {
+                            Toast.makeText(getContext(), "Gagal mendapatkan data sholat, periksa koneksi internet.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
                 sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putString(Constant.WAKTU_SUBUH, jadwalSholat.getSubuh());

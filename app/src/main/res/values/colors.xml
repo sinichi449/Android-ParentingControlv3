@@ -5,7 +5,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorBlue">#218AC4</color>
     <color name="colorSkyBlue">#25AAE1</color>
-    <color name="colorDarkGreen">#009700</color>
+    <color name="colorDarkGreen">#006F00</color>
     <color name="colorGrey">#727272</color>
-    <color name="TabLayoutSelectedIndicator">#8A8A8A</color>
+    <color name="colorOrange">#DD8500</color>
 </resources>

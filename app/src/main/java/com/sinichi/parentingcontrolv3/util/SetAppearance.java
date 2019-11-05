@@ -93,8 +93,4 @@ public class SetAppearance {
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
-
-    public interface z {
-        void hideNavigationBar(Activity activity);
-    }
 }

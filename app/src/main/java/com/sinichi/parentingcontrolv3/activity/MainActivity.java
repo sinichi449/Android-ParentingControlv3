@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
+import com.sinichi.parentingcontrolv3.fragment.OverviewFragment;
 import com.sinichi.parentingcontrolv3.model.DataModel;
 import com.sinichi.parentingcontrolv3.service.LocationService;
 import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
@@ -90,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private String jamSekarang, menitSekarang, waktuSekarang;
     private List<DataModel> models;
     private List<Address> a;
+    // Floating button
+    private FloatingActionButton flbAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +161,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 && username.equals(Constant.USER_ANAK)) {
             kegiatanRef.addValueEventListener(this);
         }
+
+        flbAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OverviewFragment overviewFragment = new OverviewFragment();
+                CheckBox chk1 = overviewFragment.chkMembantuOrtu;
+                CheckBox chk2 = overviewFragment.chkSekolah;
+                chk1.setEnabled(true);
+                chk2.setEnabled(true);
+            }
+        });
     }
 
     public void initComponents() {
@@ -171,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+        flbAdd = findViewById(R.id.flb_add);
     }
 
     @Override

@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,6 +111,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         final TextView tvAlamat = dialogView.findViewById(R.id.txt_alamat);
         final TextView tvNomorTelepon = dialogView.findViewById(R.id.txt_no_telp);
         final TextView tvTanggalLahir = dialogView.findViewById(R.id.txt_tanggal_lahir);
+
+        final Spinner spinner = dialogView.findViewById(R.id.spinnner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.jenis_kelamin, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -115,6 +125,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 String alamat = tvAlamat.getText().toString();
                 String nomorTelpon = tvNomorTelepon.getText().toString();
                 String tanggalLahir = tvTanggalLahir.getText().toString();
+                String gender = spinner.getSelectedItem().toString();
+                Log.e("Spinner", gender);
+                editor.putString(Constant.GENDER, gender);
                 // TODO: Check user input
                 if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
                         && isValidTextView(tvNomorTelepon) && isValidTextView(tvTanggalLahir)) {

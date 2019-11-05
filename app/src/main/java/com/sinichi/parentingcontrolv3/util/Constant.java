@@ -28,4 +28,7 @@ public class Constant {
     public static final int REQUEST_LOCATION = 99;
     public static final String JADWAL_SHOLAT_URL = "https://time.siswadi.com/";
     public static final String INTENT_NOTIFICATION_ID = "notification_id";
+    public static final String GENDER = "GENDER";
+    public static final String LAKI_LAKI = "Laki-laki";
+    public static final String PEREMPUAN = "Perempuan";
 }

@@ -19,12 +19,15 @@ import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private TextView tvNama, tvTipeAkun, tvAlamat,
             tvSekolah, tvNomorTelepon, tvTanggalLahir;
     private ImageView imgHeaderProfile;
+    private CircleImageView circleImageView;
     private BottomNavigationView mBottomNavigation;
     private ImageView imgSignOut;
     private FirebaseAuth mFirebaseAuth;
@@ -36,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(R.drawable.headprofile)
                 .into(imgHeaderProfile);
+        circleImageView = findViewById(R.id.circle_image);
         tvNama = findViewById(R.id.tv_nama);
         tvTipeAkun = findViewById(R.id.tv_anak_ortu);
         tvAlamat = findViewById(R.id.tv_alamat);
@@ -73,6 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             } else {
+                setProfileDefaultImage();
                 tvNama.setText(nama);
                 tvTipeAkun.setText(tipeAkun);
                 tvAlamat.setText(alamat);
@@ -99,5 +104,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     public static boolean isValidTextView(TextView textView) {
         return !textView.getText().toString().equals("");
+    }
+
+    private void setProfileDefaultImage() {
+        // TODO: Female male
+        if (sharedPreferences.getString(Constant.GENDER, null)
+                .equals(Constant.LAKI_LAKI)) {
+            circleImageView.setImageResource(R.drawable.male);
+        } else if (sharedPreferences.getString(Constant.GENDER, null)
+                .equals(Constant.PEREMPUAN)) {
+            circleImageView.setImageResource(R.drawable.female);
+        }
     }
 }

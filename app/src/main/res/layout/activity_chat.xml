@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ChatActivity">
+    tools:context=".activity.ChatActivity"
+    android:background="@drawable/chat_bg">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -84,7 +85,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
                 android:layout_marginBottom="10dp"
-                android:tint="@color/colorDarkGreen"/>
+                android:tint="@color/colorSkyBlue"/>
 
             <EditText
                 android:id="@+id/messageEditText"
@@ -103,7 +104,7 @@
                  android:layout_width="30dp"
                  android:layout_height="30dp"
                  android:src="@drawable/send3"
-                 android:tint="@color/colorDarkGreen"
+                 android:tint="@color/colorSkyBlue"
                  app:layout_constraintStart_toEndOf="@+id/messageEditText"
                  app:layout_constraintTop_toTopOf="@+id/messageEditText"
                  app:layout_constraintBottom_toBottomOf="@+id/messageEditText"
@@ -118,6 +119,7 @@
                     app:itemTextColor="#fff"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:menu="@menu/layout_menu" />
             </androidx.constraintlayout.widget.ConstraintLayout>

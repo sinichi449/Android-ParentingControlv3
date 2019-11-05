@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,9 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -31,6 +34,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -67,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private MainAlt mainAlt;
+    private CoordinatorLayout mCoordinatorLayout;
     private ImageView imgHeaderCollapsingToolbar;
     private ConstraintLayout constraintLayout;
     private ConstraintSet constraintSet;
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             SetAppearance.setExtendStatusBarWithView(this);
         }
+
         mBottomNavigation = findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
@@ -113,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
             new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
                 @Override
                 public void gpsStatus(boolean isGPSEnable) {
-                    isGPS = true;
-                }
-            });
-
+                    isGPS =
+            true;
+        }
+    });
             // Dapatkan lokasi
             FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
             mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {

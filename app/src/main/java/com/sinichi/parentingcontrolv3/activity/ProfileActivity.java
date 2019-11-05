@@ -3,6 +3,7 @@ package com.sinichi.parentingcontrolv3.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -84,14 +85,15 @@ public class ProfileActivity extends AppCompatActivity {
                 tvAlamat.setText(alamat);
 
                 String user = sharedPreferences.getString(Constant.USERNAME, null);
-                String anak = sharedPreferences.getString(Constant.USER_ANAK, null);
-                String orangTua = sharedPreferences.getString(Constant.USER_ORANG_TUA, null);
-                if (user != null && user.equals(anak)) {
+                Log.e("Username", user);
+                String anak = Constant.USER_ANAK;
+                String orangTua = Constant.USER_ORANG_TUA;
+                if (!user.equals("") && user.equals(anak)) {
                     tv2.setText("Sekolah");
-                } else if (user != null && user.equals(orangTua)) {
+                } else if (!user.equals("") && user.equals(orangTua)) {
                     tv2.setText("Pekerjaan");
                 }
-                
+
                 tvSekolah.setText(sekolah);
                 tvNomorTelepon.setText(nomorTelepon);
                 tvTanggalLahir.setText(tanggalLahir);

@@ -46,6 +46,7 @@ class DialogDataDiri {
         sharedPrefs = context.getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
     }
 
+    // LAUNCH DIALOG
     void launch() {
         builder = new AlertDialog.Builder(context);
         dialogView = layoutInflater.inflate(R.layout.temp_layout_isi_data_diri, null);

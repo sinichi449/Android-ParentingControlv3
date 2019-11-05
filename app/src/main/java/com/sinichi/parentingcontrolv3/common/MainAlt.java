@@ -89,6 +89,7 @@ public class MainAlt implements d {
         localRecyclerView.setAdapter(mFirebaseAdapter);
         localRecyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL,
                 true));
+        localRecyclerView.setHasFixedSize(true);
     }
 
     @Override

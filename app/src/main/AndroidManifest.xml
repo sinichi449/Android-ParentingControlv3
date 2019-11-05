@@ -45,10 +45,14 @@
         </activity>
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".util.AlarmNotificationReceiver"
+            android:enabled="true" />
+        <service
+            android:name=".service.LocationService"
             android:enabled="true" />
     </application>
 

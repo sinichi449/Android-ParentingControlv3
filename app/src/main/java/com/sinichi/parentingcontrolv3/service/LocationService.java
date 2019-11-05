@@ -26,6 +26,7 @@ import com.sinichi.parentingcontrolv3.model.LocationModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
 public class LocationService extends Service {
+    private boolean isEnable;
 
     public LocationService() {
 

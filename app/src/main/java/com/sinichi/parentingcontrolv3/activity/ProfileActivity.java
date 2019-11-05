@@ -25,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private TextView tvNama, tvTipeAkun, tvAlamat,
-            tvSekolah, tvNomorTelepon, tvTanggalLahir;
+            tvSekolah, tvNomorTelepon, tvTanggalLahir, tv2;
     private ImageView imgHeaderProfile;
     private CircleImageView circleImageView;
     private BottomNavigationView mBottomNavigation;
@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvSekolah = findViewById(R.id.tv_sekolah);
         tvNomorTelepon = findViewById(R.id.tv_nomor_telepon);
         tvTanggalLahir = findViewById(R.id.tv_tanggal_lahir);
+        tv2 = findViewById(R.id.tv2);
         mBottomNavigation = findViewById(R.id.bottom_navigation);
         imgSignOut = findViewById(R.id.btn_signout);
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -67,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         String nama = sharedPreferences.getString(Constant.DATA_NAMA, null);
         String tipeAkun = sharedPreferences.getString(Constant.USERNAME, null);
         String alamat = sharedPreferences.getString(Constant.DATA_ALAMAT, null);
-        String sekolah = sharedPreferences.getString(Constant.DATA_SEKOLAH, "SMK Negeri 1 Turen");
+        String sekolah = sharedPreferences.getString(Constant.DATA_SEKOLAH_PEKERJAAN, "SMK Negeri 1 Turen");
         String nomorTelepon = sharedPreferences.getString(Constant.DATA_NOMOR_TELEPON, null);
         String tanggalLahir = sharedPreferences.getString(Constant.DATA_TANGGAL_LAHIR, null);
         try {
@@ -81,6 +82,16 @@ public class ProfileActivity extends AppCompatActivity {
                 tvNama.setText(nama);
                 tvTipeAkun.setText(tipeAkun);
                 tvAlamat.setText(alamat);
+
+                String user = sharedPreferences.getString(Constant.USERNAME, null);
+                String anak = sharedPreferences.getString(Constant.USER_ANAK, null);
+                String orangTua = sharedPreferences.getString(Constant.USER_ORANG_TUA, null);
+                if (user != null && user.equals(anak)) {
+                    tv2.setText("Sekolah");
+                } else if (user != null && user.equals(orangTua)) {
+                    tv2.setText("Pekerjaan");
+                }
+                
                 tvSekolah.setText(sekolah);
                 tvNomorTelepon.setText(nomorTelepon);
                 tvTanggalLahir.setText(tanggalLahir);

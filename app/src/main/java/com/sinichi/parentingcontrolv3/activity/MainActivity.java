@@ -117,25 +117,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         tabLayout.addOnTabSelectedListener(this);
 
-        // Get nama kota
-        if (isLocationPermissionGranted()) {
-            //  Aktifkan GPS
-            new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
-                @Override
-                public void gpsStatus(boolean isGPSEnable) {
-                    isGPS = true;
-                }
-            });
-            getLokasi();
-            if (sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK)) {
-                Intent intent = new Intent(this, LocationService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
-            }
-        }
+        getNamaKota();
 
         // Get user
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -257,6 +239,28 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 }
             }
         });
+    }
+
+    private void getNamaKota() {
+        // Get nama kota
+        if (isLocationPermissionGranted()) {
+            //  Aktifkan GPS
+            new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
+                @Override
+                public void gpsStatus(boolean isGPSEnable) {
+                    isGPS = true;
+                }
+            });
+            getLokasi();
+            if (sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK)) {
+                Intent intent = new Intent(this, LocationService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent);
+                } else {
+                    startService(intent);
+                }
+            }
+        }
     }
 
     private void makeNotification(String waktuSholat, int notificationId, int requestCode, int jam, int menit) {
@@ -503,6 +507,4 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 break;
         }
     }
-
-
 }

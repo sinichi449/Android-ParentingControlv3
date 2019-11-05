@@ -8,7 +8,7 @@ public class Constant {
     public static final String DATA_ALAMAT = "USER_ALAMAT";
     public static final String DATA_NOMOR_TELEPON = "USER_NOMOR_TELEPON";
     public static final String DATA_TANGGAL_LAHIR = "USER_TANGGAL_LAHIR";
-    public static final String DATA_SEKOLAH = "USER_SEKOLAH";
+    public static final String DATA_SEKOLAH_PEKERJAAN = "USER_SEKOLAH";
     public static final String LOCATION_CHILD = "location_anak";
     public static final int LOKASI_JADWAL_SHOLAT_REQUEST = 97;
     public static final String NOTIFICATION_ID = "notification";

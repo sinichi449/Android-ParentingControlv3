@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:background="@drawable/layout_rounded">
 
-
         <ImageView
             android:id="@+id/head"
             android:layout_width="match_parent"
@@ -38,10 +37,16 @@
             android:layout_height="wrap_content" />
 
         <EditText
+            android:id="@+id/edt_sekolah_pekerjaan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"/>
+
+        <EditText
             android:id="@+id/txt_alamat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:hint="Masukkan alamat"
             android:layout_marginTop="8dp"/>
 

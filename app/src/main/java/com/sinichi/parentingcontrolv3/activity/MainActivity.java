@@ -46,6 +46,7 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
+import com.sinichi.parentingcontrolv3.service.LocationService;
 import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
@@ -123,6 +124,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 }
             });
             getLokasi();
+            if (sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK)) {
+                Intent intent = new Intent(this, LocationService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent);
+                } else {
+                    startService(intent);
+                }
+            }
         }
 
         // Get user
@@ -479,4 +488,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 break;
         }
     }
+
+
 }

@@ -35,7 +35,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private List<DataModel> models;
     private List<Address> a;
     // Floating button
-    private FloatingActionButton flbAdd;
+    private ImageView flbAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private String jamSekarang, menitSekarang, waktuSekarang;
     private List<DataModel> models;
     private List<Address> a;
-    private int lama_pencarian = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -52,7 +52,7 @@
             android:name=".util.AlarmNotificationReceiver"
             android:enabled="true" />
         <service
-            android:name=".LocationService"
+            android:name=".service.LocationService"
             android:enabled="true" />
     </application>
 

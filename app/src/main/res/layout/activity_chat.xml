@@ -7,6 +7,14 @@
     tools:context=".activity.ChatActivity"
     android:background="@drawable/chat_bg">
 
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -90,14 +98,16 @@
             <EditText
                 android:id="@+id/messageEditText"
                 android:layout_width="280dp"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
+                android:minHeight="35dp"
                 android:background="@drawable/edittext"
                 android:hint="Ketik Pesan"
                 android:paddingStart="10dp"
                 app:layout_constraintStart_toEndOf="@+id/addMessageImageView"
                 app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
                 android:layout_marginBottom="10dp"
-                android:paddingLeft="10dp" />
+                android:paddingLeft="10dp"
+                android:inputType="textMultiLine"/>
 
              <ImageView
                  android:id="@+id/btn_send"

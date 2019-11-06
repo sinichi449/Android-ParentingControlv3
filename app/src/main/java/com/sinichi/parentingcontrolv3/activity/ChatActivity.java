@@ -8,7 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
@@ -32,11 +39,7 @@ import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import java.util.Calendar;
 
 
 public class ChatActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, z {
@@ -44,7 +47,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final String TAG = "Results";
     private static final int REQUEST_IMAGE = 2;
     private String mUsername;
-    private String mPhotoUrl;
+    private String mPhotoUrl, time;
     private ImageView mSendButton;
     private RecyclerView mMessageRecyclerView;
     private EditText mMessageEditText;
@@ -56,6 +59,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private BottomNavigationView mBottomNavigation;
     private DatabaseReference messageRef;
     FirebaseRecyclerAdapter<ChatModel, ChatViewHolder.MessageViewHolder> mFirebaseAdapter;
+    private ProgressBar progressBar;
 
     @Override
     public void initComponents() {
@@ -69,6 +73,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         mMessageEditText = findViewById(R.id.messageEditText);
         mAddMessageImageView = findViewById(R.id.addMessageImageView);
         mSendButton = findViewById(R.id.btn_send);
+        progressBar = findViewById(R.id.progress_circular);
     }
 
     @Override
@@ -91,7 +96,12 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         // Building GoogleApiClient
         chatAlt.buildGoogleApiClient(this);
 
-        chatAlt.parseDataFromCloud();
+        if (chatAlt.parseDataFromCloud() != null) {
+            progressBar.setVisibility(View.GONE);
+            Log.e(Constant.TAG, "Data found in database");
+        } else {
+            Log.e(Constant.TAG, "Data not found in database");
+        }
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -145,9 +155,17 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                 if (data != null) {
                     final Uri uri = data.getData();
                     Log.d(TAG, "Uri: " + uri.toString());
-
+                    Calendar calendar = Calendar.getInstance();
+                    int minute = calendar.get(Calendar.MINUTE);
+                    String minuteStr;
+                    if (minute < 10) {
+                        minuteStr = "0" + minute;
+                    } else {
+                        minuteStr = String.valueOf(minute);
+                    }
+                    time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + minuteStr;
                     ChatModel tempMessage = new ChatModel(null, mUsername, mPhotoUrl,
-                            LOADING_IMAGE_URL);
+                            LOADING_IMAGE_URL, time);
                     mFirebaseDatabaseReference.child(mFirebaseUser.getUid()).child(Constant.MESSAGES_CHILD).push()
                             .setValue(tempMessage, new DatabaseReference.CompletionListener() {
                                 @Override
@@ -187,7 +205,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                                                     if (task.isSuccessful()) {
                                                         ChatModel friendlyMessage =
                                                                 new ChatModel(null, mUsername, mPhotoUrl,
-                                                                        task.getResult().toString());
+                                                                        task.getResult().toString(), time);
                                                         mFirebaseDatabaseReference.child(Constant.MESSAGES_CHILD).child(key)
                                                                 .setValue(friendlyMessage);
                                                     }

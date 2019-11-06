@@ -7,15 +7,17 @@ public class ChatModel {
     private String name;
     private String photoUrl;
     private String imageUrl;
+    private String time;
 
     public ChatModel() {
     }
 
-    public ChatModel(String text, String name, String photoUrl, String imageUrl) {
+    public ChatModel(String text, String name, String photoUrl, String imageUrl, String time) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
         this.imageUrl = imageUrl;
+        this.time = time;
     }
 
     public String getId() {
@@ -56,5 +58,13 @@ public class ChatModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

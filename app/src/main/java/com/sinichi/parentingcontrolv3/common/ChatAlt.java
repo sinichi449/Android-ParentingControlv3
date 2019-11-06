@@ -12,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -36,9 +34,15 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
+import java.util.Calendar;
+
 import static android.content.Context.MODE_PRIVATE;
 
-public class ChatAlt extends ChatViewHolder {
+public class ChatAlt {
+
+    public ChatAlt() {
+
+    }
 
     public void buildGoogleApiClient(Context context) {
         new GoogleApiClient.Builder(context)
@@ -82,22 +86,41 @@ public class ChatAlt extends ChatViewHolder {
                 // TODO: Set chat logic
                 SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
                 // TODO: Inflate via view root
-                ConstraintSet set = new ConstraintSet();
-                ConstraintLayout layout = viewHolder.constraintLayout;
-                set.clone(layout);
-
                 if (friendlyMessage.getText() != null) {
                     viewHolder.messageTextView.setText(friendlyMessage.getText());
                     viewHolder.messageTextView.setVisibility(TextView.VISIBLE);
                     viewHolder.messageImageView.setVisibility(ImageView.GONE);
+                    viewHolder.tvTime.setText(friendlyMessage.getTime());
 
                     // Set chat bubble to be in left or to be in right
-                    if (friendlyMessage.getName().equals(sharedPreferences.getString(Constant.USERNAME, "Anonymous"))) {
-                        set.connect(R.id.tv_message_chat,ConstraintSet.END, viewHolder.constraintLayout.getId(),ConstraintSet.END);
-                        viewHolder.messageTextView.setBackgroundResource(R.drawable.bg_outgoing_chat);
+//                    String usernameInSharedPrefs = sharedPreferences.getString(Constant.USERNAME, null);
+//                    String currentUser = friendlyMessage.getName();
+//                    if (currentUser.equals(usernameInSharedPrefs)) {
+//                        set.connect(R.id.tv_message_chat,ConstraintSet.END, viewHolder.constraintLayout.getId(),ConstraintSet.END);
+//                        viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_outgoing_chat);
+//                        viewHolder.messageTextView.setTextColor(Color.parseColor("#000000"));
+//                        set.applyTo(viewHolder.constraintLayout);
+//                    } else if (!currentUser.equals(usernameInSharedPrefs)) {
+//
+//                    }
+
+                    String currentUsername = sharedPreferences.getString(Constant.USERNAME, null);
+                    String incomingUsername = friendlyMessage.getName();
+                    boolean pengirimSayaSendiri = incomingUsername.equals(currentUsername);
+                    boolean pengirimOrangLain = !incomingUsername.equals(currentUsername);
+
+                    ConstraintSet constraintSet = new ConstraintSet();
+                    constraintSet.clone(viewHolder.constraintParent);
+                    if (pengirimSayaSendiri) {
+                        viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_outgoing_chat);
                         viewHolder.messageTextView.setTextColor(Color.parseColor("#000000"));
-                        set.applyTo(layout);
+                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.END, viewHolder.constraintParent.getId(), ConstraintSet.END);
+                    } else if (pengirimOrangLain) {
+                        viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_incoming_chat);
+                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.START, viewHolder.constraintParent.getId(), ConstraintSet.START);
                     }
+                    constraintSet.applyTo(viewHolder.constraintParent);
+
                 } else if (friendlyMessage.getImageUrl() != null) {
                     String imageUrl = friendlyMessage.getImageUrl();
                     if (imageUrl.startsWith("gs://")) {
@@ -166,11 +189,21 @@ public class ChatAlt extends ChatViewHolder {
                 // Send messages on click.
                 SharedPreferences mSharedPrefs = context.getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
                 String username = mSharedPrefs.getString(Constant.USERNAME, "Anonymous");
+                Calendar calendar = Calendar.getInstance();
+                int minute = calendar.get(Calendar.MINUTE);
+                String minuteStr;
+                if (minute < 10) {
+                    minuteStr = "0" + minute;
+                } else {
+                    minuteStr = String.valueOf(minute);
+                }
+                String time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + minuteStr;
                 ChatModel friendlyMessage = new
                         ChatModel(mMessageEditText.getText().toString(),
                         username,
                         mPhotoUrl,
-                        null);
+                        null,
+                        time);
 
                 // TODO: Send to database
                 mFirebaseDatabaseReference

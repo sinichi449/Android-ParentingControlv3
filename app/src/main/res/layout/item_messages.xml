@@ -21,7 +21,8 @@
             android:text="Lorem ipsum dolor sit amet"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            android:maxWidth="300dp"/>
 
         <ImageView
             android:id="@+id/img_message_chat"

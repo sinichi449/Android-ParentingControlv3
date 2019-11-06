@@ -2,7 +2,6 @@ package com.sinichi.parentingcontrolv3.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -109,17 +108,22 @@ public class ChatAlt {
                     boolean pengirimSayaSendiri = incomingUsername.equals(currentUsername);
                     boolean pengirimOrangLain = !incomingUsername.equals(currentUsername);
 
-                    ConstraintSet constraintSet = new ConstraintSet();
-                    constraintSet.clone(viewHolder.constraintParent);
+
                     if (pengirimSayaSendiri) {
                         viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_outgoing_chat);
-                        viewHolder.messageTextView.setTextColor(Color.parseColor("#000000"));
+                        viewHolder.messageTextView.setTextColor(context.getResources().getColor(R.color.colorLightBlue));
+                        ConstraintSet constraintSet = new ConstraintSet();
+                        constraintSet.clone(viewHolder.constraintParent);
                         constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.END, viewHolder.constraintParent.getId(), ConstraintSet.END);
+                        constraintSet.applyTo(viewHolder.constraintParent);
                     } else if (pengirimOrangLain) {
                         viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_incoming_chat);
+                        viewHolder.messageTextView.setTextColor(context.getResources().getColor(R.color.colorBlue));
+                        ConstraintSet constraintSet = new ConstraintSet();
+                        constraintSet.clone(viewHolder.constraintParent);
                         constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.START, viewHolder.constraintParent.getId(), ConstraintSet.START);
+                        constraintSet.applyTo(viewHolder.constraintParent);
                     }
-                    constraintSet.applyTo(viewHolder.constraintParent);
 
                 } else if (friendlyMessage.getImageUrl() != null) {
                     String imageUrl = friendlyMessage.getImageUrl();

@@ -47,7 +47,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/ic_membantu"
+                android:background="@drawable/bantu"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -58,7 +58,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/ic_sholat"
+                android:background="@drawable/salat"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_tanggal" />
 
@@ -83,7 +83,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/ic_sekolah"
+                android:background="@drawable/literasi"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2" />

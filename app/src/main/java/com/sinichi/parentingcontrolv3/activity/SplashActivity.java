@@ -14,7 +14,6 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 public class SplashActivity extends AppCompatActivity {
-    private boolean isGPS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

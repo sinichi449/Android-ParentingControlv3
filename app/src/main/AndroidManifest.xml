@@ -49,8 +49,15 @@
             android:screenOrientation="portrait"/>
 
         <receiver
-            android:name=".util.AlarmNotificationReceiver"
+            android:name=".service.AlarmNotificationReceiver"
             android:enabled="true" />
+        <receiver android:name=".service.GpsCheckReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".service.LocationService"
             android:enabled="true" />

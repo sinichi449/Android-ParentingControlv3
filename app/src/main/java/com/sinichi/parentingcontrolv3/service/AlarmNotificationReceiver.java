@@ -1,4 +1,4 @@
-package com.sinichi.parentingcontrolv3.util;
+package com.sinichi.parentingcontrolv3.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.NotificationOnClick;
+import com.sinichi.parentingcontrolv3.util.Constant;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
 

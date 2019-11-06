@@ -47,8 +47,8 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
+import com.sinichi.parentingcontrolv3.service.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.service.LocationService;
-import com.sinichi.parentingcontrolv3.util.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             Toast.makeText(MainActivity.this, "Data berhasil diperbarui",
                     Toast.LENGTH_LONG).show();
         }
+
+
 
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
@@ -242,26 +244,31 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void getNamaKota() {
         if (isLocationPermissionGranted()) {
-            //  Aktifkan GPS
-            new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
-                @Override
-                public void gpsStatus(boolean isGPSEnable) {
-                    isGPS = true;
-                }
-            });
-            getLokasi();
-
+            String username = sharedPrefs.getString(Constant.USERNAME, null);
+            if (username != null && username.equals(Constant.USER_ANAK)) {
+                //  Aktifkan GPS
+                new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
+                    @Override
+                    public void gpsStatus(boolean isGPSEnable) {
+                        isGPS = true;
+                    }
+                });
+                getLokasi();
+            }
+            Log.e("Status", "User saat ini " + username);
         }
     }
 
     private void startLocationService() {
-        if (sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK)) {
+        String username = sharedPrefs.getString(Constant.USERNAME, null);
+        if (username != null && username.equals(Constant.USER_ANAK)) {
             Intent intent = new Intent(this, LocationService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent);
             } else {
                 startService(intent);
             }
+            Log.e("Status", "User saat ini " + username);
         }
     }
 

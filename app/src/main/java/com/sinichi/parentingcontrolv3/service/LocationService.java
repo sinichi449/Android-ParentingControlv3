@@ -53,6 +53,7 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("Status", "Started Command");
+//        goToGpsSetting();
         sendToDatabase();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -63,6 +64,21 @@ public class LocationService extends Service {
         Log.e("Status", "onBind");
         return null;
     }
+
+//    private void goToGpsSetting() {
+//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        boolean gpsSudahDiaktifkan = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+//        if (!gpsSudahDiaktifkan) {
+//            Toast.makeText(this,"Mohon aktifkan GPS",
+//                    Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            Log.e("Status", "GPS Not enabled");
+//        } else {
+//            Log.e("Status", "GPS Enabled, ready to use");
+//        }
+//    }
 
     private void sendToDatabase() {
         FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();

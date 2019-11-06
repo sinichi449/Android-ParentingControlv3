@@ -8,5 +8,6 @@
     <color name="colorDarkGreen">#006F00</color>
     <color name="colorGrey">#727272</color>
     <color name="colorOrange">#DD8500</color>
+    <color name="colorLightBlue">#00D1EE</color>
     <color name="TabLayoutSelectedIndicator">#000000</color>
 </resources>

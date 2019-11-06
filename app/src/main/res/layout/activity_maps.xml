@@ -30,13 +30,13 @@
         app:layout_constraintEnd_toEndOf="@+id/tv_header"
         app:layout_constraintTop_toTopOf="@+id/tv_header"
         app:layout_constraintBottom_toBottomOf="@+id/tv_header"
+        android:gravity=""
         android:layout_marginStart="0dp"
         android:layout_marginEnd="85dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="85dp"/>
-
 
     <fragment
         android:id="@+id/map"

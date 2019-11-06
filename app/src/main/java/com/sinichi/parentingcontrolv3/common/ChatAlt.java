@@ -108,20 +108,20 @@ public class ChatAlt {
                     boolean pengirimSayaSendiri = incomingUsername.equals(currentUsername);
                     boolean pengirimOrangLain = !incomingUsername.equals(currentUsername);
 
-
                     if (pengirimSayaSendiri) {
                         viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_outgoing_chat);
-                        viewHolder.messageTextView.setTextColor(context.getResources().getColor(R.color.colorLightBlue));
                         ConstraintSet constraintSet = new ConstraintSet();
                         constraintSet.clone(viewHolder.constraintParent);
-                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.END, viewHolder.constraintParent.getId(), ConstraintSet.END);
+//                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.END, viewHolder.constraintParent.getId(), ConstraintSet.END);
+                        constraintSet.clear(viewHolder.constraintLayout.getId(), ConstraintSet.START);
                         constraintSet.applyTo(viewHolder.constraintParent);
-                    } else if (pengirimOrangLain) {
+                    }
+                    if (pengirimOrangLain) {
                         viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_incoming_chat);
-                        viewHolder.messageTextView.setTextColor(context.getResources().getColor(R.color.colorBlue));
                         ConstraintSet constraintSet = new ConstraintSet();
                         constraintSet.clone(viewHolder.constraintParent);
-                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.START, viewHolder.constraintParent.getId(), ConstraintSet.START);
+//                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.START, viewHolder.constraintParent.getId(), ConstraintSet.START);
+                        constraintSet.clear(viewHolder.constraintLayout.getId(), ConstraintSet.END);
                         constraintSet.applyTo(viewHolder.constraintParent);
                     }
 

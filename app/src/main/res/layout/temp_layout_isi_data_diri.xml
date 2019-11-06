@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="25dp"/>
 
          <TextView
              android:layout_width="wrap_content"
@@ -85,15 +85,45 @@
             android:hint="Masukkan nomor telepon"
             android:layout_marginTop="8dp"/>
 
-        <EditText
-            android:id="@+id/txt_tanggal_lahir"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/spinner_tanggal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <Spinner
+                    android:id="@+id/spinner_bulan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/spinner_tanggal"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/spinner_tahun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/spinner_bulan"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:hint="Masukkkan tanggal lahir"
-            android:layout_marginTop="8dp"/>
+            android:text="Submit" />
 
-
+        <Button
+            android:id="@+id/btn_admin_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Admin Mode" />
 
 </LinearLayout>
 

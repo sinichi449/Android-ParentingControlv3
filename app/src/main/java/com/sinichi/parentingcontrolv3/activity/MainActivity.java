@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     Toast.LENGTH_LONG).show();
         }
 
-
-
         SetAppearance.hideNavigationBar(this);
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_overview);
         // Setting ViewPager

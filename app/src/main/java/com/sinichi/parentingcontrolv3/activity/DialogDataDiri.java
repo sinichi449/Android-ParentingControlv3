@@ -2,13 +2,15 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,9 +35,9 @@ public class DialogDataDiri {
             tanggalLahir;
     private SharedPreferences sharedPrefs;
     private View dialogView;
-    private TextView tvNama, tvAlamat, tvNomorTelepon, tvTanggalLahir,
-            tvSekolahPekerjaan;
-    private Spinner spinner;
+    private TextView tvNama, tvAlamat, tvNomorTelepon, tvSekolahPekerjaan;
+    private Button btnSubmit, btnAdminMode;
+    private Spinner spinner, spinnerTanggal, spinnerBulan, spinnerTahun;
     private AlertDialog.Builder builder;
     public ProgressDialog progressDialog;
 
@@ -57,12 +59,12 @@ public class DialogDataDiri {
         builder = new AlertDialog.Builder(context);
         dialogView = layoutInflater.inflate(R.layout.temp_layout_isi_data_diri, null);
         builder.setView(dialogView)
-                .setCancelable(false)
-                .setTitle("Isi data diri");
+                .setCancelable(false);
         initComponents();
         onDialogPositiveButton();
         onDialogNegativeButton();
         AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
 
@@ -88,29 +90,34 @@ public class DialogDataDiri {
 
         tvAlamat = dialogView.findViewById(R.id.txt_alamat);
         tvNomorTelepon = dialogView.findViewById(R.id.txt_no_telp);
-        tvTanggalLahir = dialogView.findViewById(R.id.txt_tanggal_lahir);
 
         // Spinner string array
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
                 R.array.jenis_kelamin, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        btnSubmit = dialogView.findViewById(R.id.btn_submit);
+        btnAdminMode = dialogView.findViewById(R.id.btn_admin_mode);
+        spinnerTanggal = dialogView.findViewById(R.id.spinner_tanggal);
+        spinnerBulan = dialogView.findViewById(R.id.spinner_bulan);
+        spinnerTahun = dialogView.findViewById(R.id.spinner_tahun);
+
+
     }
 
     private void onDialogPositiveButton() {
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 nama = tvNama.getText().toString();
                 alamat = tvAlamat.getText().toString();
                 sekolahPekerjaan = tvSekolahPekerjaan.getText().toString();
                 nomorTelpon = tvNomorTelepon.getText().toString();
-                tanggalLahir = tvTanggalLahir.getText().toString();
                 gender = spinner.getSelectedItem().toString();
                 Log.e("Spinner", gender);
                 // TODO: Check user input
                 if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
-                        && isValidTextView(tvNomorTelepon) && isValidTextView(tvTanggalLahir) && isValidTextView(tvSekolahPekerjaan)) {
+                        && isValidTextView(tvNomorTelepon) && isValidTextView(tvSekolahPekerjaan)) {
                     putDataToSharedPrefs();
                     progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Connecting to Cloud...");
@@ -126,9 +133,9 @@ public class DialogDataDiri {
     }
 
     private void onDialogNegativeButton() {
-        builder.setNegativeButton("Admin Mode", new DialogInterface.OnClickListener() {
+        btnAdminMode.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 loginActivity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
                         Constant.RC_SIGN_IN);
                 ProgressDialog progressDialog = new ProgressDialog(context);

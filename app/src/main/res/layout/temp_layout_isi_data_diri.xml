@@ -4,7 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_rounded">
+    android:background="@drawable/layout_rounded"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/head"
@@ -12,15 +17,37 @@
             android:layout_height="175dp"
             android:layout_marginTop="-15dp"
             android:layout_marginStart="-25dp"
-            android:layout_marginEnd="-25dp"/>
-
+            android:layout_marginEnd="-25dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
+            android:id="@+id/sd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Selamat Datang"
+            android:textSize="20sp"
             android:fontFamily="@font/arial_rounded"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            app:layout_constraintTop_toTopOf="@+id/head"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"/>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Isi Data Diri Anda Disini!"
+             android:fontFamily="@font/arial"
+             android:textSize="15sp"
+             android:textStyle="italic|bold"
+             android:textColor="@color/colorWhite"
+             app:layout_constraintTop_toBottomOf="@+id/sd"
+             app:layout_constraintStart_toStartOf="@+id/sd"
+             android:layout_marginTop="2dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <EditText
@@ -34,7 +61,7 @@
         <Spinner
             android:id="@+id/spinnner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="30dp" />
 
         <EditText
             android:id="@+id/edt_sekolah_pekerjaan"

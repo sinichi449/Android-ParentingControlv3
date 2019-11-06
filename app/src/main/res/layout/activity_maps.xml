@@ -9,14 +9,12 @@
     <ImageView
         android:id="@+id/img_header"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="70dp"
         android:background="@drawable/maphead"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="-10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
         android:layout_marginLeft="-10dp"/>
 
     <TextView
@@ -30,12 +28,12 @@
         app:layout_constraintEnd_toEndOf="@+id/img_header"
         app:layout_constraintTop_toTopOf="@+id/img_header"
         app:layout_constraintBottom_toBottomOf="@+id/img_header"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="85dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="95dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="85dp"/>
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="95dp"/>
 
     <fragment
         android:id="@+id/map"

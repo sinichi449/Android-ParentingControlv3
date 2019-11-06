@@ -28,16 +28,16 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         Log.e("PendingRequestCode", String.valueOf(requestCode));
         Intent intent1 = new Intent(context, NotificationOnClick.class);
         intent1.putExtra("notif_sholat", waktuSholat); // Passing data menuju NotificationOnClick bersisi nama waktu sholat
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent1, PendingIntent.FLAG_ONE_SHOT);
-        builder.setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent1, 0);
+        builder.setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
                 .setContentTitle("Kamu belum " + waktuSholat + "?")
                 .setContentIntent(pendingIntent)
                 .setContentText("Klik notifikasi ini apabila sudah sholat " + waktuSholat)
                 .setDefaults(Notification.DEFAULT_LIGHTS |
                         Notification.DEFAULT_SOUND)
                 .setContentInfo("Info")
-                .setOngoing(true);
+                .setOngoing(true)
+                .setAutoCancel(true);
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(notificationId, builder.build());

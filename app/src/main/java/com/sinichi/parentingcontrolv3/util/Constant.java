@@ -1,8 +1,6 @@
 package com.sinichi.parentingcontrolv3.util;
 
 public class Constant {
-
-    public static final String TAG = "Result";
     public static final int GPS_REQUEST = 98;
     public static final String DATA_NAMA = "USER_NAMA";
     public static final String DATA_ALAMAT = "USER_ALAMAT";
@@ -32,4 +30,5 @@ public class Constant {
     public static final String LAKI_LAKI = "Laki-laki";
     public static final String PEREMPUAN = "Perempuan";
     public static final String IS_BARU_BUKA_APLIKASI = "FirstTimeOpen";
+    public static final String TAG = "Status";
 }

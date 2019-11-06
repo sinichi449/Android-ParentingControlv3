@@ -294,23 +294,27 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         if (!waktuSubuh.equals("kosong")
                 && !sudahSholatSubuh) {
             makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
-            Log.e("Msg", "Belum sholat " + Constant.WAKTU_SUBUH);
+            Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_SUBUH);
         }
+
         if (!waktuDhuhr.equals("kosong")
                 && !sudahSholatDhuhr) {
             makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
-            Log.e("Msg", "Belum sholat " + Constant.WAKTU_DHUHR);
+            Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_DHUHR);
         }
+
         if (!waktuAshar.equals("kosong")
                 && !sudahSholatAshar) {
             makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
             Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
         }
+
         if (!waktuMaghrib.equals("kosong")
                 && !sudahSholatMaghrib) {
             makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
             Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
         }
+
         if (!waktuIsya.equals("kosong")
                 && !sudahSholatIsya) {
             makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));

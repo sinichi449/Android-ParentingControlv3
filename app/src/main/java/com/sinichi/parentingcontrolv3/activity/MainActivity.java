@@ -17,6 +17,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private MainAlt mainAlt;
     private ImageView imgHeaderCollapsingToolbar;
     private ConstraintLayout constraintLayout;
+    private LinearLayout linearLayoutCollapsingToolbar, linearLayoutJadwalSholat;
     private ConstraintSet constraintSet;
     private TextView tvHariIni;
     private TextView tvHeaderDate;
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private List<Address> a;
     // Floating button
     private ImageView flbAdd;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         // Set header background berdasarkan hari
         setBackgroundReferToDays(imgHeaderCollapsingToolbar);
         // Setting layout
-        makeView();
+        tabZeroView();
         tabLayout.addOnTabSelectedListener(this);
         getNamaKota();
         startLocationService();
@@ -166,6 +170,26 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         constraintSet.clone(constraintLayout);
         sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         flbAdd = findViewById(R.id.flb_add);
+        linearLayoutCollapsingToolbar = findViewById(R.id.linear_layout_collapsingtoolbar);
+        collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
+    }
+
+    private void onPositionZeroTab() {
+//        constraintLayout.removeView(linearLayoutJadwalSholat);
+        collapsingToolbarLayout.addView(constraintLayout);
+        linearLayoutCollapsingToolbar.addView(imgHeaderCollapsingToolbar);
+        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+        tabZeroView();
+    }
+
+    private void onPositionOneTab() {
+//        linearLayoutCollapsingToolbar.removeView(imgHeaderCollapsingToolbar);
+//        constraintLayout.removeView(tvHariIni);
+//        constraintLayout.removeView(tvHeaderDate);
+//        constraintLayout.removeView(tvHeaderDetails);
+        collapsingToolbarLayout.removeView(constraintLayout);
+        linearLayoutCollapsingToolbar.removeView(imgHeaderCollapsingToolbar);
+        tabOneJadwalSholatView();
     }
 
     @Override
@@ -175,15 +199,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         // Jika posisi tab 0, set ke calendar header
         // Remove chartview
         if (position == 0) {
-            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-            makeView();
-
+            onPositionZeroTab();
         // JIka posisi 1, maka ganti chartview
         } else if (position == 1) {
-            constraintLayout.removeView(tvHariIni);
-            constraintLayout.removeView(tvHeaderDate);
-            constraintLayout.removeView(tvHeaderDetails);
-            setLineChartView();
+            onPositionOneTab();
         }
     }
 
@@ -198,15 +217,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         int position = tab.getPosition();
         // Jika posisi tab 0, ganti ke Calendar Header
         if (position == 0) {
-            setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-            makeView();
+            onPositionZeroTab();
 
         // Jika posisi tab 1, ganti ke chartview
         } else if (position == 1) {
-            constraintLayout.removeView(tvHariIni);
-            constraintLayout.removeView(tvHeaderDate);
-            constraintLayout.removeView(tvHeaderDetails);
-            setLineChartView();
+            onPositionOneTab();
         }
     }
 
@@ -243,16 +258,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void getNamaKota() {
         if (isLocationPermissionGranted()) {
             String username = sharedPrefs.getString(Constant.USERNAME, null);
-            if (username != null && username.equals(Constant.USER_ANAK)) {
                 //  Aktifkan GPS
-                new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
-                    @Override
-                    public void gpsStatus(boolean isGPSEnable) {
-                        isGPS = true;
-                    }
-                });
-                getLokasi();
-            }
+            new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
+                @Override
+                public void gpsStatus(boolean isGPSEnable) {
+                    isGPS = true;
+                }
+            });
+            getLokasi();
             Log.e("Status", "User saat ini " + username);
         }
     }
@@ -407,7 +420,19 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 .into(imageTarget);
     }
 
-    private void makeView() {
+    private void tabOneJadwalSholatView() {
+        linearLayoutJadwalSholat = new LinearLayout(this);
+        linearLayoutJadwalSholat.setId(ViewCompat.generateViewId());
+        linearLayoutJadwalSholat.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayoutJadwalSholat.setOrientation(LinearLayout.VERTICAL);
+
+        View jadwalSholatView = getLayoutInflater().inflate(R.layout.layout_jadwal_sholat, null);
+        linearLayoutJadwalSholat.addView(jadwalSholatView);
+
+        collapsingToolbarLayout.addView(linearLayoutJadwalSholat);
+    }
+
+    private void tabZeroView() {
         setTvHariIni();
         setTvHeaderDate();
         setTvHeaderDetails();
@@ -464,33 +489,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         constraintSet.connect(tvHeaderDetails.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         constraintSet.connect(tvHeaderDetails.getId(), ConstraintSet.TOP, tvHeaderDate.getId(), ConstraintSet.BOTTOM);
         constraintSet.connect(tvHeaderDetails.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM, setDp(MainActivity.this, 10));
-    }
-
-    private void setLineChartView() {
-//        chart = new LineChartView(this);
-//        chart.setId(ViewCompat.generateViewId());
-//        constraintSet.constrainWidth(chart.getId(), ConstraintSet.MATCH_CONSTRAINT);
-//        constraintSet.constrainHeight(chart.getId(), setDp(this, 250));
-//        chart.setInteractive(true);
-//        List<PointValue> values = new ArrayList<>();
-//        values.add(new PointValue(0, 2));
-//        values.add(new PointValue(1, 4));
-//        values.add(new PointValue(2, 3));
-//        values.add(new PointValue(3, 4));
-//        Line line = new Line(values).setColor(getResources().getColor(R.color.colorSkyBlue))
-//                .setCubic(true);
-//
-//        List<Line> lines = new ArrayList<>();
-//        lines.add(line);
-//        LineChartData data = new LineChartData();
-//        data.setLines(lines);
-//        chart.setLineChartData(data);
-//        constraintSet.connect(chart.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-//        constraintSet.connect(chart.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-//        constraintSet.connect(chart.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.BOTTOM);
-//        constraintSet.connect(chart.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-//        constraintSet.applyTo(constraintLayout);
-//        constraintLayout.addView(chart);
     }
 
     private void setBackgroundReferToDays(ImageView imgTarget) {

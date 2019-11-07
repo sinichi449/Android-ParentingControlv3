@@ -71,7 +71,7 @@ public class OverviewFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
     private boolean isGotJson = false;
-    private TextView tvQuotes;
+    private TextView tvQuotes, tvAuthor;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -93,6 +93,7 @@ public class OverviewFragment extends Fragment {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
         tvQuotes = root.findViewById(R.id.tv_quotes);
+        tvAuthor = root.findViewById(R.id.tv_author);
         quotesRef = mDatabaseReference.child("quotes");
 
 //        tvSubuh = root.findViewById(R.id.tv_subuh);
@@ -250,8 +251,10 @@ public class OverviewFragment extends Fragment {
                 int max = quotesArray.size();
                 Random random = new Random();
                 int number = random.nextInt(max);
-                String quotes = quotesArray.get(number).getQuotes() + "\n-" + quotesArray.get(number).getAuthor();
+                String quotes = quotesArray.get(number).getQuotes();
+                String author = quotesArray.get(number).getAuthor();
                 tvQuotes.setText(quotes);
+                tvAuthor.setText(author);
             }
 
             @Override

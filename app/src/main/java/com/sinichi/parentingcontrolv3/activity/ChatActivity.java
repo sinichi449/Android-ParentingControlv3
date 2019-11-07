@@ -219,7 +219,6 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                 });
     }
 
-
     @Override
     public void onResume() {
         mFirebaseAdapter.startListening();
@@ -228,7 +227,6 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public void onPause() {
-        mFirebaseAdapter.stopListening();
         super.onPause();
     }
 

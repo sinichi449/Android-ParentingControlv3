@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.DataModel;
+import com.sinichi.parentingcontrolv3.model.QuotesModel;
 import com.sinichi.parentingcontrolv3.retrofit.ApiService;
 import com.sinichi.parentingcontrolv3.retrofit.Data;
 import com.sinichi.parentingcontrolv3.retrofit.JadwalSholat;
@@ -34,6 +35,7 @@ import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,21 +53,25 @@ public class OverviewFragment extends Fragment {
     private View root;
     private DatabaseReference mDatabaseReference;
     private DatabaseReference kegiatanRef;
+    private DatabaseReference quotesRef;
     private List<DataModel> models;
+    private List<QuotesModel> quotesArray;
     private boolean available;
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
     private Calendar calendar;
     private String date, day, month, year;
-    private TextView tvLokasi, tvTanggal, tvHari, tvBulan, tvTahun,
+    private TextView tvTanggal, tvHari, tvBulan, tvTahun,
             tvJumlahSholat;
+//    private TextView tvLokasi;
     private CheckBox chkMembantuOrtu, chkSekolah;
-    private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
+//    private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
     private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
     private boolean isGotJson = false;
+    private TextView tvQuotes;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -73,7 +79,7 @@ public class OverviewFragment extends Fragment {
 
     private void initComponents() {
         root = inflater.inflate(R.layout.fragment_overview, container, false);
-        tvLokasi = root.findViewById(R.id.tv_lokasi);
+//        tvLokasi = root.findViewById(R.id.tv_lokasi);
         tvTanggal = root.findViewById(R.id.tv_tanggal);
         tvHari = root.findViewById(R.id.tv_hari);
         tvBulan = root.findViewById(R.id.tv_bulan);
@@ -86,12 +92,14 @@ public class OverviewFragment extends Fragment {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child("data_kegiatan");
+        tvQuotes = root.findViewById(R.id.tv_quotes);
+        quotesRef = mDatabaseReference.child("quotes");
 
-        tvSubuh = root.findViewById(R.id.tv_subuh);
-        tvDhuhr = root.findViewById(R.id.tv_dhuhr);
-        tvAshar = root.findViewById(R.id.tv_ashar);
-        tvMaghrib = root.findViewById(R.id.tv_maghrib);
-        tvIsya = root.findViewById(R.id.tv_isya);
+//        tvSubuh = root.findViewById(R.id.tv_subuh);
+//        tvDhuhr = root.findViewById(R.id.tv_dhuhr);
+//        tvAshar = root.findViewById(R.id.tv_ashar);
+//        tvMaghrib = root.findViewById(R.id.tv_maghrib);
+//        tvIsya = root.findViewById(R.id.tv_isya);
     }
 
     @Override
@@ -102,9 +110,13 @@ public class OverviewFragment extends Fragment {
         initComponents();
         showTodayData();
 
-        tvLokasi.setText(getLocalityName());
+//        tvLokasi.setText(getLocalityName());
         getJadwalSholat(getLocalityName());
 
+//        QuotesModel quotesModel = new QuotesModel("Wala wala wala wal wal wal wal walwa l", "Bagus Eka Saputra", true);
+//        quotesRef.push().setValue(quotesModel);
+
+        getQuotes();
         return root;
     }
 
@@ -189,11 +201,11 @@ public class OverviewFragment extends Fragment {
                 int percobaan = 0;
                 while(!isGotJson) {
                     if (jadwalSholat != null) {
-                        tvSubuh.setText(jadwalSholat.getSubuh());
-                        tvDhuhr.setText(jadwalSholat.getDhuhr());
-                        tvAshar.setText(jadwalSholat.getAshar());
-                        tvMaghrib.setText(jadwalSholat.getMaghrib());
-                        tvIsya.setText(jadwalSholat.getIsya());
+//                        tvSubuh.setText(jadwalSholat.getSubuh());
+//                        tvDhuhr.setText(jadwalSholat.getDhuhr());
+//                        tvAshar.setText(jadwalSholat.getAshar());
+//                        tvMaghrib.setText(jadwalSholat.getMaghrib());
+//                        tvIsya.setText(jadwalSholat.getIsya());
                         isGotJson = true;
                     } else {
                         isGotJson = false;
@@ -217,6 +229,33 @@ public class OverviewFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Data> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getQuotes() {
+        quotesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                quotesArray = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    QuotesModel quotesModel = snapshot.getValue(QuotesModel.class);
+                    if (quotesModel != null) {
+                        quotesModel.setId(snapshot.getKey());
+                    }
+                    quotesArray.add(quotesModel);
+                }
+
+                int max = quotesArray.size();
+                Random random = new Random();
+                int number = random.nextInt(max);
+                String quotes = quotesArray.get(number).getQuotes() + "\n-" + quotesArray.get(number).getAuthor();
+                tvQuotes.setText(quotes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

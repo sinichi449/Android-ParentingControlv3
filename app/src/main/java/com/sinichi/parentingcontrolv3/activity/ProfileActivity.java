@@ -2,6 +2,8 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -57,9 +59,11 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SetAppearance.setExtendStatusBarWithView(this);
+//        SetAppearance.setExtendStatusBarWithView(this);
         setContentView(R.layout.activity_profile);
-        SetAppearance.hideNavigationBar(this);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2f9cd7")));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         SetAppearance.hideNavigationBar(this);
         initComponents();
         SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);

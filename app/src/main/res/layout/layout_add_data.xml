@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/layout_rounded"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apakah kamu sudah membantu orang tua hari ini?" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/rb_sudah_membantu_ortu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sudah" />
+
+        <RadioButton
+            android:id="@+id/rb_belum_membantu_oru"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belum" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/edt_judul_buku"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Judul buku"
+        android:layout_marginTop="12dp"/>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

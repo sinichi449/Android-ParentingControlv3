@@ -108,16 +108,12 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         this.inflater = inflater;
         this.container = container;
+
         initComponents();
         showTodayData();
-
-//        tvLokasi.setText(getLocalityName());
         getJadwalSholat(getLocalityName());
-
-//        QuotesModel quotesModel = new QuotesModel("Wala wala wala wal wal wal wal walwa l", "Bagus Eka Saputra", true);
-//        quotesRef.push().setValue(quotesModel);
-
         getQuotes();
+
         return root;
     }
 
@@ -173,7 +169,6 @@ public class OverviewFragment extends Fragment {
                     tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                     chkMembantuOrtu.setChecked(models.get(index).isMembantuOrangTua());
                     chkSekolah.setChecked(models.get(index).isSekolah());
-                    tvJumlahSholat.setEnabled(false);
                     chkMembantuOrtu.setEnabled(false);
                     chkSekolah.setEnabled(false);
                     progressBar.setVisibility(View.GONE);
@@ -200,32 +195,32 @@ public class OverviewFragment extends Fragment {
                 Data data = response.body();
                 JadwalSholat jadwalSholat = data.getJadwalSholat();
                 int percobaan = 0;
-                while(!isGotJson) {
-                    if (jadwalSholat != null) {
+                if (jadwalSholat != null) {
 //                        tvSubuh.setText(jadwalSholat.getSubuh());
 //                        tvDhuhr.setText(jadwalSholat.getDhuhr());
 //                        tvAshar.setText(jadwalSholat.getAshar());
 //                        tvMaghrib.setText(jadwalSholat.getMaghrib());
 //                        tvIsya.setText(jadwalSholat.getIsya());
-                        isGotJson = true;
-                    } else {
-                        isGotJson = false;
-                        percobaan++;
-                        if (percobaan > 3) {
-                            Toast.makeText(getContext(), "Gagal mendapatkan data sholat, periksa koneksi internet.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                    isGotJson = true;
+                } else {
+                    isGotJson = false;
+                    percobaan++;
+                    if (percobaan > 3) {
+                        Toast.makeText(getContext(), "Gagal mendapatkan data sholat, periksa koneksi internet.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
-                editor.putString(Constant.WAKTU_SUBUH, jadwalSholat.getSubuh());
-                editor.putString(Constant.WAKTU_DHUHR, jadwalSholat.getDhuhr());
-                editor.putString(Constant.WAKTU_ASHAR, jadwalSholat.getAshar());
-                editor.putString(Constant.WAKTU_MAGHRIB, jadwalSholat.getMaghrib());
-                editor.putString(Constant.WAKTU_ISYA, jadwalSholat.getIsya());
-                editor.apply();
+                if (jadwalSholat != null) {
+                    editor.putString(Constant.WAKTU_SUBUH, jadwalSholat.getSubuh());
+                    editor.putString(Constant.WAKTU_DHUHR, jadwalSholat.getDhuhr());
+                    editor.putString(Constant.WAKTU_ASHAR, jadwalSholat.getAshar());
+                    editor.putString(Constant.WAKTU_MAGHRIB, jadwalSholat.getMaghrib());
+                    editor.putString(Constant.WAKTU_ISYA, jadwalSholat.getIsya());
+                    editor.apply();
+                }
             }
 
             @Override
@@ -263,5 +258,4 @@ public class OverviewFragment extends Fragment {
             }
         });
     }
-
 }

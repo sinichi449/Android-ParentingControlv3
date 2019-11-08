@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     // Floating button
     private ImageView flbAdd;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private FloatingButtonAdd floatingButtonAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,16 +144,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 && username.equals(Constant.USER_ANAK)) {
             kegiatanRef.addValueEventListener(this);
         }
-        flbAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                OverviewFragment overviewFragment = new OverviewFragment();
-//                CheckBox chk1 = overviewFragment.chkMembantuOrtu;
-//                CheckBox chk2 = overviewFragment.chkSekolah;
-//                chk1.setEnabled(true);
-//                chk2.setEnabled(true);
-            }
-        });
     }
 
     public void initComponents() {
@@ -515,5 +506,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 attachImage(R.drawable.back7, imgTarget);
                 break;
         }
+    }
+
+    public interface FloatingButtonAdd {
+        void onClick(View view);
     }
 }

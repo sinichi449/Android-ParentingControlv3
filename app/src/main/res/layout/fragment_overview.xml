@@ -34,7 +34,7 @@
                 android:fontFamily="@font/golden_hills"
                 android:textSize="25sp"
                 android:textColor="@color/colorBlue"
-                app:layout_constraintTop_toBottomOf="@+id/tableRow"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="10dp"/>
@@ -76,7 +76,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/salat"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_quotes" />
+                app:layout_constraintTop_toBottomOf="@id/tableRow" />
 
             <TextView
                 android:id="@+id/textView"
@@ -191,7 +191,7 @@
                 android:textStyle="bold"
                 app:fontFamily="@font/arial"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_quotes"
                 tools:text="17" />
 
             <TextView
@@ -266,21 +266,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="300dp" />
+                app:layout_constraintGuide_end="50dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_horizontal_atas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="175dp" />
+                app:layout_constraintTop_toTopOf="@+id/img_quotes"
+                app:layout_constraintGuide_begin="110dp"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidline_horizontal_bawah"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="295dp" />
+                app:layout_constraintGuide_begin="235dp" />
 
             <TextView
                 android:id="@+id/tv_quotes"

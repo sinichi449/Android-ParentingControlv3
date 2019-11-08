@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -19,7 +20,9 @@
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/FullScreen">
-        <activity android:name=".activity.NotificationOnClick"></activity>
+        <activity android:name=".TentangActivity"></activity>
+        <activity android:name=".tentang" />
+        <activity android:name=".activity.NotificationOnClick" />
         <activity android:name=".activity.ProfileActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as getCollapsingToolbarLayoutView string resource.
@@ -35,7 +38,7 @@
 
         <activity
             android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,12 +48,14 @@
         </activity>
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".service.AlarmNotificationReceiver"
             android:enabled="true" />
+
         <service
             android:name=".service.LocationService"
             android:enabled="true" />

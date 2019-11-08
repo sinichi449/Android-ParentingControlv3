@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -20,10 +20,9 @@
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/FullScreen">
-        <activity android:name=".TentangActivity"></activity>
-        <activity android:name=".tentang" />
-        <activity android:name=".activity.NotificationOnClick" />
-        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.NotificationOnClick"></activity>
+        <activity android:name=".activity.ProfileActivity"
+            android:theme="@style/Theme.AppCompat.Light"/>
         <!--
              The API key for Google Maps-based APIs is defined as getCollapsingToolbarLayoutView string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,7 +37,7 @@
 
         <activity
             android:name=".activity.MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"></activity>
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,17 +47,21 @@
         </activity>
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".service.AlarmNotificationReceiver"
             android:enabled="true" />
-
         <service
             android:name=".service.LocationService"
             android:enabled="true" />
+        <service
+            android:name=".service.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGE_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

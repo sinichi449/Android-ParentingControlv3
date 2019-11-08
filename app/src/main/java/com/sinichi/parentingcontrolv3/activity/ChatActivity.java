@@ -1,8 +1,13 @@
 package com.sinichi.parentingcontrolv3.activity;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +36,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.ChatAlt;
 import com.sinichi.parentingcontrolv3.common.ChatViewHolder;
@@ -60,6 +67,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     private DatabaseReference messageRef;
     FirebaseRecyclerAdapter<ChatModel, ChatViewHolder.MessageViewHolder> mFirebaseAdapter;
     private ProgressBar progressBar;
+    public static PubNub pubnub;
 
     @Override
     public void initComponents() {
@@ -145,6 +153,35 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
                 startActivityForResult(intent, REQUEST_IMAGE);
             }
         });
+
+        initPubnub();
+        createChannel();
+//        Intent intent = new Intent(this, FirebaseMessagingService.class);
+//        startService(intent);
+
+    }
+
+    private void initPubnub() {
+        PNConfiguration pnConfiguration = new PNConfiguration();
+        pnConfiguration.setPublishKey("pub-c-0c9db853-7f39-4610-a86e-7720d8908899");
+        pnConfiguration.setSubscribeKey("pub-c-0c9db853-7f39-4610-a86e-7720d8908899");
+        pnConfiguration.setSecure(false);
+        pubnub = new PubNub(pnConfiguration);
+    }
+
+
+    private void createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel chan1 = new NotificationChannel(
+                    "default",
+                    "default",
+                    NotificationManager.IMPORTANCE_NONE);
+            chan1.setLightColor(Color.TRANSPARENT);
+            chan1.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
+            notificationManager.createNotificationChannel(chan1);
+        }
+
     }
 
     @Override
@@ -234,4 +271,5 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(ChatActivity.this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
     }
+
 }

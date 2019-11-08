@@ -9,310 +9,322 @@
     tools:context=".fragment.OverviewFragment"
     android:layout_marginBottom="?attr/actionBarSize">
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="180dp"/>
-
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="216dp">
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/quote_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quote of The Day"
-                android:fontFamily="@font/golden_hills"
-                android:textSize="25sp"
-                android:textColor="@color/colorBlue"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="10dp"/>
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/constraint_cardview"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent">
 
-            <TableRow
-                android:id="@+id/tableRow"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="7dp"
-                android:background="#3C000000"
-                app:layout_constraintBottom_toTopOf="@+id/imageView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_tanggal"
-                app:layout_constraintVertical_bias="1.0" />
+               <androidx.cardview.widget.CardView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:cardCornerRadius="12dp"
+                   android:layout_margin="8dp">
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="38dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/bantu"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                   <androidx.constraintlayout.widget.ConstraintLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/salat"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tableRow" />
+                       <TableRow
+                           android:id="@+id/tableRow"
+                           android:layout_width="match_parent"
+                           android:layout_height="0.5dp"
+                           android:layout_marginStart="10dp"
+                           android:layout_marginLeft="10dp"
+                           android:layout_marginTop="7dp"
+                           android:layout_marginEnd="10dp"
+                           android:layout_marginRight="10dp"
+                           android:layout_marginBottom="7dp"
+                           android:background="#3C000000"
+                           app:layout_constraintBottom_toTopOf="@+id/imageView"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toBottomOf="@+id/tv_tanggal"
+                           app:layout_constraintVertical_bias="1.0" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:text="Sholat"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView" />
+                       <ImageView
+                           android:id="@+id/imageView2"
+                           android:layout_width="38dp"
+                           android:layout_height="35dp"
+                           android:layout_marginStart="8dp"
+                           android:layout_marginLeft="8dp"
+                           android:layout_marginTop="15dp"
+                           android:background="@drawable/bantu"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/literasi"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                       <ImageView
+                           android:id="@+id/imageView"
+                           android:layout_width="35dp"
+                           android:layout_height="35dp"
+                           android:layout_marginStart="8dp"
+                           android:layout_marginLeft="8dp"
+                           android:layout_marginTop="15dp"
+                           android:background="@drawable/salat"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toBottomOf="@id/tableRow" />
 
-            <TextView
-                android:id="@+id/a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginLeft="13dp"
-                android:text="Membantu Orang Tua"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="@+id/imageView2" />
+                       <TextView
+                           android:id="@+id/textView"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="16dp"
+                           android:layout_marginLeft="16dp"
+                           android:text="Sholat"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                           app:layout_constraintStart_toEndOf="@+id/imageView"
+                           app:layout_constraintTop_toTopOf="@+id/imageView" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="Sekolah"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                       <ImageView
+                           android:id="@+id/imageView3"
+                           android:layout_width="35dp"
+                           android:layout_height="35dp"
+                           android:layout_marginStart="8dp"
+                           android:layout_marginLeft="8dp"
+                           android:layout_marginTop="15dp"
+                           android:layout_marginBottom="8dp"
+                           android:background="@drawable/literasi"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-            <TextView
-                android:id="@+id/tv_hari"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginBottom="4dp"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toTopOf="@+id/tv_bulan"
-                app:layout_constraintStart_toEndOf="@+id/tv_tanggal"
-                app:layout_constraintTop_toTopOf="@+id/tv_tanggal"
-                tools:text="Sabtu" />
+                       <TextView
+                           android:id="@+id/a"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="13dp"
+                           android:layout_marginLeft="13dp"
+                           android:text="Membantu Orang Tua"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                           app:layout_constraintStart_toEndOf="@+id/imageView2"
+                           app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
-            <TextView
-                android:id="@+id/tv_jumlahSholat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:text="4"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toBottomOf="@+id/textView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView" />
+                       <TextView
+                           android:id="@+id/textView4"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="16dp"
+                           android:layout_marginLeft="16dp"
+                           android:layout_marginBottom="8dp"
+                           android:text="Sekolah"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                           app:layout_constraintStart_toEndOf="@+id/imageView3"
+                           app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
-            <CheckBox
-                android:id="@+id/chkbx_membantuOrtu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:enabled="true"
-                app:layout_constraintBottom_toBottomOf="@+id/a"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/a" />
+                       <TextView
+                           android:id="@+id/tv_hari"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="15dp"
+                           android:layout_marginLeft="15dp"
+                           android:layout_marginBottom="4dp"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toTopOf="@+id/tv_bulan"
+                           app:layout_constraintStart_toEndOf="@+id/tv_tanggal"
+                           app:layout_constraintTop_toTopOf="@+id/tv_tanggal"
+                           tools:text="Sabtu" />
 
-            <CheckBox
-                android:id="@+id/chkbx_sekolah"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:enabled="true"
-                app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView4" />
+                       <TextView
+                           android:id="@+id/tv_jumlahSholat"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginEnd="14dp"
+                           android:layout_marginRight="14dp"
+                           android:text="4"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toBottomOf="@+id/textView"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintTop_toTopOf="@+id/textView" />
 
-            <TextView
-                android:id="@+id/tv_tanggal"
-                android:layout_width="41dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                app:fontFamily="@font/arial"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_quotes"
-                tools:text="17" />
+                       <CheckBox
+                           android:id="@+id/chkbx_membantuOrtu"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginEnd="8dp"
+                           android:layout_marginRight="8dp"
+                           android:enabled="true"
+                           app:layout_constraintBottom_toBottomOf="@+id/a"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintTop_toTopOf="@+id/a" />
 
-            <TextView
-                android:id="@+id/tv_bulan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_tanggal"
-                app:layout_constraintStart_toEndOf="@+id/tv_tanggal"
-                tools:text="Maret" />
+                       <CheckBox
+                           android:id="@+id/chkbx_sekolah"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginEnd="8dp"
+                           android:layout_marginRight="8dp"
+                           android:enabled="true"
+                           app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintTop_toTopOf="@+id/textView4" />
 
-            <TextView
-                android:id="@+id/tv_tahun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:textColor="#000000"
-                app:fontFamily="@font/arial"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_bulan"
-                app:layout_constraintStart_toEndOf="@+id/tv_bulan"
-                app:layout_constraintTop_toTopOf="@+id/tv_bulan"
-                tools:text="2018" />
+                       <TextView
+                           android:id="@+id/tv_tanggal"
+                           android:layout_width="41dp"
+                           android:layout_height="36dp"
+                           android:layout_marginStart="10dp"
+                           android:layout_marginLeft="10dp"
+                           android:layout_marginTop="20dp"
+                           android:textColor="#000000"
+                           android:textSize="30sp"
+                           android:textStyle="bold"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toTopOf="parent"
+                           tools:text="17" />
 
+                       <TextView
+                           android:id="@+id/tv_bulan"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="15dp"
+                           android:layout_marginLeft="15dp"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toBottomOf="@+id/tv_tanggal"
+                           app:layout_constraintStart_toEndOf="@+id/tv_tanggal"
+                           tools:text="Maret" />
 
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="12dp"-->
-<!--                android:layout_marginTop="24dp"-->
-<!--                android:layout_marginEnd="12dp"-->
-<!--                android:layout_marginBottom="12dp"-->
-<!--                android:padding="5dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/textView4">-->
+                       <TextView
+                           android:id="@+id/tv_tahun"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginStart="4dp"
+                           android:layout_marginLeft="4dp"
+                           android:textColor="#000000"
+                           app:fontFamily="@font/arial"
+                           app:layout_constraintBottom_toBottomOf="@+id/tv_bulan"
+                           app:layout_constraintStart_toEndOf="@+id/tv_bulan"
+                           app:layout_constraintTop_toTopOf="@+id/tv_bulan"
+                           tools:text="2018" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_quotes"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="24dp"-->
-<!--                    android:text="Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/textView4" />-->
+                   </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--            </androidx.cardview.widget.CardView>-->
+               </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:id="@+id/img_quotes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/quote_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/ic_quote"
-                android:layout_marginTop="1dp"/>
+           </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_vertical_kiri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="50dp" />
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/constraint_jadwal_sholat"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintTop_toBottomOf="@id/constraint_cardview"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               android:layout_marginTop="16dp">
+               <include layout="@layout/layout_jadwal_sholat" />
+           </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidline_vertical_kanan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="50dp" />
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layout_constraintTop_toBottomOf="@id/constraint_jadwal_sholat"
+               app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_horizontal_atas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="@+id/img_quotes"
-                app:layout_constraintGuide_begin="110dp"/>
+               <TextView
+                   android:id="@+id/quote_title"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Quote of The Day"
+                   android:fontFamily="@font/golden_hills"
+                   android:textSize="25sp"
+                   android:textColor="@color/colorBlue"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   android:layout_marginTop="10dp"/>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidline_horizontal_bawah"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="235dp" />
+               <ImageView
+                   android:id="@+id/img_quotes"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   app:layout_constraintTop_toBottomOf="@id/quote_title"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   android:background="@drawable/ic_quote"
+                   android:layout_marginTop="1dp"/>
 
-            <TextView
-                android:id="@+id/tv_quotes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/arial_rounded"
-                android:textColor="@color/colorBlack"
-                android:text="Lorem ipsum dolor sit amet, consectetur, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
-                app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
-                app:layout_constraintTop_toTopOf="@id/guideline_horizontal_atas"
-                android:gravity="center" />
+               <androidx.constraintlayout.widget.Guideline
+                   android:id="@+id/guideline_vertical_kiri"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   app:layout_constraintGuide_begin="50dp" />
 
-            <TextView
-                android:id="@+id/tv_author"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Bagus Eka Saputra"
-                android:fontFamily="@font/arial"
-                android:textStyle="italic"
-                android:textColor="@color/colorBlack"
-                app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
-                app:layout_constraintBottom_toBottomOf="@id/guidline_horizontal_bawah"
-                app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
-                android:gravity="end"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="12dp" />
+               <androidx.constraintlayout.widget.Guideline
+                   android:id="@+id/guidline_vertical_kanan"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   app:layout_constraintGuide_end="50dp" />
 
+               <androidx.constraintlayout.widget.Guideline
+                   android:id="@+id/guideline_horizontal_atas"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   app:layout_constraintTop_toTopOf="@+id/img_quotes"
+                   app:layout_constraintGuide_begin="110dp"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+               <androidx.constraintlayout.widget.Guideline
+                   android:id="@+id/guidline_horizontal_bawah"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   app:layout_constraintGuide_begin="235dp" />
+
+               <TextView
+                   android:id="@+id/tv_quotes"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:fontFamily="@font/arial_rounded"
+                   android:textColor="@color/colorBlack"
+                   android:text="Lorem ipsum dolor sit amet, consectetur, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                   app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
+                   app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
+                   app:layout_constraintTop_toTopOf="@id/guideline_horizontal_atas"
+                   android:gravity="center" />
+
+               <TextView
+                   android:id="@+id/tv_author"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:text="Bagus Eka Saputra"
+                   android:fontFamily="@font/arial"
+                   android:textStyle="italic"
+                   android:textColor="@color/colorBlack"
+                   app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
+                   app:layout_constraintBottom_toBottomOf="@id/guidline_horizontal_bawah"
+                   app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
+                   android:gravity="end"
+                   android:layout_marginEnd="12dp"
+                   android:layout_marginBottom="5dp"
+                   android:layout_marginRight="12dp" />
+
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 

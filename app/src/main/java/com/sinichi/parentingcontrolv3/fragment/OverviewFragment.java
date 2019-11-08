@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +65,6 @@ public class OverviewFragment extends Fragment {
 //    private TextView tvLokasi;
     private CheckBox chkMembantuOrtu, chkSekolah;
 //    private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
-    private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
@@ -87,7 +85,6 @@ public class OverviewFragment extends Fragment {
         tvJumlahSholat = root.findViewById(R.id.tv_jumlahSholat);
         chkMembantuOrtu = root.findViewById(R.id.chkbx_membantuOrtu);
         chkSekolah = root.findViewById(R.id.chkbx_sekolah);
-        progressBar = root.findViewById(R.id.progress_circular);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -172,7 +169,6 @@ public class OverviewFragment extends Fragment {
                     chkSekolah.setChecked(models.get(index).isSekolah());
                     chkMembantuOrtu.setEnabled(false);
                     chkSekolah.setEnabled(false);
-                    progressBar.setVisibility(View.GONE);
                 }
             }
 

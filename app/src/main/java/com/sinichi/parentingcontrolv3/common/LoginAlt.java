@@ -14,7 +14,6 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,12 +25,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.LoginActivity;
 import com.sinichi.parentingcontrolv3.activity.MainActivity;
-import com.sinichi.parentingcontrolv3.interfaces.b;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
-public class LoginAlt extends LoginActivity implements b{
+public class LoginAlt extends LoginActivity {
 
-    @Override
     public void checkUserCredential(Activity activity, Context context) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -42,10 +39,8 @@ public class LoginAlt extends LoginActivity implements b{
         }
     }
 
-
-    @Override
     public void setLoginButtonBehaviour(final ImageView imgAnak, final ImageView imgOrtu,
-                                        final SignInButton mSignInButton, final Context context,
+                                        final ImageView mSignInButton, final Context context,
                                         final SharedPreferences.Editor sharedPrefsEditor) {
         imgAnak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +67,6 @@ public class LoginAlt extends LoginActivity implements b{
         });
     }
 
-    @Override
     public GoogleApiClient buildGoogleApi(final Context context) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("620226023898-da2auc1aqqd8q0ipbtiq4bamel0ugj7l.apps.googleusercontent.com")
@@ -83,7 +77,6 @@ public class LoginAlt extends LoginActivity implements b{
                 .build();
     }
 
-    @Override
     public void getRequestCodeAndLogin(Context context, Activity activity, int requestCode, Intent data) {
         if (requestCode == Constant.RC_SIGN_IN) { // 9001 == 9001 true
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);

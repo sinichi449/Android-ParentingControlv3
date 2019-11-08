@@ -40,22 +40,6 @@
                 android:layout_marginEnd="-25dp"
                 app:layout_constraintBottom_toTopOf="@id/guideline2" />
 
-            <TextView
-                android:id="@+id/header_profil"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_marginStart="-25dp"
-                android:layout_marginTop="-25dp"
-                android:layout_marginEnd="-25dp"
-
-                android:fontFamily="@font/arial_rounded"
-                android:gravity="center|top"
-                android:paddingTop="40dp"
-                android:text="Profil"
-                android:textColor="@color/colorWhite"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@id/guideline2"/>
-
             <!--        <ImageView-->
             <!--            android:id="@+id/btn_signout"-->
             <!--            android:layout_width="20dp"-->
@@ -74,7 +58,6 @@
                 android:layout_height="120dp"
 
                 android:tint="@color/colorGrey"
-                android:layout_below="@id/header_profil"
                 app:layout_constraintBottom_toTopOf="@id/guidline1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
@@ -318,7 +301,19 @@
             app:titleTextColor="@color/colorWhite"
             app:layout_scrollFlags="scroll |enterAlways"
             app:menu="@menu/layout_menu_profile"
-            style="@style/WhiteThreeDot"/>
+            style="@style/WhiteThreeDot"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Profil"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:fontFamily="@font/arial_rounded"
+                android:textColor="@color/colorWhite"/>
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

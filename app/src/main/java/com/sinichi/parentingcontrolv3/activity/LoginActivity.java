@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sinichi.parentingcontrolv3.R;
@@ -23,7 +22,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private SignInButton mSignInButton;
+    private ImageView mSignInButton;
     private GoogleApiClient mGoogleApiClient;
     private ImageView imgAnak;
     private ImageView imgOrangTua;

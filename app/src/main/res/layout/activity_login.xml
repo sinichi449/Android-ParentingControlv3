@@ -62,17 +62,12 @@
         android:textSize="18sp" />
 
     <ImageView
-        android:layout_width="185dp"
-        android:layout_height="50dp"
-        android:src="@drawable/btn_fb"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"/>
-
-    <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_google" />
 
 
     <RelativeLayout

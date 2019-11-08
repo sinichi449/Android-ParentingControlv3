@@ -22,7 +22,7 @@
         android:theme="@style/FullScreen">
         <activity android:name=".activity.NotificationOnClick"></activity>
         <activity android:name=".activity.ProfileActivity"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <!--
              The API key for Google Maps-based APIs is defined as getCollapsingToolbarLayoutView string resource.
              (See the file "res/values/google_maps_api.xml").

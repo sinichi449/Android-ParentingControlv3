@@ -6,11 +6,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -32,7 +34,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imgHeaderProfile;
     private CircleImageView circleImageView;
     private BottomNavigationView mBottomNavigation;
-    private ImageView imgSignOut;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
@@ -50,8 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvNomorTelepon = findViewById(R.id.tv_nomor_telepon);
         tvTanggalLahir = findViewById(R.id.tv_tanggal_lahir);
         tv2 = findViewById(R.id.tv2);
-        mBottomNavigation = findViewById(R.id.bottom_navigation);
-        imgSignOut = findViewById(R.id.btn_signout);
+//        mBottomNavigation = findViewById(R.id.bottom_navigation);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
     }
@@ -66,8 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         SetAppearance.hideNavigationBar(this);
         initComponents();
-        SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);
-        mBottomNavigation.setSelectedItemId(R.id.menu_profile);
+//        SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);
+//        mBottomNavigation.setSelectedItemId(R.id.menu_profile);
 
         final MainAlt mainAlt = new MainAlt();
         String nama = sharedPreferences.getString(Constant.DATA_NAMA, null);
@@ -111,12 +111,6 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         }
-        imgSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainAlt.signOut(ProfileActivity.this, ProfileActivity.this, imgSignOut);
-            }
-        });
         setSekolahOrPekerjaanIcon();
     }
 
@@ -142,5 +136,17 @@ public class ProfileActivity extends AppCompatActivity {
             ImageView imgSekolahOrPekerjaan = findViewById(R.id.img_sekolah);
             imgSekolahOrPekerjaan.setImageResource(R.drawable.kerja);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.layout_menu_profile, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        return super.onOptionsItemSelected(item);
     }
 }

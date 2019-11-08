@@ -114,6 +114,7 @@ public class OverviewFragment extends Fragment {
         getJadwalSholat(getLocalityName());
         getQuotes();
 
+
         return root;
     }
 

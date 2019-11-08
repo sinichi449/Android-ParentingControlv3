@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"/>
+        android:layout_marginTop="180dp"/>
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
@@ -25,6 +25,19 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="216dp">
+
+            <TextView
+                android:id="@+id/quote_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quote of The Day"
+                android:fontFamily="@font/golden_hills"
+                android:textSize="25sp"
+                android:textColor="@color/colorBlue"
+                app:layout_constraintTop_toBottomOf="@+id/tableRow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"/>
 
             <TableRow
                 android:id="@+id/tableRow"
@@ -63,7 +76,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/salat"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_tanggal" />
+                app:layout_constraintTop_toBottomOf="@id/img_quotes" />
 
             <TextView
                 android:id="@+id/textView"
@@ -235,11 +248,11 @@
                 android:id="@+id/img_quotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/quote_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:background="@drawable/ic_quote"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="1dp"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_vertical_kiri"
@@ -253,26 +266,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="350dp" />
+                app:layout_constraintGuide_begin="300dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_horizontal_atas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="294dp" />
+                app:layout_constraintGuide_begin="175dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidline_horizontal_bawah"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="417dp" />
+                app:layout_constraintGuide_begin="295dp" />
 
             <TextView
                 android:id="@+id/tv_quotes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/arial_rounded"
+                android:textColor="@color/colorBlack"
                 android:text="Lorem ipsum dolor sit amet, consectetur, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
                 app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
@@ -284,6 +299,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Bagus Eka Saputra"
+                android:fontFamily="@font/arial"
+                android:textStyle="italic"
+                android:textColor="@color/colorBlack"
                 app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
                 app:layout_constraintBottom_toBottomOf="@id/guidline_horizontal_bawah"
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"

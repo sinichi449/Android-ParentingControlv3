@@ -2,8 +2,7 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,14 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.TentangActivity;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
@@ -51,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvNomorTelepon = findViewById(R.id.tv_nomor_telepon);
         tvTanggalLahir = findViewById(R.id.tv_tanggal_lahir);
         tv2 = findViewById(R.id.tv2);
-//        mBottomNavigation = findViewById(R.id.bottom_navigation);
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
     }
@@ -61,13 +61,14 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        SetAppearance.setExtendStatusBarWithView(this);
         setContentView(R.layout.activity_profile);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2f9cd7")));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        setActionBarView();
         SetAppearance.hideNavigationBar(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SetAppearance.setStatusBarColor(this, R.color.HeaderProfileBlue);
+        }
         initComponents();
-//        SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);
-//        mBottomNavigation.setSelectedItemId(R.id.menu_profile);
+        SetAppearance.onBottomNavigationClick(this, this, mBottomNavigation, R.id.menu_profile);
+        mBottomNavigation.setSelectedItemId(R.id.menu_profile);
 
         final MainAlt mainAlt = new MainAlt();
         String nama = sharedPreferences.getString(Constant.DATA_NAMA, null);
@@ -141,12 +142,31 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.layout_menu_profile, menu);
-        return super.onCreateOptionsMenu(menu);
+//        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
+    private void setActionBarView() {
+        Toolbar toolbar = findViewById(R.id.toolbar_profile);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_tentang_kami:
+                        Intent intent = new Intent(ProfileActivity.this, TentangActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.menu_log_out:
+                        Intent intent1 = new Intent(ProfileActivity.this, LoginActivity.class);
+                        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                        firebaseAuth.signOut();
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent1);
+                        Toast.makeText(ProfileActivity.this, "Log out berhasil",Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+        });
     }
 }

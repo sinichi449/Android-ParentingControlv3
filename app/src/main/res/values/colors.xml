@@ -10,4 +10,5 @@
     <color name="colorOrange">#DD8500</color>
     <color name="colorLightBlue">#009FB4</color>
     <color name="TabLayoutSelectedIndicator">#000000</color>
+    <color name="HeaderProfileBlue">#2f9cd7</color>
 </resources>

@@ -21,8 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/FullScreen">
         <activity android:name=".activity.NotificationOnClick"></activity>
-        <activity android:name=".activity.ProfileActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".activity.ProfileActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as getCollapsingToolbarLayoutView string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -49,6 +48,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.MainActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".TentangActivity" />
 
         <receiver
             android:name=".service.AlarmNotificationReceiver"

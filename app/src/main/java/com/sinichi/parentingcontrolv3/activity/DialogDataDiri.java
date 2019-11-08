@@ -72,7 +72,7 @@ public class DialogDataDiri {
         spinner = dialogView.findViewById(R.id.spinnner);
         ImageView imgDataDiri = dialogView.findViewById(R.id.head);
         Glide.with(dialogView)
-                .load(R.drawable.datadiri)
+                .load(R.drawable.bg2)
                 .into(imgDataDiri);
         tvNama = dialogView.findViewById(R.id.txt_name);
 

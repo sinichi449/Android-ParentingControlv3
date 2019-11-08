@@ -157,7 +157,7 @@
             android:layout_marginEnd="25dp"/>
 
         <ImageView
-            android:id="@+id/sekolah"
+            android:id="@+id/img_sekolah"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/sekolah"
@@ -175,8 +175,8 @@
             android:fontFamily="@font/arial_rounded"
             android:textSize="20sp"
             android:textColor="@color/colorBlack"
-            app:layout_constraintTop_toTopOf="@+id/sekolah"
-            app:layout_constraintStart_toEndOf="@+id/sekolah"
+            app:layout_constraintTop_toTopOf="@+id/img_sekolah"
+            app:layout_constraintStart_toEndOf="@+id/img_sekolah"
             app:layout_constraintBottom_toTopOf="@+id/tv_sekolah"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"/>
@@ -190,15 +190,15 @@
             android:textSize="18sp"
             android:textColor="@color/colorGrey"
             app:layout_constraintTop_toBottomOf="@+id/tv2"
-            app:layout_constraintStart_toEndOf="@+id/sekolah"
-            app:layout_constraintBottom_toBottomOf="@+id/sekolah"
+            app:layout_constraintStart_toEndOf="@+id/img_sekolah"
+            app:layout_constraintBottom_toBottomOf="@+id/img_sekolah"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"/>
 
         <View
             android:id="@+id/div2"
             style="@style/divider"
-            app:layout_constraintTop_toBottomOf="@+id/sekolah"
+            app:layout_constraintTop_toBottomOf="@+id/img_sekolah"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="15dp"
@@ -268,7 +268,7 @@
             android:id="@+id/tv4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tangal Lahir"
+            android:text="Tanggal Lahir"
             android:fontFamily="@font/arial_rounded"
             android:textSize="20sp"
             android:textColor="@color/colorBlack"

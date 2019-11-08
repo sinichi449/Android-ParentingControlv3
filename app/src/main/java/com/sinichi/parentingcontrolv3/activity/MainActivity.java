@@ -66,7 +66,8 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 import static com.sinichi.parentingcontrolv3.common.MainAlt.getCurrentDay;
 
-public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, ValueEventListener{
+public class MainActivity extends AppCompatActivity implements ValueEventListener {
+
     private BottomNavigationView mBottomNavigation;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     // Floating button
     private ImageView flbAdd;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private FloatingButtonAdd floatingButtonAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         setBackgroundReferToDays(imgHeaderCollapsingToolbar);
         // Setting layout
         tabZeroView();
-        tabLayout.addOnTabSelectedListener(this);
+//        tabLayout.addOnTabSelectedListener(this);
         getNamaKota();
         startLocationService();
         // Get user
@@ -144,6 +144,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 && username.equals(Constant.USER_ANAK)) {
             kegiatanRef.addValueEventListener(this);
         }
+
+        flbAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(Constant.TAG, "Floating button add clicked");
+
+            }
+        });
+        tabZeroView();
     }
 
     public void initComponents() {
@@ -183,38 +192,38 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabOneJadwalSholatView();
     }
 
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        // Get tab position
-        int position = tab.getPosition();
-        // Jika posisi tab 0, set ke calendar header
-        // Remove chartview
-        if (position == 0) {
-            onPositionZeroTab();
-        // JIka posisi 1, maka ganti chartview
-        } else if (position == 1) {
-            onPositionOneTab();
-        }
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-        // Hapus semua view dari memory glide
-        Glide.get(MainActivity.this).clearMemory();
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-        int position = tab.getPosition();
-        // Jika posisi tab 0, ganti ke Calendar Header
-        if (position == 0) {
-            onPositionZeroTab();
-
-        // Jika posisi tab 1, ganti ke chartview
-        } else if (position == 1) {
-            onPositionOneTab();
-        }
-    }
+//    @Override
+//    public void onTabSelected(TabLayout.Tab tab) {
+//        // Get tab position
+//        int position = tab.getPosition();
+//        // Jika posisi tab 0, set ke calendar header
+//        // Remove chartview
+//        if (position == 0) {
+//            onPositionZeroTab();
+//        // JIka posisi 1, maka ganti chartview
+//        } else if (position == 1) {
+//            onPositionOneTab();
+//        }
+//    }
+//
+//    @Override
+//    public void onTabUnselected(TabLayout.Tab tab) {
+//        // Hapus semua view dari memory glide
+//        Glide.get(MainActivity.this).clearMemory();
+//    }
+//
+//    @Override
+//    public void onTabReselected(TabLayout.Tab tab) {
+//        int position = tab.getPosition();
+//        // Jika posisi tab 0, ganti ke Calendar Header
+//        if (position == 0) {
+//            onPositionZeroTab();
+//
+//        // Jika posisi tab 1, ganti ke chartview
+//        } else if (position == 1) {
+//            onPositionOneTab();
+//        }
+//    }
 
     private void getLokasi() {
         // Dapatkan lokasi
@@ -506,9 +515,5 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 attachImage(R.drawable.back7, imgTarget);
                 break;
         }
-    }
-
-    public interface FloatingButtonAdd {
-        void onClick(View view);
     }
 }

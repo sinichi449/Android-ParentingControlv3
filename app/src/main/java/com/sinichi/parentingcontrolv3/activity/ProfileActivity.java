@@ -113,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                 mainAlt.signOut(ProfileActivity.this, ProfileActivity.this, imgSignOut);
             }
         });
+        setSekolahOrPekerjaanIcon();
     }
 
     public static boolean isValidTextView(TextView textView) {
@@ -127,6 +128,15 @@ public class ProfileActivity extends AppCompatActivity {
         } else if (sharedPreferences.getString(Constant.GENDER, null)
                 .equals(Constant.PEREMPUAN)) {
             circleImageView.setImageResource(R.drawable.female);
+        }
+    }
+
+    private void setSekolahOrPekerjaanIcon() {
+        String username = sharedPreferences.getString(Constant.USERNAME, null);
+        String userOrangTua = Constant.USER_ORANG_TUA;
+        if (username.equals(userOrangTua)) {
+            ImageView imgSekolahOrPekerjaan = findViewById(R.id.img_sekolah);
+            imgSekolahOrPekerjaan.setImageResource(R.drawable.kerja);
         }
     }
 }

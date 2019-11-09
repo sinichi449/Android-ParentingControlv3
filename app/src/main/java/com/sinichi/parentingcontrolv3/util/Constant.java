@@ -24,7 +24,8 @@ public class Constant {
     public static final String MESSAGES_CHILD = "messages";
     public static final int RC_SIGN_IN = 9001;
     public static final int REQUEST_LOCATION = 99;
-    public static final String JADWAL_SHOLAT_URL = "https://time.siswadi.com/";
+    public static final String JADWAL_SHOLAT_SISWANDI_URL = "https://time.siswadi.com/";
+    public static final String JADWAL_SHOLAT_MUSLIM_SALAT_URL = "http://muslimsalat.com/";
     public static final String INTENT_NOTIFICATION_ID = "notification_id";
     public static final String GENDER = "GENDER";
     public static final String LAKI_LAKI = "Laki-laki";
@@ -34,4 +35,7 @@ public class Constant {
     public static final String JUDULBUKU_CHILD = "judulBuku";
     public static final String KEGIATANMEMBANTU_CHILD = "kegiatanMembantu";
     public static final String LITERASI = "literasi";
+    public static final String LOCATION_TAG = "Location";
+    public static final String JADWAL_SHOLAT_CHILD = "jadwalSholat";
+    public static final String KEGIATAN_REF_CHILD = "data_kegiatan";
 }

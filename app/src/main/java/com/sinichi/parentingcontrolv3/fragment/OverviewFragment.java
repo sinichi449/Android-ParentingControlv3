@@ -1,12 +1,20 @@
 package com.sinichi.parentingcontrolv3.fragment;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,15 +41,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.DataModel;
 import com.sinichi.parentingcontrolv3.model.QuotesModel;
-import com.sinichi.parentingcontrolv3.retrofit.ApiService;
-import com.sinichi.parentingcontrolv3.retrofit.Data;
-import com.sinichi.parentingcontrolv3.retrofit.JadwalSholat;
+import com.sinichi.parentingcontrolv3.model.ServerJadwalSholat;
+import com.sinichi.parentingcontrolv3.retrofit.MuslimSalat.ApiServiceMuslimSalat;
+import com.sinichi.parentingcontrolv3.retrofit.MuslimSalat.ItemMuslimSalat;
+import com.sinichi.parentingcontrolv3.retrofit.MuslimSalat.JadwalSholatMuslimSalat;
+import com.sinichi.parentingcontrolv3.retrofit.TimeSiswadi.ApiServiceSiswandi;
+import com.sinichi.parentingcontrolv3.retrofit.TimeSiswadi.DataSiswandi;
+import com.sinichi.parentingcontrolv3.retrofit.TimeSiswadi.JadwalSholatSiswandi;
+import com.sinichi.parentingcontrolv3.service.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -48,11 +65,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * ChatViewHolder simple {@link Fragment} subclass.
  */
-public class OverviewFragment extends Fragment {
+public class OverviewFragment extends Fragment implements ValueEventListener {
     private LayoutInflater inflater;
     private ViewGroup container;
     private View root;
@@ -61,28 +81,53 @@ public class OverviewFragment extends Fragment {
     private DatabaseReference quotesRef;
     private List<DataModel> models;
     private List<QuotesModel> quotesArray;
+    private List<ServerJadwalSholat> serverList;
     private boolean available;
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
     private Calendar calendar;
-    private String date, day, month, year;
+    private String date, day, month, year, locality = "Jakarta", server;
     private TextView tvTanggal, tvHari, tvBulan, tvTahun,
             tvJumlahSholat;
 //    private TextView tvLokasi;
     private CheckBox chkMembantuOrtu, chkSekolah;
 //    private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
     private boolean isGotJson = false;
     private TextView tvQuotes, tvAuthor;
     private int index;
+    private List<Address> a;
+    private ProgressDialog progressDialog;
+    private Context context;
+    private boolean sudahSholatSubuh, sudahSholatDhuhr, sudahSholatAshar, sudahSholatMaghrib, sudahSholatIsya;
+    private String jamSekarang, menitSekarang, waktuSekarang;
+    private String waktuSubuh, waktuDhuhr, waktuAshar, waktuMaghrib, waktuIsya;
 
     public OverviewFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.inflater = inflater;
+        this.container = container;
+
+        initComponents();
+        listenDataFromCloud();
+        getServer();
+        getLocalityName();
+        showTodayData();
+        getQuotes();
+        setOverviewOnClicks();
+
+        return root;
+    }
+
     private void initComponents() {
+        context = getContext();
         root = inflater.inflate(R.layout.fragment_overview, container, false);
 //        tvLokasi = root.findViewById(R.id.tv_lokasi);
         tvTanggal = root.findViewById(R.id.tv_tanggal);
@@ -99,32 +144,86 @@ public class OverviewFragment extends Fragment {
         tvQuotes = root.findViewById(R.id.tv_quotes);
         tvAuthor = root.findViewById(R.id.tv_author);
         quotesRef = mDatabaseReference.child("quotes");
-
+        sharedPrefs = getContext().getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
 //        tvSubuh = root.findViewById(R.id.tv_subuh);
 //        tvDhuhr = root.findViewById(R.id.tv_dhuhr);
 //        tvAshar = root.findViewById(R.id.tv_ashar);
 //        tvMaghrib = root.findViewById(R.id.tv_maghrib);
 //        tvIsya = root.findViewById(R.id.tv_isya);
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Memuat data dari cloud, mohon tunggu...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        this.inflater = inflater;
-        this.container = container;
-
-        initComponents();
-        showTodayData();
-        getJadwalSholat(getLocalityName());
-        getQuotes();
-        setOverviewOnClicks();
-
-        return root;
+    private void listenDataFromCloud() {
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference kegiatanRef = mDatabaseReference.child(mFirebaseUser.getUid()).child(Constant.KEGIATAN_REF_CHILD);
+        kegiatanRef.addValueEventListener(this);
     }
 
-    private String getLocalityName() {
-        sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(Constant.NAMA_KOTA, "Jakarta");
+    private void getServer() {
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference serverRef = mDatabaseReference.child(Constant.JADWAL_SHOLAT_CHILD);
+        serverRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ServerJadwalSholat serverJadwalSholat = snapshot.getValue(ServerJadwalSholat.class);
+                    if (serverJadwalSholat != null) {
+                        serverJadwalSholat.setId(snapshot.getKey());
+                    }
+                    server = serverJadwalSholat.getServer();
+                }
+                Log.e(Constant.TAG, server);
+                boolean isServerMuslimSalat = server.equals("muslimsalat");
+                boolean isServerSiswandi = server.equals("siswandi");
+                if (isServerMuslimSalat) {
+                    getJadwalSholatMuslimSalat(locality);
+                } else if (isServerSiswandi) {
+                    getJadwalSholatSiswandi(locality);
+                }
+                Log.e(Constant.TAG, locality);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Error occured, periksa koneksi internet Anda",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getLocalityName() {
+            // Dapatkan lokasi
+        FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(getActivity());
+        a = new ArrayList<>();
+        mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    try {
+                        // Get nama kota
+                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                        a = geocoder.getFromLocation(location.getLatitude(),
+                                location.getLongitude(), 1);
+                        sharedPrefs = getContext().getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                        editor = sharedPrefs.edit();
+                        locality = a.get(0).getSubAdminArea();
+                        editor.putString(Constant.NAMA_KOTA, locality);
+                        editor.apply();
+                        Log.e("Locality", a.get(0).getSubAdminArea());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
+                            Toast.LENGTH_LONG).show();
+                    locality = "Jakarta";
+                }
+            }
+        });
     }
 
     private void showTodayData() {
@@ -186,52 +285,174 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    private void getJadwalSholat(String kota) {
+    private void getJadwalSholatSiswandi(String kota) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.JADWAL_SHOLAT_URL)
+                .baseUrl(Constant.JADWAL_SHOLAT_SISWANDI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        ApiService apiService = retrofit.create(ApiService.class);
-        Call<Data> call = apiService.getData(kota);
-        call.enqueue(new Callback<Data>() {
+        ApiServiceSiswandi apiServiceSiswandi = retrofit.create(ApiServiceSiswandi.class);
+        Call<DataSiswandi> call = apiServiceSiswandi.getData(kota);
+        call.enqueue(new Callback<DataSiswandi>() {
             @Override
-            public void onResponse(Call<Data> call, Response<Data> response) {
-                Data data = response.body();
-                JadwalSholat jadwalSholat = data.getJadwalSholat();
-                int percobaan = 0;
-                if (jadwalSholat != null) {
-//                        tvSubuh.setText(jadwalSholat.getSubuh());
-//                        tvDhuhr.setText(jadwalSholat.getDhuhr());
-//                        tvAshar.setText(jadwalSholat.getAshar());
-//                        tvMaghrib.setText(jadwalSholat.getMaghrib());
-//                        tvIsya.setText(jadwalSholat.getIsya());
-                    isGotJson = true;
-                } else {
-                    isGotJson = false;
-                    percobaan++;
-                    if (percobaan > 3) {
-                        Toast.makeText(getContext(), "Gagal mendapatkan data sholat, periksa koneksi internet.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
+            public void onResponse(Call<DataSiswandi> call, Response<DataSiswandi> response) {
+                DataSiswandi dataSiswandi = response.body();
+                JadwalSholatSiswandi jadwalSholatSiswandi = dataSiswandi.getJadwalSholatSiswandi();
+                if (jadwalSholatSiswandi != null) {
+                    TextView tvSubuh = root.findViewById(R.id.tv_subuh);
+                    TextView tvSyurooq = root.findViewById(R.id.tv_syurooq);
+                    TextView tvDhuhr = root.findViewById(R.id.tv_dhuhr);
+                    TextView tvAshar = root.findViewById(R.id.tv_ashar);
+                    TextView tvMaghrib = root.findViewById(R.id.tv_maghrib);
+                    TextView tvIsya = root.findViewById(R.id.tv_isya);
 
-                sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, Context.MODE_PRIVATE);
-                editor = sharedPreferences.edit();
-                if (jadwalSholat != null) {
-                    editor.putString(Constant.WAKTU_SUBUH, jadwalSholat.getSubuh());
-                    editor.putString(Constant.WAKTU_DHUHR, jadwalSholat.getDhuhr());
-                    editor.putString(Constant.WAKTU_ASHAR, jadwalSholat.getAshar());
-                    editor.putString(Constant.WAKTU_MAGHRIB, jadwalSholat.getMaghrib());
-                    editor.putString(Constant.WAKTU_ISYA, jadwalSholat.getIsya());
+                    tvSubuh.setText(jadwalSholatSiswandi.getSubuh());
+                    Log.e(Constant.TAG, jadwalSholatSiswandi.getSubuh());
+                    tvDhuhr.setText(jadwalSholatSiswandi.getDhuhr());
+                    tvAshar.setText(jadwalSholatSiswandi.getAshar());
+                    tvMaghrib.setText(jadwalSholatSiswandi.getMaghrib());
+                    tvIsya.setText(jadwalSholatSiswandi.getIsya());
+
+                    editor.putString(Constant.WAKTU_SUBUH, jadwalSholatSiswandi.getSubuh());
+                    editor.putString(Constant.WAKTU_DHUHR, jadwalSholatSiswandi.getDhuhr());
+                    editor.putString(Constant.WAKTU_ASHAR, jadwalSholatSiswandi.getAshar());
+                    editor.putString(Constant.WAKTU_MAGHRIB, jadwalSholatSiswandi.getMaghrib());
+                    editor.putString(Constant.WAKTU_ISYA, jadwalSholatSiswandi.getIsya());
                     editor.apply();
+                    isGotJson = true;
+                    progressDialog.dismiss();
+                } else {
+                    Toast.makeText(getContext(), "Data sholat di server siswandi kosong",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Data> call, Throwable t) {
-
+            public void onFailure(Call<DataSiswandi> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(),
+                                Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void getJadwalSholatMuslimSalat(final String kota) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.JADWAL_SHOLAT_MUSLIM_SALAT_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiServiceMuslimSalat apiServiceMuslimSalat = retrofit.create(ApiServiceMuslimSalat.class);
+        Call<JadwalSholatMuslimSalat> call = apiServiceMuslimSalat.getJadwalMuslimSalat(kota);
+        call.enqueue(new Callback<JadwalSholatMuslimSalat>() {
+            @Override
+            public void onResponse(Call<JadwalSholatMuslimSalat> call, Response<JadwalSholatMuslimSalat> response) {
+                List<ItemMuslimSalat> itemMuslimSalats = response.body().getItemMuslimSalats();
+                if (itemMuslimSalats != null) {
+                    TextView tvLokasi = root.findViewById(R.id.tv_lokasi);
+                    TextView tvSubuh = root.findViewById(R.id.tv_subuh);
+                    TextView tvSyurooq = root.findViewById(R.id.tv_syurooq);
+                    TextView tvDhuhr = root.findViewById(R.id.tv_dhuhr);
+                    TextView tvAshar = root.findViewById(R.id.tv_ashar);
+                    TextView tvMaghrib = root.findViewById(R.id.tv_maghrib);
+                    TextView tvIsya = root.findViewById(R.id.tv_isya);
+
+                    tvLokasi.setText(kota);
+                    tvSubuh.setText(itemMuslimSalats.get(0).getSubuh());
+                    tvSyurooq.setText(itemMuslimSalats.get(0).getSyurooq());
+                    tvDhuhr.setText(itemMuslimSalats.get(0).getDhuhr());
+                    tvAshar.setText(itemMuslimSalats.get(0).getAshar());
+                    tvMaghrib.setText(itemMuslimSalats.get(0).getMaghrib());
+                    tvIsya.setText(itemMuslimSalats.get(0).getIsya());
+                    Log.e(Constant.TAG, "Subuh :" + itemMuslimSalats.get(0).getSubuh());
+                    Log.e(Constant.TAG, "Dhuhr :" + itemMuslimSalats.get(0).getDhuhr());
+                    Log.e(Constant.TAG, "Ashar :" + itemMuslimSalats.get(0).getAshar());
+                    Log.e(Constant.TAG, "Maghrib :" + itemMuslimSalats.get(0).getMaghrib());
+                    Log.e(Constant.TAG, "Isya' :" + itemMuslimSalats.get(0).getIsya());
+
+                    editor.putString(Constant.WAKTU_SUBUH, itemMuslimSalats.get(0).getSubuh());
+                    editor.putString(Constant.WAKTU_DHUHR, itemMuslimSalats.get(0).getDhuhr());
+                    editor.putString(Constant.WAKTU_ASHAR, itemMuslimSalats.get(0).getAshar());
+                    editor.putString(Constant.WAKTU_MAGHRIB, itemMuslimSalats.get(0).getMaghrib());
+                    editor.putString(Constant.WAKTU_ISYA, itemMuslimSalats.get(0).getIsya());
+                    editor.apply();
+                    isGotJson = true;
+                    progressDialog.dismiss();
+                } else {
+                    Toast.makeText(getContext(), "Data sholat di muslimsalat kosong",
+                                Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JadwalSholatMuslimSalat> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(),
+                                Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    // TODO: Muslim salat time format
+    private int getJam(String keyWaktu) {
+        String strJam = sharedPrefs.getString(keyWaktu, "Kosong").substring(0, 2);
+        return Integer.parseInt(strJam);
+    }
+
+    // TODO: Muslim salat time format
+    private int getMenit(String keyMenit) {
+        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3, 5);
+        return Integer.parseInt(strMenit);
+    }
+
+    private void makeNotification(String waktuSholat, int notificationId, int requestCode, int jam, int menit) {
+        Intent intent = new Intent(context, AlarmNotificationReceiver.class);
+        intent.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
+        intent.putExtra(Constant.INTENT_NOTIFICATION_ID, notificationId);
+        // TODO: Change request code
+        intent.putExtra("request_code", requestCode);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, jam);
+        calendar.set(Calendar.MINUTE, menit);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private void makeNotifikasiSholat() {
+        boolean isUserAnak = sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK);
+        if (isUserAnak) {
+            if (!waktuSubuh.equals("kosong")
+                    && !sudahSholatSubuh) {
+                makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+                Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_SUBUH);
+            }
+
+            if (!waktuDhuhr.equals("kosong")
+                    && !sudahSholatDhuhr) {
+                makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+                Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_DHUHR);
+            }
+
+            if (!waktuAshar.equals("kosong")
+                    && !sudahSholatAshar) {
+                makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+                Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
+            }
+
+            if (!waktuMaghrib.equals("kosong")
+                    && !sudahSholatMaghrib) {
+                makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+                Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
+            }
+
+            if (!waktuIsya.equals("kosong")
+                    && !sudahSholatIsya) {
+                makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
+                Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
+            }
+        }
     }
 
     private void getQuotes() {
@@ -332,5 +553,61 @@ public class OverviewFragment extends Fragment {
         if (models.get(index).isLiterasi()) {
             chktvLiterasi.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
         }
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        // Get data dari Firebase, lalu dimasukkan ke dalam List<DataModel>
+        models = new ArrayList<>();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            DataModel model = snapshot.getValue(DataModel.class);
+            if (model != null) {
+                model.setId(snapshot.getKey());
+//                progressDialog.dismiss();
+            }
+            models.add(model);
+        }
+
+        // Cek apakah data untuk hari ini sudah tersedia
+        boolean isAvailableTodayData = false;
+        for (DataModel dataModel : models) {
+            isAvailableTodayData = dataModel.getTanggal().equals(date)
+                    || dataModel.getHari().equals(day)
+                    || dataModel.getBulan().equals(month)
+                    || dataModel.getTahun().equals(year);
+        }
+
+        Log.e(Constant.TAG, "Data Sholat available : " + isAvailableTodayData);
+        if (isAvailableTodayData) {
+            // Get data terbaru
+            int index = models.size() - 1;
+            sudahSholatSubuh = models.get(index).isSholatSubuh();
+            sudahSholatDhuhr = models.get(index).isSholatDhuhr();
+            sudahSholatAshar = models.get(index).isSholatAshar();
+            sudahSholatMaghrib = models.get(index).isSholatMaghrib();
+            sudahSholatIsya = models.get(index).isSholatIsya();
+
+            Calendar cal = Calendar.getInstance();
+            jamSekarang = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+            menitSekarang = String.valueOf(cal.get(Calendar.MINUTE));
+            waktuSekarang = jamSekarang + ":" + menitSekarang;
+
+            SharedPreferences sharedPrefs = context.getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+            waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
+            waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
+            waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");
+            waktuMaghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, "kosong");
+            waktuIsya = sharedPrefs.getString(Constant.WAKTU_ISYA, "kosong");
+
+            // Hanya user anak yang akan mendapatkan notifikasi
+            // Jika user anak belum sholat, beri notifikasi
+            makeNotifikasiSholat();
+        }
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+        Toast.makeText(context, "Something error, please check your internet connection" + "\n" + databaseError.getMessage(),
+                Toast.LENGTH_SHORT).show();
     }
 }

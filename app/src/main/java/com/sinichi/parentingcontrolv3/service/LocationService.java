@@ -78,8 +78,8 @@ public class LocationService extends Service {
             public void onLocationResult(LocationResult locationResult) {
                 Location location = locationResult.getLastLocation();
                 LocationModel model = new LocationModel(location.getLatitude(), location.getLongitude());
-                Log.e("Status", String.valueOf(model.getLatitude()));
-                Log.e("Status", String.valueOf(model.getLongitude()));
+                Log.e(Constant.LOCATION_TAG, String.valueOf(model.getLatitude()));
+                Log.e(Constant.LOCATION_TAG, String.valueOf(model.getLongitude()));
                 location_ref.setValue(model);
             }
         }, null);

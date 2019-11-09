@@ -1,9 +1,7 @@
 package com.sinichi.parentingcontrolv3.activity;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +11,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,8 +37,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -57,24 +51,20 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
-import com.sinichi.parentingcontrolv3.service.AlarmNotificationReceiver;
 import com.sinichi.parentingcontrolv3.service.LocationService;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import lecho.lib.hellocharts.view.LineChartView;
 
 import static com.sinichi.parentingcontrolv3.common.MainAlt.getCurrentDay;
 
-public class MainActivity extends AppCompatActivity implements ValueEventListener {
+public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mBottomNavigation;
     private ViewPager viewPager;
@@ -107,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     private ImageView flbAdd;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private ProgressDialog progressDialog;
+    public boolean dataNotFound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         Intent intent = getIntent();
         boolean isDiperbarui = intent.getBooleanExtra("after_notification", false);
         if (isDiperbarui) {
-            Toast.makeText(MainActivity.this, "Data berhasil diperbarui",
+            Toast.makeText(MainActivity.this, "DataSiswandi berhasil diperbarui",
                     Toast.LENGTH_LONG).show();
         }
 
@@ -151,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         String username = sharedPrefs.getString(Constant.USERNAME, null); // Get nama username
         boolean isUsernameAnak = username.equals(Constant.USER_ANAK);
         boolean isUsernameOrangTua = username.equals(Constant.USER_ORANG_TUA);
-        kegiatanRef.addValueEventListener(this);
+//        kegiatanRef.addValueEventListener(this);
         if (username != null
                 && isUsernameAnak) {
             onFlbAddClicked();
@@ -180,41 +171,51 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         flbAdd = findViewById(R.id.flb_add);
         linearLayoutCollapsingToolbar = findViewById(R.id.linear_layout_collapsingtoolbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("Memuat data, pastikan Smartphone Anda terkoneksi internet");
-        progressDialog.show();
+//        progressDialog = new ProgressDialog(this);
+//        progressDialog.setCancelable(false);
+//        progressDialog.setMessage("Memuat data, pastikan Smartphone Anda terkoneksi internet");
+//        int timeOut = 0;
+//        while (dataNotFound) {
+//            progressDialog.show();
+//            timeOut++;
+//            if (timeOut > 10) {
+//                dataNotFound = true;
+//                Toast.makeText(MainActivity.this, "Error connecting to database",
+//                        Toast.LENGTH_LONG).show();
+//                progressDialog.dismiss();
+//            }
+//        }
     }
 
-    private void getLokasi() {
-        // Dapatkan lokasi
-        FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
-        a = new ArrayList<>();
-        mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    try {
-                        // Get nama kota
-                        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-                        a = geocoder.getFromLocation(location.getLatitude(),
-                                location.getLongitude(), 1);
-                        sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                        edit = sharedPrefs.edit();
-                        String locality = a.get(0).getSubAdminArea();
-                        edit.putString(Constant.NAMA_KOTA, locality);
-                        edit.apply();
-                        Log.e("Locality", a.get(0).getSubAdminArea());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
+//    private void getLokasi() {
+//        // Dapatkan lokasi
+//        FusedLocationProviderClient mFusedLocation = new FusedLocationProviderClient(MainActivity.this);
+//        a = new ArrayList<>();
+//        mFusedLocation.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if (location != null) {
+//                    try {
+//                        // Get nama kota
+//                        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+//                        a = geocoder.getFromLocation(location.getLatitude(),
+//                                location.getLongitude(), 1);
+//                        sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+//                        edit = sharedPrefs.edit();
+//                        String locality = a.get(0).getSubAdminArea();
+//                        edit.putString(Constant.NAMA_KOTA, locality);
+//                        edit.apply();
+//                        Log.e("Locality", a.get(0).getSubAdminArea());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//    }
 
     private void getNamaKota() {
         if (isLocationPermissionGranted()) {
@@ -226,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                     isGPS = true;
                 }
             });
-            getLokasi();
+//            getLokasi();
             Log.e("Status", "User saat ini " + username);
         }
     }
@@ -244,119 +245,122 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         }
     }
 
-    private void makeNotification(String waktuSholat, int notificationId, int requestCode, int jam, int menit) {
-        Intent intent = new Intent(MainActivity.this, AlarmNotificationReceiver.class);
-        intent.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
-        intent.putExtra(Constant.INTENT_NOTIFICATION_ID, notificationId);
-        // TODO: Change request code
-        intent.putExtra("request_code", requestCode);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//    private void makeNotification(String waktuSholat, int notificationId, int requestCode, int jam, int menit) {
+//        Intent intent = new Intent(MainActivity.this, AlarmNotificationReceiver.class);
+//        intent.putExtra(Constant.INTENT_WAKTU_SHOLAT, waktuSholat);
+//        intent.putExtra(Constant.INTENT_NOTIFICATION_ID, notificationId);
+//        // TODO: Change request code
+//        intent.putExtra("request_code", requestCode);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, jam);
+//        calendar.set(Calendar.MINUTE, menit);
+//        calendar.set(Calendar.SECOND, 0);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY, pendingIntent);
+//    }
+//
+//    private void makeNotifikasiSholat() {
+//        boolean isUserAnak = sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK);
+//        if (isUserAnak) {
+//            if (!waktuSubuh.equals("kosong")
+//                    && !sudahSholatSubuh) {
+//                makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+//                Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_SUBUH);
+//            }
+//
+//            if (!waktuDhuhr.equals("kosong")
+//                    && !sudahSholatDhuhr) {
+//                makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
+//                Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_DHUHR);
+//            }
+//
+//            if (!waktuAshar.equals("kosong")
+//                    && !sudahSholatAshar) {
+//                makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
+//                Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
+//            }
+//
+//            if (!waktuMaghrib.equals("kosong")
+//                    && !sudahSholatMaghrib) {
+//                makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
+//                Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
+//            }
+//
+//            if (!waktuIsya.equals("kosong")
+//                    && !sudahSholatIsya) {
+//                makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
+//                Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
+//            }
+//        }
+//    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, jam);
-        calendar.set(Calendar.MINUTE, menit);
-        calendar.set(Calendar.SECOND, 0);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
+//    @Override
+//    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//        // Get data dari Firebase, lalu dimasukkan ke dalam List<DataModel>
+//        models = new ArrayList<>();
+//        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//            DataModel model = snapshot.getValue(DataModel.class);
+//            if (model != null) {
+//                model.setId(snapshot.getKey());
+//                progressDialog.dismiss();
+//            }
+//            models.add(model);
+//        }
+//
+//        // Cek apakah data untuk hari ini sudah tersedia
+//        for (DataModel dataModel : models) {
+//            isAvailableTodayData = dataModel.getTanggal().equals(date)
+//                    || dataModel.getHari().equals(day)
+//                    || dataModel.getBulan().equals(month)
+//                    || dataModel.getTahun().equals(year);
+//        }
+//
+//        if (isAvailableTodayData) {
+//            // Get data terbaru
+//            int index = models.size() - 1;
+//            sudahSholatSubuh = models.get(index).isSholatSubuh();
+//            sudahSholatDhuhr = models.get(index).isSholatDhuhr();
+//            sudahSholatAshar = models.get(index).isSholatAshar();
+//            sudahSholatMaghrib = models.get(index).isSholatMaghrib();
+//            sudahSholatIsya = models.get(index).isSholatIsya();
+//
+//            Calendar cal = Calendar.getInstance();
+//            jamSekarang = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+//            menitSekarang = String.valueOf(cal.get(Calendar.MINUTE));
+//            waktuSekarang = jamSekarang + ":" + menitSekarang;
+//
+//            SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+//            waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
+//            waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
+//            waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");
+//            waktuMaghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, "kosong");
+//            waktuIsya = sharedPrefs.getString(Constant.WAKTU_ISYA, "kosong");
+//
+//            // Hanya user anak yang akan mendapatkan notifikasi
+//            // Jika user anak belum sholat, beri notifikasi
+//            makeNotifikasiSholat();
+//        }
+//    }
+//
+//    @Override
+//    public void onCancelled(@NonNull DatabaseError databaseError) {
+//        Toast.makeText(MainActivity.this, "Something error, please check your internet connection",
+//                Toast.LENGTH_SHORT).show();
+//    }
 
-    private void makeNotifikasiSholat() {
-        if (!waktuSubuh.equals("kosong")
-                && !sudahSholatSubuh) {
-            makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
-            Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_SUBUH);
-        }
-
-        if (!waktuDhuhr.equals("kosong")
-                && !sudahSholatDhuhr) {
-            makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
-            Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_DHUHR);
-        }
-
-        if (!waktuAshar.equals("kosong")
-                && !sudahSholatAshar) {
-            makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
-            Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
-        }
-
-        if (!waktuMaghrib.equals("kosong")
-                && !sudahSholatMaghrib) {
-            makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
-            Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
-        }
-
-        if (!waktuIsya.equals("kosong")
-                && !sudahSholatIsya) {
-            makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
-            Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
-        }
-    }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        // Get data dari Firebase, lalu dimasukkan ke dalam List<DataModel>
-        models = new ArrayList<>();
-        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-            DataModel model = snapshot.getValue(DataModel.class);
-            if (model != null) {
-                model.setId(snapshot.getKey());
-                progressDialog.dismiss();
-            }
-            models.add(model);
-        }
-
-        // Cek apakah data untuk hari ini sudah tersedia
-        for (DataModel dataModel : models) {
-            isAvailableTodayData = dataModel.getTanggal().equals(date)
-                    || dataModel.getHari().equals(day)
-                    || dataModel.getBulan().equals(month)
-                    || dataModel.getTahun().equals(year);
-        }
-
-        if (isAvailableTodayData) {
-            // Get data terbaru
-            int index = models.size() - 1;
-            sudahSholatSubuh = models.get(index).isSholatSubuh();
-            sudahSholatDhuhr = models.get(index).isSholatDhuhr();
-            sudahSholatAshar = models.get(index).isSholatAshar();
-            sudahSholatMaghrib = models.get(index).isSholatMaghrib();
-            sudahSholatIsya = models.get(index).isSholatIsya();
-
-            Calendar cal = Calendar.getInstance();
-            jamSekarang = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
-            menitSekarang = String.valueOf(cal.get(Calendar.MINUTE));
-            waktuSekarang = jamSekarang + ":" + menitSekarang;
-
-            SharedPreferences sharedPrefs = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-            waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
-            waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
-            waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");
-            waktuMaghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, "kosong");
-            waktuIsya = sharedPrefs.getString(Constant.WAKTU_ISYA, "kosong");
-
-            // Hanya user anak yang akan mendapatkan notifikasi
-            // Jika user anak belum sholat, beri notifikasi
-            makeNotifikasiSholat();
-        }
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-        Toast.makeText(MainActivity.this, "Something error, please check your internet connection",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    private int getJam(String keyWaktu) {
-        String strJam = sharedPrefs.getString(keyWaktu, "Kosong").substring(0, 2);
-        return Integer.parseInt(strJam);
-    }
-
-    private int getMenit(String keyMenit) {
-        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3, 5);
-        return Integer.parseInt(strMenit);
-    }
+//    private int getJam(String keyWaktu) {
+//        String strJam = sharedPrefs.getString(keyWaktu, "Kosong").substring(0, 2);
+//        return Integer.parseInt(strJam);
+//    }
+//
+//    private int getMenit(String keyMenit) {
+//        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3, 5);
+//        return Integer.parseInt(strMenit);
+//    }
 
     private boolean isLocationPermissionGranted() {
         String[] permission = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -380,18 +384,6 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                 .load(resid)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageTarget);
-    }
-
-    private void tabOneJadwalSholatView() {
-        linearLayoutJadwalSholat = new LinearLayout(this);
-        linearLayoutJadwalSholat.setId(ViewCompat.generateViewId());
-        linearLayoutJadwalSholat.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        linearLayoutJadwalSholat.setOrientation(LinearLayout.VERTICAL);
-
-        View jadwalSholatView = getLayoutInflater().inflate(R.layout.layout_jadwal_sholat, null);
-        linearLayoutJadwalSholat.addView(jadwalSholatView);
-
-        collapsingToolbarLayout.addView(linearLayoutJadwalSholat);
     }
 
     private void tabZeroView() {
@@ -421,13 +413,6 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         constraintSet.connect(tvHariIni.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, setDp(MainActivity.this, 10));
     }
 
-    private void onPositionZeroTab() {
-//        constraintLayout.removeView(linearLayoutJadwalSholat);
-        collapsingToolbarLayout.addView(constraintLayout);
-        linearLayoutCollapsingToolbar.addView(imgHeaderCollapsingToolbar);
-        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-        tabZeroView();
-    }
     private void setTvHeaderDate() {
         tvHeaderDetails = new TextView(this);
         tvHeaderDetails.setId(ViewCompat.generateViewId());
@@ -542,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                                     sendJudulBuku(false, judulBuku);
                             }
 
-                            Toast.makeText(MainActivity.this, "Data berhasil diperbarui",
+                            Toast.makeText(MainActivity.this, "DataSiswandi berhasil diperbarui",
                                     Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
                         } else {

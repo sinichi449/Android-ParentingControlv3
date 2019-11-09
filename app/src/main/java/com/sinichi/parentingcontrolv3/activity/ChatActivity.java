@@ -106,9 +106,9 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
         if (chatAlt.parseDataFromCloud() != null) {
             progressBar.setVisibility(View.GONE);
-            Log.e(Constant.TAG, "Data found in database");
+            Log.e(Constant.TAG, "DataSiswandi found in database");
         } else {
-            Log.e(Constant.TAG, "Data not found in database");
+            Log.e(Constant.TAG, "DataSiswandi not found in database");
         }
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();

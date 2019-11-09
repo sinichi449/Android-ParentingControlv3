@@ -235,7 +235,179 @@
                app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"
                android:layout_marginTop="16dp">
-               <include layout="@layout/layout_jadwal_sholat" />
+
+               <androidx.cardview.widget.CardView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_margin="8dp"
+                   app:cardCornerRadius="12dp"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent">
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:orientation="vertical">
+
+                       <TextView
+                           android:id="@+id/tv_lokasi"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:text="Jakarta"
+                           android:gravity="center"
+                           android:textStyle="bold"
+                           android:textSize="16sp"
+                           android:layout_marginTop="8dp"/>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:weightSum="2"
+                           android:orientation="horizontal"
+                           android:layout_marginTop="5dp"
+                           android:layout_marginBottom="5dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="Subuh"
+                               android:gravity="center"/>
+
+                           <TextView
+                               android:id="@+id/tv_subuh"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="00:00 am"
+                               android:gravity="center"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:weightSum="2"
+                           android:orientation="horizontal"
+                           android:layout_marginBottom="5dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="Syurooq"
+                               android:gravity="center"/>
+
+                           <TextView
+                               android:id="@+id/tv_syurooq"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="00:00 am"
+                               android:gravity="center"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:weightSum="2"
+                           android:orientation="horizontal"
+                           android:layout_marginBottom="5dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="Dhuhr"
+                               android:gravity="center"/>
+
+                           <TextView
+                               android:id="@+id/tv_dhuhr"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="00:00 am"
+                               android:gravity="center"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:weightSum="2"
+                           android:orientation="horizontal"
+                           android:layout_marginBottom="5dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="Ashar"
+                               android:gravity="center"/>
+
+                           <TextView
+                               android:id="@+id/tv_ashar"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="00:00 am"
+                               android:gravity="center"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:weightSum="2"
+                           android:orientation="horizontal"
+                           android:layout_marginBottom="5dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="Maghrib"
+                               android:gravity="center"/>
+
+                           <TextView
+                               android:id="@+id/tv_maghrib"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="00:00 am"
+                               android:gravity="center"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:weightSum="2"
+                           android:orientation="horizontal"
+                           android:layout_marginBottom="5dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="Isya"
+                               android:gravity="center"/>
+
+                           <TextView
+                               android:id="@+id/tv_isya"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:text="00:00 am"
+                               android:gravity="center"
+                               android:layout_marginBottom="8dp"/>
+
+                       </LinearLayout>
+                   </LinearLayout>
+               </androidx.cardview.widget.CardView>
+
            </androidx.constraintlayout.widget.ConstraintLayout>
 
            <androidx.constraintlayout.widget.ConstraintLayout

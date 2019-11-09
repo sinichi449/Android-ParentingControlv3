@@ -2,12 +2,16 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -16,8 +20,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     // Floating button
     private ImageView flbAdd;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,16 +152,10 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         if (username != null
                 && username.equals(Constant.USER_ANAK)) {
             kegiatanRef.addValueEventListener(this);
+            onFlbAddClicked();
         }
-
-        flbAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e(Constant.TAG, "Floating button add clicked");
-
-            }
-        });
         tabZeroView();
+
     }
 
     public void initComponents() {
@@ -172,6 +175,10 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         flbAdd = findViewById(R.id.flb_add);
         linearLayoutCollapsingToolbar = findViewById(R.id.linear_layout_collapsingtoolbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Memuat data, pastikan Smartphone Anda terkoneksi internet");
+        progressDialog.show();
     }
 
     private void onPositionZeroTab() {
@@ -258,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     private void getNamaKota() {
         if (isLocationPermissionGranted()) {
             String username = sharedPrefs.getString(Constant.USERNAME, null);
-                //  Aktifkan GPS
+            //  Aktifkan GPS
             new GpsUtil(MainActivity.this).turnGPSOn(new GpsUtil.onGpsListener() {
                 @Override
                 public void gpsStatus(boolean isGPSEnable) {
@@ -341,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
             DataModel model = snapshot.getValue(DataModel.class);
             if (model != null) {
                 model.setId(snapshot.getKey());
+                progressDialog.dismiss();
             }
             models.add(model);
         }
@@ -392,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     }
 
     private int getMenit(String keyMenit) {
-        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3,5);
+        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3, 5);
         return Integer.parseInt(strMenit);
     }
 
@@ -448,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         tvHariIni.setId(ViewCompat.generateViewId());
         constraintSet.constrainWidth(tvHariIni.getId(), ConstraintSet.WRAP_CONTENT);
         constraintSet.constrainHeight(tvHariIni.getId(), ConstraintSet.WRAP_CONTENT);
-        constraintSet.setMargin(tvHariIni.getId(), ConstraintSet.TOP, setDp(MainActivity.this, 10));
+//        constraintSet.setMargin(tvHariIni.getId(), ConstraintSet.TOP, setDp(MainActivity.this, 10));
         tvHariIni.setText("Hari ini");
         tvHariIni.setTypeface(ResourcesCompat.getFont(this, R.font.arial));
         tvHariIni.setTextColor(getResources().getColor(R.color.colorWhite));
@@ -515,5 +523,102 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                 attachImage(R.drawable.back7, imgTarget);
                 break;
         }
+    }
+
+    private void onFlbAddClicked() {
+        ImageView imgAdd = findViewById(R.id.flb_add);
+        imgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View dialogView = getLayoutInflater().inflate(R.layout.layout_add_data, null);
+                final Context context = MainActivity.this;
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+                dialogBuilder.setView(dialogView);
+                dialogBuilder.setCancelable(false);
+
+                final RadioGroup radioGroup = dialogView.findViewById(R.id.radio_group);
+                final EditText edtJudulBuku = dialogView.findViewById(R.id.edt_judul_buku);
+                final Button btnSubmit = dialogView.findViewById(R.id.btn_ok);
+                Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+                final AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.show();
+
+                btnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String judulBuku = edtJudulBuku.getText().toString();
+                        boolean judulBukuTidakKosong = !edtJudulBuku.getText().toString().equals("");
+                        boolean radioGroupTidakKosong = radioGroup.getCheckedRadioButtonId() != -1;
+                        if (radioGroupTidakKosong && judulBukuTidakKosong) {
+                            int selectedId = radioGroup.getCheckedRadioButtonId();
+                            RadioButton radioButton = dialogView.findViewById(selectedId);
+                            Log.e(Constant.TAG, String.valueOf(radioButton.getText()));
+                            String membantuOrangTua = String.valueOf(radioButton.getText());
+                            switch (membantuOrangTua) {
+                                case "Sudah":
+                                    setMembantuOrangTua(true);
+                                    break;
+                                case "Belum":
+                                    setMembantuOrangTua(false);
+                                    break;
+                            }
+                            Log.e(Constant.TAG, judulBuku);
+                            Toast.makeText(MainActivity.this, "Data berhasil diperbarui",
+                                    Toast.LENGTH_SHORT).show();
+                            alertDialog.dismiss();
+                        } else {
+                            Toast.makeText(context, "Mohon isi form yang kosong!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    private void setMembantuOrangTua(final boolean sudahMembantuOrtu) {
+        kegiatanRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DataModel model = new DataModel();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    model = snapshot.getValue(DataModel.class);
+                    if (model != null) {
+                        model.setId(snapshot.getKey());
+                    }
+                }
+                if (sudahMembantuOrtu) {
+                    kegiatanRef.child(model.getId()).child("membantuOrangTua").setValue(true);
+                } else if (!sudahMembantuOrtu) {
+                    kegiatanRef.child(model.getId()).child("membantuOrangTua").setValue(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "Error occured, hubungi developer untuk mendapatkan bantuan."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SetAppearance.hideNavigationBar(this);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        SetAppearance.hideNavigationBar(this);
     }
 }

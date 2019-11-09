@@ -19,7 +19,8 @@
             android:id="@+id/rb_sudah_membantu_ortu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sudah" />
+            android:text="Sudah"
+            android:checked="true"/>
 
         <RadioButton
             android:id="@+id/rb_belum_membantu_oru"
@@ -41,6 +42,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:background="@color/colorSkyBlue"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorSkyBlue"
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

@@ -259,6 +259,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onResume() {
         mFirebaseAdapter.startListening();
+        SetAppearance.hideNavigationBar(this);
         super.onResume();
     }
 
@@ -270,6 +271,12 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(ChatActivity.this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        SetAppearance.hideNavigationBar(this);
     }
 
 }

@@ -39,7 +39,6 @@ public class LocationService extends Service {
         builder.setSmallIcon(R.drawable.ic_my_location_black_24dp)
                 .setOngoing(true)
                 .setContentTitle("Parenting Control Location")
-                .setContentText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
                 .setAutoCancel(false)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

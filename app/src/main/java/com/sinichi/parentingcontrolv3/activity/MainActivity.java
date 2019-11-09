@@ -329,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
                 final EditText edtKegiatanMembantu = dialogView.findViewById(R.id.edt_membantu_ortu);
                 final Button btnSubmit = dialogView.findViewById(R.id.btn_ok);
                 Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+
                 final AlertDialog alertDialog = dialogBuilder.create();
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 alertDialog.show();

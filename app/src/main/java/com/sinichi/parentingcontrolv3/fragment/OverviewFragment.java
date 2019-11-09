@@ -95,7 +95,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     private CheckBox chkMembantuOrtu, chkSekolah;
 //    private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
     private SharedPreferences sharedPrefs;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editorJadwal;
     private boolean subuh, dhuhr, ashar, maghrib, isya;
     private boolean isGotJson = false;
     private TextView tvQuotes, tvAuthor;
@@ -212,10 +212,10 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                         a = geocoder.getFromLocation(location.getLatitude(),
                                 location.getLongitude(), 1);
                         sharedPrefs = getContext().getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                        editor = sharedPrefs.edit();
+                        editorJadwal = sharedPrefs.edit();
                         locality = a.get(0).getSubAdminArea();
-                        editor.putString(Constant.NAMA_KOTA, locality);
-                        editor.apply();
+                        editorJadwal.putString(Constant.NAMA_KOTA, locality);
+                        editorJadwal.apply();
                         Log.e(Constant.TAG, "Locality: " + a.get(0).getSubAdminArea());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -315,12 +315,12 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                     tvMaghrib.setText(jadwalSholatSiswandi.getMaghrib());
                     tvIsya.setText(jadwalSholatSiswandi.getIsya());
 
-                    editor.putString(Constant.WAKTU_SUBUH, jadwalSholatSiswandi.getSubuh());
-                    editor.putString(Constant.WAKTU_DHUHR, jadwalSholatSiswandi.getDhuhr());
-                    editor.putString(Constant.WAKTU_ASHAR, jadwalSholatSiswandi.getAshar());
-                    editor.putString(Constant.WAKTU_MAGHRIB, jadwalSholatSiswandi.getMaghrib());
-                    editor.putString(Constant.WAKTU_ISYA, jadwalSholatSiswandi.getIsya());
-                    editor.apply();
+                    editorJadwal.putString(Constant.WAKTU_SUBUH, jadwalSholatSiswandi.getSubuh());
+                    editorJadwal.putString(Constant.WAKTU_DHUHR, jadwalSholatSiswandi.getDhuhr());
+                    editorJadwal.putString(Constant.WAKTU_ASHAR, jadwalSholatSiswandi.getAshar());
+                    editorJadwal.putString(Constant.WAKTU_MAGHRIB, jadwalSholatSiswandi.getMaghrib());
+                    editorJadwal.putString(Constant.WAKTU_ISYA, jadwalSholatSiswandi.getIsya());
+                    editorJadwal.apply();
                     isGotJson = true;
                     progressDialog.dismiss();
                 } else {
@@ -378,12 +378,14 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                     Log.e(Constant.TAG, "Maghrib :" + jamMaghrib);
                     Log.e(Constant.TAG, "Isya' :" + jamIsya);
 
-                    editor.putString(Constant.WAKTU_SUBUH, jamSubuh);
-                    editor.putString(Constant.WAKTU_DHUHR, jamDhuhr);
-                    editor.putString(Constant.WAKTU_ASHAR, jamAshar);
-                    editor.putString(Constant.WAKTU_MAGHRIB, jamMaghrib);
-                    editor.putString(Constant.WAKTU_ISYA, jamIsya);
-                    editor.apply();
+                    SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editorJadwal = sharedPreferences.edit();
+                    editorJadwal.putString(Constant.WAKTU_SUBUH, jamSubuh);
+                    editorJadwal.putString(Constant.WAKTU_DHUHR, jamDhuhr);
+                    editorJadwal.putString(Constant.WAKTU_ASHAR, jamAshar);
+                    editorJadwal.putString(Constant.WAKTU_MAGHRIB, jamMaghrib);
+                    editorJadwal.putString(Constant.WAKTU_ISYA, jamIsya);
+                    editorJadwal.apply();
 
                     isGotJson = true;
                     progressDialog.dismiss();
@@ -534,6 +536,17 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
+
+        TextView tvHeaderStatus = dialogView.findViewById(R.id.tv_header_status);
+        String username = sharedPrefs.getString(Constant.USERNAME, null);
+        String header = "";
+        if (username.equals(Constant.USER_ORANG_TUA)) {
+            header = "Status Anak Anda Hari Ini";
+            tvHeaderStatus.setText(header);
+        } else if (username.equals(Constant.USER_ANAK)) {
+            header = "Status Kamu Hari Ini";
+            tvHeaderStatus.setText(header);
+        }
 
         setCheckedTextViewSholat(dialogView);
         setCheckedTextViewMembantuOrtu(dialogView);

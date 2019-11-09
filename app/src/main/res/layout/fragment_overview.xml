@@ -28,16 +28,18 @@
                app:layout_constraintEnd_toEndOf="parent">
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/cardview_overview"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   app:layout_constraintTop_toTopOf="parent"
-                   app:layout_constraintStart_toStartOf="parent"
+                   android:layout_margin="8dp"
                    app:cardCornerRadius="12dp"
-                   android:layout_margin="8dp">
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent">
 
                    <androidx.constraintlayout.widget.ConstraintLayout
                        android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
+                       android:layout_height="wrap_content"
+                       android:layout_marginBottom="24dp">
 
                        <TableRow
                            android:id="@+id/tableRow"
@@ -84,7 +86,7 @@
                            android:layout_height="wrap_content"
                            android:layout_marginStart="16dp"
                            android:layout_marginLeft="16dp"
-                           android:text="Sholat"
+                           android:text="Religius\n(Sholat)"
                            android:textColor="#000000"
                            app:fontFamily="@font/arial"
                            app:layout_constraintBottom_toBottomOf="@+id/imageView"
@@ -109,7 +111,7 @@
                            android:layout_height="wrap_content"
                            android:layout_marginStart="13dp"
                            android:layout_marginLeft="13dp"
-                           android:text="Membantu Orang Tua"
+                           android:text="Gotong Royong\n(Membantu Orangtua)"
                            android:textColor="#000000"
                            app:fontFamily="@font/arial"
                            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -123,12 +125,12 @@
                            android:layout_marginStart="16dp"
                            android:layout_marginLeft="16dp"
                            android:layout_marginBottom="8dp"
-                           android:text="Sekolah"
                            android:textColor="#000000"
                            app:fontFamily="@font/arial"
                            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                            app:layout_constraintStart_toEndOf="@+id/imageView3"
-                           app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                           app:layout_constraintTop_toTopOf="@+id/imageView3"
+                           android:text="Integritas dan Mandiri\n(Literasi)" />
 
                        <TextView
                            android:id="@+id/tv_hari"
@@ -302,7 +304,7 @@
                    android:layout_height="wrap_content"
                    android:fontFamily="@font/arial_rounded"
                    android:textColor="@color/colorBlack"
-                   android:text="Lorem ipsum dolor sit amet, consectetur, adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                   android:text="..."
                    app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
                    app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
                    app:layout_constraintTop_toTopOf="@id/guideline_horizontal_atas"
@@ -312,7 +314,7 @@
                    android:id="@+id/tv_author"
                    android:layout_width="0dp"
                    android:layout_height="wrap_content"
-                   android:text="Bagus Eka Saputra"
+                   android:text="..."
                    android:fontFamily="@font/arial"
                    android:textStyle="italic"
                    android:textColor="@color/colorBlack"

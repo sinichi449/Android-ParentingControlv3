@@ -31,4 +31,7 @@ public class Constant {
     public static final String PEREMPUAN = "Perempuan";
     public static final String IS_BARU_BUKA_APLIKASI = "FirstTimeOpen";
     public static final String TAG = "Status";
+    public static final String JUDULBUKU_CHILD = "judulBuku";
+    public static final String KEGIATANMEMBANTU_CHILD = "kegiatanMembantu";
+    public static final String LITERASI = "literasi";
 }

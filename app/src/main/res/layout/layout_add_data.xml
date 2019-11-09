@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/layout_rounded"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:text="Apakah kamu sudah membantu orang tua hari ini?" />
 
     <RadioGroup
-        android:id="@+id/radio_group"
+        android:id="@+id/rg_membantu_ortu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -30,12 +30,45 @@
 
     </RadioGroup>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apakah kamu sudah melakukan kegiatan literasi hari ini?"
+        android:layout_marginTop="12dp"/>
+
+    <RadioGroup
+        android:id="@+id/rg_literasi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sudah" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belum" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/edt_membantu_ortu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Kegiatan membantu ortu"
+        android:inputType="textMultiLine"
+        android:layout_marginTop="12dp"
+        />
+
     <EditText
         android:id="@+id/edt_judul_buku"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Judul buku"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp"
+        android:inputType="textMultiLine"/>
 
     <Button
         android:id="@+id/btn_ok"

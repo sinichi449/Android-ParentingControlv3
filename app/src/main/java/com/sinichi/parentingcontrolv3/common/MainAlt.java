@@ -79,7 +79,7 @@ public class MainAlt implements d {
                         }
                         dataViewHolder.tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                         dataViewHolder.chkMembantuOrtu.setChecked(dataModel.isMembantuOrangTua());
-                        dataViewHolder.chkSekolah.setChecked(dataModel.isSekolah());
+                        dataViewHolder.chkSekolah.setChecked(dataModel.isLiterasi());
                         dataViewHolder.chkMembantuOrtu.setEnabled(false);
                         dataViewHolder.chkSekolah.setEnabled(false);
                     }

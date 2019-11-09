@@ -16,12 +16,14 @@ public class DataModel {
     private boolean isSholatMaghrib;
     private boolean isSholatIsya;
     private boolean membantuOrangTua;
-    private boolean sekolah;
+    private String kegiatanMembantu;
+    private boolean literasi;
+    private String judulBuku;
 
     public DataModel() {
     }
 
-    public DataModel(String tanggal, String hari, String bulan, String tahun, boolean isSholatSubuh, boolean isSholatDhuhr, boolean isSholatAshar, boolean isSholatMaghrib, boolean isSholatIsya, boolean membantuOrangTua, boolean sekolah) {
+    public DataModel(String tanggal, String hari, String bulan, String tahun, boolean isSholatSubuh, boolean isSholatDhuhr, boolean isSholatAshar, boolean isSholatMaghrib, boolean isSholatIsya, boolean membantuOrangTua, String kegiatanMembantu, boolean literasi, String judulBuku) {
         this.tanggal = tanggal;
         this.hari = hari;
         this.bulan = bulan;
@@ -32,7 +34,9 @@ public class DataModel {
         this.isSholatMaghrib = isSholatMaghrib;
         this.isSholatIsya = isSholatIsya;
         this.membantuOrangTua = membantuOrangTua;
-        this.sekolah = sekolah;
+        this.kegiatanMembantu = kegiatanMembantu;
+        this.literasi = literasi;
+        this.judulBuku = judulBuku;
     }
 
     public String getId() {
@@ -69,6 +73,14 @@ public class DataModel {
 
     public String getTahun() {
         return tahun;
+    }
+
+    public String getJudulBuku() {
+        return judulBuku;
+    }
+
+    public void setJudulBuku(String judulBuku) {
+        this.judulBuku = judulBuku;
     }
 
     public void setTahun(String tahun) {
@@ -123,11 +135,19 @@ public class DataModel {
         this.membantuOrangTua = membantuOrangTua;
     }
 
-    public boolean isSekolah() {
-        return sekolah;
+    public String getKegiatanMembantu() {
+        return kegiatanMembantu;
     }
 
-    public void setSekolah(boolean sekolah) {
-        this.sekolah = sekolah;
+    public void setKegiatanMembantu(String kegiatanMembantu) {
+        this.kegiatanMembantu = kegiatanMembantu;
+    }
+
+    public boolean isLiterasi() {
+        return literasi;
+    }
+
+    public void setLiterasi(boolean literasi) {
+        this.literasi = literasi;
     }
 }

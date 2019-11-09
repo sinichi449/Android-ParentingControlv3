@@ -149,10 +149,15 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         year = String.valueOf(calendar.get(Calendar.YEAR));
         // Lakukan operasi berikut jika username == anak
         String username = sharedPrefs.getString(Constant.USERNAME, null); // Get nama username
+        boolean isUsernameAnak = username.equals(Constant.USER_ANAK);
+        boolean isUsernameOrangTua = username.equals(Constant.USER_ORANG_TUA);
+        kegiatanRef.addValueEventListener(this);
         if (username != null
-                && username.equals(Constant.USER_ANAK)) {
-            kegiatanRef.addValueEventListener(this);
+                && isUsernameAnak) {
             onFlbAddClicked();
+        } else if (username != null
+                && isUsernameOrangTua) {
+            flbAdd.setVisibility(View.GONE);
         }
         tabZeroView();
 
@@ -180,57 +185,6 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         progressDialog.setMessage("Memuat data, pastikan Smartphone Anda terkoneksi internet");
         progressDialog.show();
     }
-
-    private void onPositionZeroTab() {
-//        constraintLayout.removeView(linearLayoutJadwalSholat);
-        collapsingToolbarLayout.addView(constraintLayout);
-        linearLayoutCollapsingToolbar.addView(imgHeaderCollapsingToolbar);
-        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
-        tabZeroView();
-    }
-
-    private void onPositionOneTab() {
-//        linearLayoutCollapsingToolbar.removeView(imgHeaderCollapsingToolbar);
-//        constraintLayout.removeView(tvHariIni);
-//        constraintLayout.removeView(tvHeaderDate);
-//        constraintLayout.removeView(tvHeaderDetails);
-        collapsingToolbarLayout.removeView(constraintLayout);
-        linearLayoutCollapsingToolbar.removeView(imgHeaderCollapsingToolbar);
-        tabOneJadwalSholatView();
-    }
-
-//    @Override
-//    public void onTabSelected(TabLayout.Tab tab) {
-//        // Get tab position
-//        int position = tab.getPosition();
-//        // Jika posisi tab 0, set ke calendar header
-//        // Remove chartview
-//        if (position == 0) {
-//            onPositionZeroTab();
-//        // JIka posisi 1, maka ganti chartview
-//        } else if (position == 1) {
-//            onPositionOneTab();
-//        }
-//    }
-//
-//    @Override
-//    public void onTabUnselected(TabLayout.Tab tab) {
-//        // Hapus semua view dari memory glide
-//        Glide.get(MainActivity.this).clearMemory();
-//    }
-//
-//    @Override
-//    public void onTabReselected(TabLayout.Tab tab) {
-//        int position = tab.getPosition();
-//        // Jika posisi tab 0, ganti ke Calendar Header
-//        if (position == 0) {
-//            onPositionZeroTab();
-//
-//        // Jika posisi tab 1, ganti ke chartview
-//        } else if (position == 1) {
-//            onPositionOneTab();
-//        }
-//    }
 
     private void getLokasi() {
         // Dapatkan lokasi
@@ -467,6 +421,13 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         constraintSet.connect(tvHariIni.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, setDp(MainActivity.this, 10));
     }
 
+    private void onPositionZeroTab() {
+//        constraintLayout.removeView(linearLayoutJadwalSholat);
+        collapsingToolbarLayout.addView(constraintLayout);
+        linearLayoutCollapsingToolbar.addView(imgHeaderCollapsingToolbar);
+        setBackgroundReferToDays(imgHeaderCollapsingToolbar);
+        tabZeroView();
+    }
     private void setTvHeaderDate() {
         tvHeaderDetails = new TextView(this);
         tvHeaderDetails.setId(ViewCompat.generateViewId());
@@ -536,8 +497,10 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                 dialogBuilder.setView(dialogView);
                 dialogBuilder.setCancelable(false);
 
-                final RadioGroup radioGroup = dialogView.findViewById(R.id.radio_group);
+                final RadioGroup rgMembantuOrtu = dialogView.findViewById(R.id.rg_membantu_ortu);
+                final RadioGroup rgLiterasi = dialogView.findViewById(R.id.rg_literasi);
                 final EditText edtJudulBuku = dialogView.findViewById(R.id.edt_judul_buku);
+                final EditText edtKegiatanMembantu = dialogView.findViewById(R.id.edt_membantu_ortu);
                 final Button btnSubmit = dialogView.findViewById(R.id.btn_ok);
                 Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
                 final AlertDialog alertDialog = dialogBuilder.create();
@@ -548,22 +511,37 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                     @Override
                     public void onClick(View v) {
                         String judulBuku = edtJudulBuku.getText().toString();
+                        String kegiatanMembantuOrtu = edtKegiatanMembantu.getText().toString();
                         boolean judulBukuTidakKosong = !edtJudulBuku.getText().toString().equals("");
-                        boolean radioGroupTidakKosong = radioGroup.getCheckedRadioButtonId() != -1;
-                        if (radioGroupTidakKosong && judulBukuTidakKosong) {
-                            int selectedId = radioGroup.getCheckedRadioButtonId();
-                            RadioButton radioButton = dialogView.findViewById(selectedId);
-                            Log.e(Constant.TAG, String.valueOf(radioButton.getText()));
-                            String membantuOrangTua = String.valueOf(radioButton.getText());
+                        boolean radioGroupTidakKosong = rgMembantuOrtu.getCheckedRadioButtonId() != -1;
+                        boolean radioGroupLiterasiTidakKosong = rgLiterasi.getCheckedRadioButtonId() != -1;
+                        if (radioGroupTidakKosong && judulBukuTidakKosong && radioGroupLiterasiTidakKosong) {
+                            int selectedIdMembantuOrtu = rgMembantuOrtu.getCheckedRadioButtonId();
+                            int selectedIdLiterasi = rgLiterasi.getCheckedRadioButtonId();
+                            RadioButton radioButtoMembantuOrtu = dialogView.findViewById(selectedIdMembantuOrtu);
+                            RadioButton radioButtonLiterasi = dialogView.findViewById(selectedIdLiterasi);
+
+                            Log.e(Constant.TAG, String.valueOf(radioButtoMembantuOrtu.getText()));
+
+                            String membantuOrangTua = String.valueOf(radioButtoMembantuOrtu.getText());
                             switch (membantuOrangTua) {
                                 case "Sudah":
-                                    setMembantuOrangTua(true);
+                                    setMembantuOrangTua(true, kegiatanMembantuOrtu);
                                     break;
                                 case "Belum":
-                                    setMembantuOrangTua(false);
+                                    setMembantuOrangTua(false, kegiatanMembantuOrtu);
                                     break;
                             }
-                            Log.e(Constant.TAG, judulBuku);
+
+                            String sudahLiterasi = String.valueOf(radioButtonLiterasi.getText());
+                            switch (sudahLiterasi) {
+                                case "Sudah":
+                                    sendJudulBuku(true, judulBuku);
+                                    break;
+                                case "Belum":
+                                    sendJudulBuku(false, judulBuku);
+                            }
+
                             Toast.makeText(MainActivity.this, "Data berhasil diperbarui",
                                     Toast.LENGTH_SHORT).show();
                             alertDialog.dismiss();
@@ -584,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         });
     }
 
-    private void setMembantuOrangTua(final boolean sudahMembantuOrtu) {
+    private void setMembantuOrangTua(final boolean sudahMembantuOrtu, final String kegiatan) {
         kegiatanRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -595,10 +573,38 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                         model.setId(snapshot.getKey());
                     }
                 }
-                if (sudahMembantuOrtu) {
+                if (sudahMembantuOrtu && !kegiatan.equals("")) {
                     kegiatanRef.child(model.getId()).child("membantuOrangTua").setValue(true);
+                    kegiatanRef.child(model.getId()).child(Constant.KEGIATANMEMBANTU_CHILD).setValue(kegiatan);
                 } else if (!sudahMembantuOrtu) {
                     kegiatanRef.child(model.getId()).child("membantuOrangTua").setValue(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "Error occured, hubungi developer untuk mendapatkan bantuan."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendJudulBuku(final boolean sudahLiterasi, final String judulBuku) {
+        kegiatanRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                DataModel model = new DataModel();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    model = snapshot.getValue(DataModel.class);
+                    if (model != null) {
+                        model.setId(snapshot.getKey());
+                    }
+                }
+                if (!judulBuku.equals("")) {
+                    kegiatanRef.child(model.getId()).child(Constant.JUDULBUKU_CHILD).setValue(judulBuku);
+                }
+                if (sudahLiterasi) {
+                    kegiatanRef.child(model.getId()).child(Constant.LITERASI).setValue(sudahLiterasi);
                 }
             }
 

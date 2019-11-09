@@ -1,18 +1,24 @@
 package com.sinichi.parentingcontrolv3.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,6 +76,7 @@ public class OverviewFragment extends Fragment {
     private boolean subuh, dhuhr, ashar, maghrib, isya;
     private boolean isGotJson = false;
     private TextView tvQuotes, tvAuthor;
+    private int index;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -110,7 +117,7 @@ public class OverviewFragment extends Fragment {
         showTodayData();
         getJadwalSholat(getLocalityName());
         getQuotes();
-
+        setOverviewOnClicks();
 
         return root;
     }
@@ -143,7 +150,7 @@ public class OverviewFragment extends Fragment {
                             || dataModel.getTahun().equals(year);
                 }
                 if (available) {
-                    int index = models.size() - 1;
+                    index = models.size() - 1;
                     int tanggal = Integer.parseInt(models.get(index).getTanggal());
                     if (tanggal < 10) {
                         tvTanggal.setGravity(Gravity.CENTER);
@@ -166,7 +173,7 @@ public class OverviewFragment extends Fragment {
                     }
                     tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                     chkMembantuOrtu.setChecked(models.get(index).isMembantuOrangTua());
-                    chkSekolah.setChecked(models.get(index).isSekolah());
+                    chkSekolah.setChecked(models.get(index).isLiterasi());
                     chkMembantuOrtu.setEnabled(false);
                     chkSekolah.setEnabled(false);
                 }
@@ -254,5 +261,76 @@ public class OverviewFragment extends Fragment {
 
             }
         });
+    }
+
+    private void setOverviewOnClicks() {
+        CardView cardView = root.findViewById(R.id.cardview_overview);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchDialogRekapHariIni();
+            }
+        });
+    }
+
+    private void launchDialogRekapHariIni() {
+        Context context = getContext();
+        View dialogView = getLayoutInflater().inflate(R.layout.layout_dialog_data_hariini, null);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setView(dialogView)
+                .setCancelable(true);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+
+        setCheckedTextViewSholat(dialogView);
+        setCheckedTextViewMembantuOrtu(dialogView);
+        setCheckedTextViewLiterasi(dialogView);
+    }
+
+    private void setCheckedTextViewSholat(View v) {
+        CheckedTextView chktvSubuh = v.findViewById(R.id.chktv_subuh);
+        CheckedTextView chktvDhuhur = v.findViewById(R.id.chktv_dhuhur);
+        CheckedTextView chktvAshar = v.findViewById(R.id.chktv_ashar);
+        CheckedTextView chktvMaghrib = v.findViewById(R.id.chktv_maghrib);
+        CheckedTextView chktvIsya = v.findViewById(R.id.chktv_isya);
+
+        if (models.get(index).isSholatSubuh()) {
+            chktvSubuh.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
+        if (models.get(index).isSholatDhuhr()) {
+            chktvDhuhur.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
+        if (models.get(index).isSholatAshar()) {
+            chktvAshar.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
+        if (models.get(index).isSholatMaghrib()) {
+            chktvMaghrib.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
+        if (models.get(index).isSholatIsya()) {
+            chktvIsya.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
+    }
+
+    private void setCheckedTextViewMembantuOrtu(View v) {
+        CheckedTextView chktvMembantuOrtu = v.findViewById(R.id.chktv_membantu_ortu);
+        EditText edtDeskripsiMembantuOrtu = v.findViewById(R.id.edt_deskripsi_membantu_ortu);
+        if (models.get(index).isMembantuOrangTua()) {
+            chktvMembantuOrtu.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
+        if (models.get(index).getKegiatanMembantu()!= null) {
+            edtDeskripsiMembantuOrtu.setText(models.get(index).getKegiatanMembantu());
+        }
+    }
+
+    private void setCheckedTextViewLiterasi(View v) {
+        CheckedTextView chktvLiterasi = v.findViewById(R.id.chktv_literasi);
+        EditText edtDeskripsiLiterasi = v.findViewById(R.id.edt_deskripsi_literasi);
+        if (models.get(index).getJudulBuku() != null) {
+            edtDeskripsiLiterasi.setText(models.get(index).getJudulBuku());
+        }
+        if (models.get(index).isLiterasi()) {
+            chktvLiterasi.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        }
     }
 }

@@ -53,6 +53,8 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -103,7 +105,8 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     private Context context;
     private boolean sudahSholatSubuh, sudahSholatDhuhr, sudahSholatAshar, sudahSholatMaghrib, sudahSholatIsya;
     private String jamSekarang, menitSekarang, waktuSekarang;
-    private String waktuSubuh, waktuDhuhr, waktuAshar, waktuMaghrib, waktuIsya;
+    private String jamSubuh, jamSyurooq, jamDhuhr, jamAshar, jamMaghrib, jamIsya, waktuSubuh, waktuDhuhr, waktuAshar, waktuMaghrib, waktuIsya;
+    private String formattedJam;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -176,7 +179,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                     }
                     server = serverJadwalSholat.getServer();
                 }
-                Log.e(Constant.TAG, server);
+                Log.e(Constant.TAG, "Server Jadwal Sholat: " + server);
                 boolean isServerMuslimSalat = server.equals("muslimsalat");
                 boolean isServerSiswandi = server.equals("siswandi");
                 if (isServerMuslimSalat) {
@@ -213,7 +216,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                         locality = a.get(0).getSubAdminArea();
                         editor.putString(Constant.NAMA_KOTA, locality);
                         editor.apply();
-                        Log.e("Locality", a.get(0).getSubAdminArea());
+                        Log.e(Constant.TAG, "Locality: " + a.get(0).getSubAdminArea());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -354,31 +357,41 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                     TextView tvMaghrib = root.findViewById(R.id.tv_maghrib);
                     TextView tvIsya = root.findViewById(R.id.tv_isya);
 
-                    tvLokasi.setText(kota);
-                    tvSubuh.setText(itemMuslimSalats.get(0).getSubuh());
-                    tvSyurooq.setText(itemMuslimSalats.get(0).getSyurooq());
-                    tvDhuhr.setText(itemMuslimSalats.get(0).getDhuhr());
-                    tvAshar.setText(itemMuslimSalats.get(0).getAshar());
-                    tvMaghrib.setText(itemMuslimSalats.get(0).getMaghrib());
-                    tvIsya.setText(itemMuslimSalats.get(0).getIsya());
-                    Log.e(Constant.TAG, "Subuh :" + itemMuslimSalats.get(0).getSubuh());
-                    Log.e(Constant.TAG, "Dhuhr :" + itemMuslimSalats.get(0).getDhuhr());
-                    Log.e(Constant.TAG, "Ashar :" + itemMuslimSalats.get(0).getAshar());
-                    Log.e(Constant.TAG, "Maghrib :" + itemMuslimSalats.get(0).getMaghrib());
-                    Log.e(Constant.TAG, "Isya' :" + itemMuslimSalats.get(0).getIsya());
+                    jamSubuh = formatTo24Hour(itemMuslimSalats.get(0).getSubuh());
+                    jamSyurooq = formatTo24Hour(itemMuslimSalats.get(0).getSyurooq());
+                    jamDhuhr = formatTo24Hour(itemMuslimSalats.get(0).getDhuhr());
+                    jamAshar = formatTo24Hour(itemMuslimSalats.get(0).getAshar());
+                    jamMaghrib = formatTo24Hour(itemMuslimSalats.get(0).getMaghrib());
+                    jamIsya = formatTo24Hour(itemMuslimSalats.get(0).getIsya());
 
-                    editor.putString(Constant.WAKTU_SUBUH, itemMuslimSalats.get(0).getSubuh());
-                    editor.putString(Constant.WAKTU_DHUHR, itemMuslimSalats.get(0).getDhuhr());
-                    editor.putString(Constant.WAKTU_ASHAR, itemMuslimSalats.get(0).getAshar());
-                    editor.putString(Constant.WAKTU_MAGHRIB, itemMuslimSalats.get(0).getMaghrib());
-                    editor.putString(Constant.WAKTU_ISYA, itemMuslimSalats.get(0).getIsya());
+                    tvLokasi.setText(kota);
+                    tvSubuh.setText(jamSubuh);
+                    tvSyurooq.setText(jamSyurooq);
+                    tvDhuhr.setText(jamDhuhr);
+                    tvAshar.setText(jamAshar);
+                    tvMaghrib.setText(jamMaghrib);
+                    tvIsya.setText(jamIsya);
+                    Log.e(Constant.TAG, "Subuh :" + jamSubuh);
+                    Log.e(Constant.TAG, "Syurooq :" + jamSyurooq);
+                    Log.e(Constant.TAG, "Dhuhr :" + jamDhuhr);
+                    Log.e(Constant.TAG, "Ashar :" + jamAshar);
+                    Log.e(Constant.TAG, "Maghrib :" + jamMaghrib);
+                    Log.e(Constant.TAG, "Isya' :" + jamIsya);
+
+                    editor.putString(Constant.WAKTU_SUBUH, jamSubuh);
+                    editor.putString(Constant.WAKTU_DHUHR, jamDhuhr);
+                    editor.putString(Constant.WAKTU_ASHAR, jamAshar);
+                    editor.putString(Constant.WAKTU_MAGHRIB, jamMaghrib);
+                    editor.putString(Constant.WAKTU_ISYA, jamIsya);
                     editor.apply();
+
                     isGotJson = true;
                     progressDialog.dismiss();
                 } else {
                     Toast.makeText(getContext(), "Data sholat di muslimsalat kosong",
                                 Toast.LENGTH_SHORT).show();
                 }
+
             }
 
             @Override
@@ -388,18 +401,6 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
             }
         });
 
-    }
-
-    // TODO: Muslim salat time format
-    private int getJam(String keyWaktu) {
-        String strJam = sharedPrefs.getString(keyWaktu, "Kosong").substring(0, 2);
-        return Integer.parseInt(strJam);
-    }
-
-    // TODO: Muslim salat time format
-    private int getMenit(String keyMenit) {
-        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3, 5);
-        return Integer.parseInt(strMenit);
     }
 
     private void makeNotification(String waktuSholat, int notificationId, int requestCode, int jam, int menit) {
@@ -425,8 +426,12 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
         if (isUserAnak) {
             if (!waktuSubuh.equals("kosong")
                     && !sudahSholatSubuh) {
-                makeNotification(Constant.WAKTU_SUBUH, 1, 10, getJam(Constant.WAKTU_SUBUH), getMenit(Constant.WAKTU_SUBUH));
+                int jamSubuh = getJam(Constant.WAKTU_SUBUH);
+                int menitSubuh = getMenit(Constant.WAKTU_SUBUH);
+                String waktuSubuh = jamSubuh + ":" + menitSubuh;
+                makeNotification(Constant.WAKTU_SUBUH, 1, 10, jamSubuh, menitSubuh);
                 Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_SUBUH);
+                Log.e(Constant.TAG, "Notifikasi Subuh: " + waktuSubuh);
             }
 
             if (!waktuDhuhr.equals("kosong")
@@ -437,8 +442,12 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
 
             if (!waktuAshar.equals("kosong")
                     && !sudahSholatAshar) {
-                makeNotification(Constant.WAKTU_ASHAR, 3, 30, getJam(Constant.WAKTU_ASHAR), getMenit(Constant.WAKTU_ASHAR));
-                Log.e("Msg", "Belum sholat " + Constant.WAKTU_ASHAR);
+                int jamAshar = getJam(Constant.WAKTU_ASHAR);
+                int menitAshar = getMenit(Constant.WAKTU_ASHAR);
+                String waktuAshar = jamAshar + ":" + menitAshar;
+                makeNotification(Constant.WAKTU_ASHAR, 3, 30, jamAshar, menitAshar);
+                Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_ASHAR);
+                Log.e(Constant.TAG, "Notifikasi Ashar: " + waktuAshar);
             }
 
             if (!waktuMaghrib.equals("kosong")
@@ -453,6 +462,28 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                 Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
             }
         }
+    }
+
+    private String formatTo24Hour(String waktu) {
+        SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat date24Format = new SimpleDateFormat("HH:mm");
+        String hasil = "";
+        try {
+            hasil = (date24Format.format(date12Format.parse(waktu)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return hasil;
+    }
+
+    private int getJam(String keyWaktu) {
+        String strJam = sharedPrefs.getString(keyWaktu, "Kosong").substring(0, 2);
+        return Integer.parseInt(strJam);
+    }
+
+    private int getMenit(String keyMenit) {
+        String strMenit = sharedPrefs.getString(keyMenit, "Kosong").substring(3, 5);
+        return Integer.parseInt(strMenit);
     }
 
     private void getQuotes() {
@@ -593,6 +624,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
             waktuSekarang = jamSekarang + ":" + menitSekarang;
 
             SharedPreferences sharedPrefs = context.getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+
             waktuSubuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, "kosong");
             waktuDhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, "kosong");
             waktuAshar = sharedPrefs.getString(Constant.WAKTU_ASHAR, "kosong");

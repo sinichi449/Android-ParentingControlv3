@@ -40,9 +40,9 @@ public class NotificationOnClick extends AppCompatActivity {
         waktuSholat = getIntent().getStringExtra("notif_sholat");
         Log.e("Waktu", waktuSholat);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Lorem ipsum")
-                .setMessage("Apakah Anda sudah melakukan sholat " + waktuSholat + " ?\n\n WARNING: Apabila Anda klik cancel, maka data Anda tidak akan ditulis lagi dan dianggap tidak melakukan sholat tertentu!")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle("Perbarui data sholat")
+                .setMessage("Apakah kamu sudah melakukan sholat " + waktuSholat + " ?\n\n WARNING: Apabila kamu klik Tidak, maka tidak akan bisa diperbarui lagi dan dianggap tidak melakukan sholat tertentu.")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: Change the database
@@ -89,7 +89,7 @@ public class NotificationOnClick extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                        Intent intent = new Intent(NotificationOnClick.this, MainActivity.class);

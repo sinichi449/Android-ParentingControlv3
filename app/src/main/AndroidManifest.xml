@@ -50,7 +50,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.MainActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".TentangActivity" />
+        <activity android:name=".activity.TentangActivity" />
 
         <receiver
             android:name=".service.AlarmNotificationReceiver"

@@ -30,19 +30,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.ChatAlt;
 import com.sinichi.parentingcontrolv3.common.ChatViewHolder;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
+import com.sinichi.parentingcontrolv3.model.TextChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -96,6 +98,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         SetAppearance.hideNavigationBar(this);
         initComponents();
         setBottomNavigationAction(this, mBottomNavigation);
+        listenChangedData();
 
         // INITIALIZE FIREBASE
         // MUST BE DECLARED
@@ -154,19 +157,10 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        initPubnub();
         createChannel();
 //        Intent intent = new Intent(this, FirebaseMessagingService.class);
 //        startService(intent);
 
-    }
-
-    private void initPubnub() {
-        PNConfiguration pnConfiguration = new PNConfiguration();
-        pnConfiguration.setPublishKey("pub-c-0c9db853-7f39-4610-a86e-7720d8908899");
-        pnConfiguration.setSubscribeKey("pub-c-0c9db853-7f39-4610-a86e-7720d8908899");
-        pnConfiguration.setSecure(false);
-        pubnub = new PubNub(pnConfiguration);
     }
 
 
@@ -278,5 +272,32 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onWindowFocusChanged(hasFocus);
         SetAppearance.hideNavigationBar(this);
     }
+
+    private void listenChangedData() {
+        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference messageRef = mDatabaseReference.child(mFirebaseUser.getUid()).child(Constant.MESSAGES_CHILD);
+        messageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextChatModel textChatModel = new TextChatModel();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    textChatModel = snapshot.getValue(TextChatModel.class);
+                    if (textChatModel != null) {
+                        textChatModel.setId(snapshot.getKey());
+                    }
+                }
+
+                Log.e(Constant.TAG, "Username chat: " + textChatModel.getName());
+                Log.e(Constant.TAG, "Message chat: " + textChatModel.getText());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 }

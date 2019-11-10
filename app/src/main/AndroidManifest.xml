@@ -66,11 +66,14 @@
         <service
             android:name=".service.LocationService"
             android:enabled="true" />
-        <service android:name=".service.FirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGE_EVENT" />
-            </intent-filter>
-        </service>
+<!--        <service android:name=".service.FirebaseMessagingService">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.firebase.MESSAGE_EVENT" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
+        <service
+            android:name=".service.MessageNotificationReceiver"
+            android:enabled="true" />
     </application>
 
 </manifest>

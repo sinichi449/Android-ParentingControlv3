@@ -45,5 +45,6 @@ public class Constant {
     public static final String TIDAK_SHOLAT_ASHAR = "TidakSholatAshar";
     public static final String TIDAK_SHOLAT_MAGHRIB = "TidakSholatMaghrib";
     public static final String TIDAK_SHOLAT_ISYA = "TidakSholatIsya";
-
+    public static final String MESSAGE_USERNAME = "UsernameChat";
+    public static final String MESSAGE_TEXT = "TextChat";
 }

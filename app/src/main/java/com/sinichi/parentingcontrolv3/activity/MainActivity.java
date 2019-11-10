@@ -52,6 +52,7 @@ import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
 import com.sinichi.parentingcontrolv3.service.LocationService;
+import com.sinichi.parentingcontrolv3.service.MessageNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 //        tabLayout.addOnTabSelectedListener(this);
         getNamaKota();
         startLocationService();
+        startChatService();
         // Get user
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
@@ -194,13 +196,14 @@ public class MainActivity extends AppCompatActivity {
         String username = sharedPrefs.getString(Constant.USERNAME, null);
         if (username != null && username.equals(Constant.USER_ANAK)) {
             Intent intent = new Intent(this, LocationService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent);
-            } else {
-                startService(intent);
-            }
+            startService(intent);
             Log.e("Status", "User saat ini " + username);
         }
+    }
+
+    private void startChatService() {
+        Intent intent = new Intent(this, MessageNotificationReceiver.class);
+        startService(intent);
     }
 
     private boolean isLocationPermissionGranted() {

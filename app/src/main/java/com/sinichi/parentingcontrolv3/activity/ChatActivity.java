@@ -140,6 +140,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         });
 
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageRecyclerView.setHasFixedSize(true);
 
         chatAlt.enableSendButtonOnUserTyping(mMessageEditText, mSendButton);
 

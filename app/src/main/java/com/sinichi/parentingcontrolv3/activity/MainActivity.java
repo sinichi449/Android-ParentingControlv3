@@ -51,8 +51,8 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
+import com.sinichi.parentingcontrolv3.service.ChatNotificationReceiver;
 import com.sinichi.parentingcontrolv3.service.LocationService;
-import com.sinichi.parentingcontrolv3.service.MessageNotificationReceiver;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startChatService() {
-        Intent intent = new Intent(this, MessageNotificationReceiver.class);
+        Intent intent = new Intent(this, ChatNotificationReceiver.class);
         startService(intent);
     }
 

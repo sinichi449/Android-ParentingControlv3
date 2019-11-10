@@ -26,7 +26,7 @@ import com.sinichi.parentingcontrolv3.activity.ChatActivity;
 import com.sinichi.parentingcontrolv3.model.TextChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
-public class MessageNotificationReceiver extends Service {
+public class ChatNotificationReceiver extends Service {
     private String username;
 
     @Override
@@ -68,7 +68,7 @@ public class MessageNotificationReceiver extends Service {
     }
 
     private void createNotification(String username, String message) {
-        Context context = MessageNotificationReceiver.this;
+        Context context = ChatNotificationReceiver.this;
         Intent intent = new Intent(this, ChatActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 25, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "message_channel");

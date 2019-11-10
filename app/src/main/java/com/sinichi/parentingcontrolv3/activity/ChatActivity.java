@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,11 +31,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,7 +43,6 @@ import com.sinichi.parentingcontrolv3.common.ChatAlt;
 import com.sinichi.parentingcontrolv3.common.ChatViewHolder;
 import com.sinichi.parentingcontrolv3.interfaces.z;
 import com.sinichi.parentingcontrolv3.model.ChatModel;
-import com.sinichi.parentingcontrolv3.model.TextChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
@@ -95,10 +93,13 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        setActionBarColor();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SetAppearance.setStatusBarColor(this, R.color.colorBlack);
+        }
         SetAppearance.hideNavigationBar(this);
         initComponents();
         setBottomNavigationAction(this, mBottomNavigation);
-        listenChangedData();
 
         // INITIALIZE FIREBASE
         // MUST BE DECLARED
@@ -273,31 +274,9 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         SetAppearance.hideNavigationBar(this);
     }
 
-    private void listenChangedData() {
-        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference messageRef = mDatabaseReference.child(mFirebaseUser.getUid()).child(Constant.MESSAGES_CHILD);
-        messageRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                TextChatModel textChatModel = new TextChatModel();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    textChatModel = snapshot.getValue(TextChatModel.class);
-                    if (textChatModel != null) {
-                        textChatModel.setId(snapshot.getKey());
-                    }
-                }
-
-                Log.e(Constant.TAG, "Username chat: " + textChatModel.getName());
-                Log.e(Constant.TAG, "Message chat: " + textChatModel.getText());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    private void setActionBarColor() {
+        getSupportActionBar().setTitle("Chat");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorSkyBlue)));
     }
-
 
 }

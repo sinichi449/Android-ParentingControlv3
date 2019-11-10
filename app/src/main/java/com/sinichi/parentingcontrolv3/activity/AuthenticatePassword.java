@@ -67,6 +67,7 @@ public class AuthenticatePassword extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         isAuthenticated = sharedPreferences.getBoolean(Constant.IS_AUTHENTICATED, false);
         if (isAuthenticated) {
+            progressDialog.dismiss();
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);

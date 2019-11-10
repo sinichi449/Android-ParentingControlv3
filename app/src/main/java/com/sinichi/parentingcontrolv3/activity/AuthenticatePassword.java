@@ -97,32 +97,33 @@ public class AuthenticatePassword extends AppCompatActivity {
     }
 
     private void listenPasswordData() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference passwordRef = databaseReference.child(firebaseUser.getUid()).child(Constant.PASSWORD_CHILD);
-        passwordRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userModels = new ArrayList<>();
-                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                String currentUsername = sharedPreferences.getString(Constant.USERNAME, null);
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    model = snapshot.getValue(UserModel.class);
-                    if (model != null) {
-                        progressDialog.dismiss();
+        if (!isAuthenticated()) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            final DatabaseReference passwordRef = databaseReference.child(firebaseUser.getUid()).child(Constant.PASSWORD_CHILD);
+            passwordRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    userModels = new ArrayList<>();
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                    String currentUsername = sharedPreferences.getString(Constant.USERNAME, null);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        model = snapshot.getValue(UserModel.class);
+                        if (model != null) {
+                            progressDialog.dismiss();
+                        }
+                        userModels.add(model);
                     }
-                    userModels.add(model);
-                }
 
 //                List<String> usernames = new ArrayList<>();
-                for (int x = 0; x < userModels.size(); x++) {
+                    for (int x = 0; x < userModels.size(); x++) {
 //                    usernames.add(userModels.get(x).getUsername());
-                    if (currentUsername.equals(userModels.get(x).getUsername())) {
-                        isDataTersediaDiCloud = true;
-                        username = userModels.get(x).getUsername();
-                        password = userModels.get(x).getPassword();
+                        if (currentUsername.equals(userModels.get(x).getUsername())) {
+                            isDataTersediaDiCloud = true;
+                            username = userModels.get(x).getUsername();
+                            password = userModels.get(x).getPassword();
+                        }
                     }
-                }
 
 //                for (int x = 0; x < usernames.size(); x++) {
 //                    // Search username
@@ -132,23 +133,24 @@ public class AuthenticatePassword extends AppCompatActivity {
 //                    }
 //                }
 
-                Log.e(Constant.TAG, "Username Available? : " + isDataTersediaDiCloud);
-                if (isDataTersediaDiCloud) {
-                    Toast.makeText(context, "Data sudah tersedia, silakan masukkan password",
-                            Toast.LENGTH_SHORT).show();
-                    launchPasswordDialog(model);
-                } else if (!isDataTersediaDiCloud) {
-                    Toast.makeText(context, "Buat password untuk akun Anda",
-                            Toast.LENGTH_SHORT).show();
-                    launchRegisterDialog();
+                    Log.e(Constant.TAG, "Username Available? : " + isDataTersediaDiCloud);
+                    if (isDataTersediaDiCloud) {
+                        Toast.makeText(context, "Data sudah tersedia, silakan masukkan password",
+                                Toast.LENGTH_SHORT).show();
+                        launchPasswordDialog(model);
+                    } else if (!isDataTersediaDiCloud) {
+                        Toast.makeText(context, "Buat password untuk akun Anda",
+                                Toast.LENGTH_SHORT).show();
+                        launchRegisterDialog();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -264,11 +266,11 @@ public class AuthenticatePassword extends AppCompatActivity {
                 if (AuthenticatePassword.this.password.equals(password)) {
                     Toast.makeText(context, "Login berhasil, selamat datang di Parenting Control",
                             Toast.LENGTH_LONG).show();
-                    alertDialogPassword.dismiss();
                     SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean(Constant.IS_AUTHENTICATED, true);
                     editor.apply();
+                    alertDialogPassword.dismiss();
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);

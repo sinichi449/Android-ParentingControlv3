@@ -679,4 +679,5 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
         super.onStop();
         progressDialog.dismiss();
     }
+
 }

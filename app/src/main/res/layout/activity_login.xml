@@ -21,33 +21,36 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
-        android:fontFamily="@font/arial_narrow_7"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/colorBlack"
-        android:gravity="center"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/arial_narrow_7"
+        android:gravity="center"
+        android:text="LOGIN"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="12dp"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="5dp">
+        android:weightSum="2">
 
         <ImageView
             android:id="@+id/btn_saya_anak"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="1"
-            android:src="@drawable/btn_anak"/>
+            android:src="@drawable/btn_anak" />
+
         <ImageView
             android:id="@+id/btn_saya_orangtua"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="1"
-            android:src="@drawable/btn_orangtua"/>
+            android:src="@drawable/btn_orangtua" />
 
     </LinearLayout>
 
@@ -56,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="12dp"
         android:fontFamily="@font/arial_narrow_7"
         android:text="Daftarkan Akunmu Di Sini!"
         android:textColor="@color/colorBlack"

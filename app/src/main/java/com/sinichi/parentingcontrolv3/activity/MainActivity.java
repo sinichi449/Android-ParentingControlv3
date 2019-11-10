@@ -465,4 +465,5 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(Constant.WAKTU_ISYA, "19:15");
         editor.apply();
     }
+
 }

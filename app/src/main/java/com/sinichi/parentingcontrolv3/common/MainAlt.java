@@ -97,6 +97,9 @@ public class MainAlt implements d {
         localRecyclerView.setLayoutManager(linearLayoutManager);
         localRecyclerView.setHasFixedSize(true);
         localRecyclerView.scrollToPosition(0);
+        localRecyclerView.setItemViewCacheSize(30);
+        localRecyclerView.setDrawingCacheEnabled(true);
+        localRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     @Override

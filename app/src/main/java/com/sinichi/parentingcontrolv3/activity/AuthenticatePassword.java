@@ -1,5 +1,6 @@
 package com.sinichi.parentingcontrolv3.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +8,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,6 +123,7 @@ public class AuthenticatePassword extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void launchRegisterDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = getLayoutInflater().inflate(R.layout.layout_buat_password, null);
@@ -130,6 +135,9 @@ public class AuthenticatePassword extends AppCompatActivity {
         final EditText edtNewPassword = view.findViewById(R.id.edt_new_password);
         final EditText edtKonfirmasiPassword = view.findViewById(R.id.edt_konfirmasi_password);
         Button btnRegister = view.findViewById(R.id.btn_register);
+        final ImageView imgPasswordVisibilityNew = view.findViewById(R.id.img_password_visibility_new_password);
+        final ImageView imgPasswordVisiblityKonfirmasi = view.findViewById(R.id.img_password_visibility_konfirmasi);
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,8 +173,37 @@ public class AuthenticatePassword extends AppCompatActivity {
                 }
             }
         });
+
+        imgPasswordVisibilityNew.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    edtNewPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imgPasswordVisibilityNew.setImageResource(R.drawable.ic_visibility_off_black_24dp);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    edtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imgPasswordVisibilityNew.setImageResource(R.drawable.ic_visibility_black_24dp);
+                }
+                return true;
+            }
+        });
+
+        imgPasswordVisiblityKonfirmasi.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    edtKonfirmasiPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imgPasswordVisiblityKonfirmasi.setImageResource(R.drawable.ic_visibility_off_black_24dp);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    edtKonfirmasiPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imgPasswordVisiblityKonfirmasi.setImageResource(R.drawable.ic_visibility_black_24dp);
+                }
+                return true;
+            }
+        });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void launchPasswordDialog(final UserModel userModel) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = getLayoutInflater().inflate(R.layout.layout_masukkan_password, null);
@@ -183,6 +220,7 @@ public class AuthenticatePassword extends AppCompatActivity {
 
         final EditText edtPassword = view.findViewById(R.id.edt_password);
         Button btnLogin = view.findViewById(R.id.btn_login);
+        final ImageView imgPasswordVisibility = view.findViewById(R.id.img_password_visibility);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +243,20 @@ public class AuthenticatePassword extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
 
                 }
+            }
+        });
+
+        imgPasswordVisibility.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imgPasswordVisibility.setImageResource(R.drawable.ic_visibility_off_black_24dp);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imgPasswordVisibility.setImageResource(R.drawable.ic_visibility_black_24dp);
+                }
+                return true;
             }
         });
     }

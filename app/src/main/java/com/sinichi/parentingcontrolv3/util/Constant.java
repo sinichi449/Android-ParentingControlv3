@@ -40,4 +40,10 @@ public class Constant {
     public static final String KEGIATAN_REF_CHILD = "data_kegiatan";
     public static final String PASSWORD_CHILD = "password";
     public static final String IS_AUTHENTICATED = "isAuthenticatedWithPassword";
+    public static final String TIDAK_SHOLAT_SUBUH = "TidakSholatSubuh";
+    public static final String TIDAK_SHOLAT_DHUHR = "TidakSholatDhuhr";
+    public static final String TIDAK_SHOLAT_ASHAR = "TidakSholatAshar";
+    public static final String TIDAK_SHOLAT_MAGHRIB = "TidakSholatMaghrib";
+    public static final String TIDAK_SHOLAT_ISYA = "TidakSholatIsya";
+
 }

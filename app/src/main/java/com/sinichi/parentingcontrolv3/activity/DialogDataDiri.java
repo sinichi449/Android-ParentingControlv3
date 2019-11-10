@@ -26,7 +26,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 
 import static com.sinichi.parentingcontrolv3.activity.ProfileActivity.isValidTextView;
 
-public class DialogDataDiri {
+public class DialogDataDiri extends LoginActivity {
     private Context context;
     private LayoutInflater layoutInflater;
     private LoginActivity loginActivity;
@@ -39,6 +39,7 @@ public class DialogDataDiri {
     private Button btnSubmit, btnAdminMode;
     private Spinner spinner, spinnerTanggal, spinnerBulan, spinnerTahun;
     private AlertDialog.Builder builder;
+    private AlertDialog alertDialog;
     public ProgressDialog progressDialog;
 
     public DialogDataDiri(Context context) {
@@ -60,15 +61,15 @@ public class DialogDataDiri {
         dialogView = layoutInflater.inflate(R.layout.temp_layout_isi_data_diri, null);
         builder.setView(dialogView)
                 .setCancelable(false);
-        initComponents();
+        initComponent();
         onDialogPositiveButton();
 //        onDialogNegativeButton();
-        AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
 
-    private void initComponents() {
+    private void initComponent() {
         spinner = dialogView.findViewById(R.id.spinnner);
         ImageView imgDataDiri = dialogView.findViewById(R.id.head);
         Glide.with(dialogView)
@@ -119,11 +120,12 @@ public class DialogDataDiri {
                 if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
                         && isValidTextView(tvNomorTelepon) && isValidTextView(tvSekolahPekerjaan)) {
                     putDataToSharedPrefs();
-                    progressDialog = new ProgressDialog(context);
-                    progressDialog.setMessage("Connecting to Cloud...");
-                    progressDialog.show();
+//                    progressDialog = new ProgressDialog(context);
+//                    progressDialog.setMessage("Connecting to Cloud...");
+//                    progressDialog.show();
                     Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     loginActivity.startActivityForResult(signIntent, Constant.RC_SIGN_IN);
+                    alertDialog.dismiss();
                 } else {
                     Toast.makeText(context, "Mohon isi kolom yang kosong", Toast.LENGTH_LONG)
                             .show();

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,10 @@ public class AuthenticatePassword extends AppCompatActivity {
     private Context context;
     private ProgressDialog progressDialog;
     private AlertDialog alertDialogPassword, alertDialogRegister;
+    private boolean isAuthenticated;
+    private boolean isDataTersediaDiCloud = false;
+    private UserModel userModel;
+    String username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,35 +60,39 @@ public class AuthenticatePassword extends AppCompatActivity {
         isAuthenticated();
         hasChildName();
         listenPasswordData();
+
     }
 
-    private void isAuthenticated() {
+    private boolean isAuthenticated() {
         SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-        boolean isAuthenticated = sharedPreferences.getBoolean(Constant.IS_AUTHENTICATED, false);
+        isAuthenticated = sharedPreferences.getBoolean(Constant.IS_AUTHENTICATED, false);
         if (isAuthenticated) {
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         }
+        return isAuthenticated;
     }
 
     private void hasChildName() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference userRef = databaseReference.child(firebaseUser.getUid());
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.hasChild(Constant.PASSWORD_CHILD)) {
-                    userRef.child(Constant.PASSWORD_CHILD).push().setValue(new UserModel("Dummy", "dummy"));
+        if (!isAuthenticated()) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            final DatabaseReference userRef = databaseReference.child(firebaseUser.getUid());
+            userRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.hasChild(Constant.PASSWORD_CHILD)) {
+                        userRef.child(Constant.PASSWORD_CHILD).push().setValue(new UserModel("Dummy", "dummy"));
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void listenPasswordData() {
@@ -94,6 +103,8 @@ public class AuthenticatePassword extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userModels = new ArrayList<>();
+                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                String currentUsername = sharedPreferences.getString(Constant.USERNAME, null);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     model = snapshot.getValue(UserModel.class);
                     if (model != null) {
@@ -101,19 +112,34 @@ public class AuthenticatePassword extends AppCompatActivity {
                     }
                     userModels.add(model);
                 }
-                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                String currentUsername = sharedPreferences.getString(Constant.USERNAME, null);
-                for (UserModel userModel : userModels) {
-                    boolean isDataTersediaDiCloud = currentUsername.equals(userModel.getUsername());
-                    if (isDataTersediaDiCloud) {
-                        Toast.makeText(context, "Data sudah tersedia, silakan masukkan password",
-                                Toast.LENGTH_SHORT).show();
-                        launchPasswordDialog(userModel);
-                    } else {
-                        Toast.makeText(context, "Buat password untuk akun Anda",
-                                Toast.LENGTH_SHORT).show();
-                        launchRegisterDialog();
+
+//                List<String> usernames = new ArrayList<>();
+                for (int x = 0; x < userModels.size(); x++) {
+//                    usernames.add(userModels.get(x).getUsername());
+                    if (currentUsername.equals(userModels.get(x).getUsername())) {
+                        isDataTersediaDiCloud = true;
+                        username = userModels.get(x).getUsername();
+                        password = userModels.get(x).getPassword();
                     }
+                }
+
+//                for (int x = 0; x < usernames.size(); x++) {
+//                    // Search username
+//                    if (currentUsername.equals(usernames.get(x))) {
+//                        isDataTersediaDiCloud = true;
+//                        Log.e(Constant.TAG, currentUsername + ": found in cloud: " + usernames.get(x));
+//                    }
+//                }
+
+                Log.e(Constant.TAG, "Username Available? : " + isDataTersediaDiCloud);
+                if (isDataTersediaDiCloud) {
+                    Toast.makeText(context, "Data sudah tersedia, silakan masukkan password",
+                            Toast.LENGTH_SHORT).show();
+                    launchPasswordDialog(model);
+                } else if (!isDataTersediaDiCloud) {
+                    Toast.makeText(context, "Buat password untuk akun Anda",
+                            Toast.LENGTH_SHORT).show();
+                    launchRegisterDialog();
                 }
             }
 
@@ -129,6 +155,7 @@ public class AuthenticatePassword extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = getLayoutInflater().inflate(R.layout.layout_buat_password, null);
         builder.setView(view);
+        builder.setCancelable(false);
         alertDialogRegister = builder.create();
         alertDialogRegister.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialogRegister.show();
@@ -206,6 +233,8 @@ public class AuthenticatePassword extends AppCompatActivity {
                 return true;
             }
         });
+
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -230,8 +259,8 @@ public class AuthenticatePassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String password = edtPassword.getText().toString();
-                if (userModel.getPassword().equals(password)) {
-                    // TODO: Masuk main activity
+//                if (userModel.getPassword().equals(password)) {
+                if (AuthenticatePassword.this.password.equals(password)) {
                     Toast.makeText(context, "Login berhasil, selamat datang di Parenting Control",
                             Toast.LENGTH_LONG).show();
                     alertDialogPassword.dismiss();
@@ -266,12 +295,6 @@ public class AuthenticatePassword extends AppCompatActivity {
                 return true;
             }
         });
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        alertDialogPassword.dismiss();
-        alertDialogRegister.dismiss();
     }
 }

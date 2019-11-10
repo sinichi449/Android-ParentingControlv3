@@ -109,4 +109,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        DialogDataDiri dialogDataDiri = new DialogDataDiri(this);
+//        dialogDataDiri.stopAlertDialog();
+//        dialogDataDiri.stopProgressBar();
+    }
 }

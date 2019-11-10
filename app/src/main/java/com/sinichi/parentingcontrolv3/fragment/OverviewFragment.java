@@ -378,8 +378,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                     Log.e(Constant.TAG, "Maghrib :" + jamMaghrib);
                     Log.e(Constant.TAG, "Isya' :" + jamIsya);
 
-                    SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                    SharedPreferences.Editor editorJadwal = sharedPreferences.edit();
+                    SharedPreferences.Editor editorJadwal = sharedPrefs.edit();
                     editorJadwal.putString(Constant.WAKTU_SUBUH, jamSubuh);
                     editorJadwal.putString(Constant.WAKTU_DHUHR, jamDhuhr);
                     editorJadwal.putString(Constant.WAKTU_ASHAR, jamAshar);
@@ -425,9 +424,14 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
 
     private void makeNotifikasiSholat() {
         boolean isUserAnak = sharedPrefs.getString(Constant.USERNAME, null).equals(Constant.USER_ANAK);
+        boolean tidakSholatSubuh = sharedPrefs.getBoolean(Constant.TIDAK_SHOLAT_SUBUH, false);
+        boolean tidakSholatDhuhr = sharedPrefs.getBoolean(Constant.TIDAK_SHOLAT_DHUHR, false);
+        boolean tidakSholatAshar = sharedPrefs.getBoolean(Constant.TIDAK_SHOLAT_ASHAR, false);
+        boolean tidakSholatMaghrib = sharedPrefs.getBoolean(Constant.TIDAK_SHOLAT_MAGHRIB, false);
+        boolean tidakSholatIsya = sharedPrefs.getBoolean(Constant.TIDAK_SHOLAT_ISYA, false);
         if (isUserAnak) {
             if (!waktuSubuh.equals("kosong")
-                    && !sudahSholatSubuh) {
+                    && !sudahSholatSubuh && !tidakSholatSubuh) {
                 int jamSubuh = getJam(Constant.WAKTU_SUBUH);
                 int menitSubuh = getMenit(Constant.WAKTU_SUBUH);
                 String waktuSubuh = jamSubuh + ":" + menitSubuh;
@@ -437,13 +441,13 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
             }
 
             if (!waktuDhuhr.equals("kosong")
-                    && !sudahSholatDhuhr) {
+                    && !sudahSholatDhuhr && !tidakSholatDhuhr) {
                 makeNotification(Constant.WAKTU_DHUHR, 2, 20, getJam(Constant.WAKTU_DHUHR), getMenit(Constant.WAKTU_DHUHR));
                 Log.e(Constant.TAG, "Belum sholat " + Constant.WAKTU_DHUHR);
             }
 
             if (!waktuAshar.equals("kosong")
-                    && !sudahSholatAshar) {
+                    && !sudahSholatAshar && tidakSholatAshar) {
                 int jamAshar = getJam(Constant.WAKTU_ASHAR);
                 int menitAshar = getMenit(Constant.WAKTU_ASHAR);
                 String waktuAshar = jamAshar + ":" + menitAshar;
@@ -453,13 +457,13 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
             }
 
             if (!waktuMaghrib.equals("kosong")
-                    && !sudahSholatMaghrib) {
+                    && !sudahSholatMaghrib && tidakSholatMaghrib) {
                 makeNotification(Constant.WAKTU_MAGHRIB, 4, 40, getJam(Constant.WAKTU_MAGHRIB), getMenit(Constant.WAKTU_MAGHRIB));
                 Log.e("Msg", "Belum sholat " + Constant.WAKTU_MAGHRIB);
             }
 
             if (!waktuIsya.equals("kosong")
-                    && !sudahSholatIsya) {
+                    && !sudahSholatIsya && tidakSholatIsya) {
                 makeNotification(Constant.WAKTU_ISYA, 5, 50, getJam(Constant.WAKTU_ISYA), getMenit(Constant.WAKTU_ISYA));
                 Log.e("Msg", "Belum sholat " + Constant.WAKTU_ISYA);
             }
@@ -668,5 +672,11 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     public void onCancelled(@NonNull DatabaseError databaseError) {
         Toast.makeText(context, "Something error, please check your internet connection" + "\n" + databaseError.getMessage(),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        progressDialog.dismiss();
     }
 }

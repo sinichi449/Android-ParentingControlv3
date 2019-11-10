@@ -51,14 +51,12 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
-import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.service.LocationService;
 import com.sinichi.parentingcontrolv3.util.Constant;
 import com.sinichi.parentingcontrolv3.util.CurrentDimension;
 import com.sinichi.parentingcontrolv3.util.GpsUtil;
 import com.sinichi.parentingcontrolv3.util.SetAppearance;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -466,37 +464,5 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(Constant.WAKTU_MAGHRIB, "18:00");
         editor.putString(Constant.WAKTU_ISYA, "19:15");
         editor.apply();
-    }
-
-    private void getUsernameFromCloud() {
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference passwordRef = mDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(Constant.PASSWORD_CHILD);
-        passwordRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserModel userModel = null;
-                List<UserModel> userModels = new ArrayList<>();
-                SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
-                String username = sharedPreferences.getString(Constant.USERNAME, null);
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    userModel = snapshot.getValue(UserModel.class);
-                    if (userModel != null) {
-                        userModel.setId(snapshot.getKey());
-                    }
-                    userModels.add(userModel);
-                }
-
-                for (UserModel userModel1 : userModels) {
-                    if (username.equals(userModel1.getUsername())) {
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }

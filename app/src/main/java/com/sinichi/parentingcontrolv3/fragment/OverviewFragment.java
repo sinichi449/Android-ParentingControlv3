@@ -562,18 +562,32 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
 
         if (models.get(index).isSholatSubuh()) {
             chktvSubuh.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        } else {
+            chktvSubuh.setChecked(false);
         }
+
         if (models.get(index).isSholatDhuhr()) {
             chktvDhuhur.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        } else {
+            chktvDhuhur.setChecked(false);
         }
+
         if (models.get(index).isSholatAshar()) {
             chktvAshar.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        } else {
+            chktvAshar.setChecked(false);
         }
+
         if (models.get(index).isSholatMaghrib()) {
             chktvMaghrib.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        } else {
+            chktvMaghrib.setChecked(false);
         }
+
         if (models.get(index).isSholatIsya()) {
             chktvIsya.setCheckMarkDrawable(R.drawable.ic_check_black_24dp);
+        } else {
+            chktvIsya.setChecked(false);
         }
     }
 

@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +40,7 @@ public class AuthenticatePassword extends AppCompatActivity {
     private UserModel model;
     private Context context;
     private ProgressDialog progressDialog;
+    private AlertDialog alertDialogPassword, alertDialogRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +129,9 @@ public class AuthenticatePassword extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = getLayoutInflater().inflate(R.layout.layout_buat_password, null);
         builder.setView(view);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.show();
+        alertDialogRegister = builder.create();
+        alertDialogRegister.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialogRegister.show();
 
         final EditText edtNewPassword = view.findViewById(R.id.edt_new_password);
         final EditText edtKonfirmasiPassword = view.findViewById(R.id.edt_konfirmasi_password);
@@ -156,7 +157,7 @@ public class AuthenticatePassword extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean(Constant.IS_AUTHENTICATED, true);
                     editor.apply();
-                    alertDialog.dismiss();
+                    alertDialogRegister.dismiss();
                     Toast.makeText(context, "Membuat user baru berhasil, selamat datang di Parenting Control",
                             Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, MainActivity.class);
@@ -178,10 +179,12 @@ public class AuthenticatePassword extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    edtNewPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edtNewPassword.setTransformationMethod(null);
+                    edtNewPassword.setSelection(edtNewPassword.getText().length());
                     imgPasswordVisibilityNew.setImageResource(R.drawable.ic_visibility_off_black_24dp);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    edtNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edtNewPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    edtNewPassword.setSelection(edtNewPassword.getText().length());
                     imgPasswordVisibilityNew.setImageResource(R.drawable.ic_visibility_black_24dp);
                 }
                 return true;
@@ -192,10 +195,12 @@ public class AuthenticatePassword extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    edtKonfirmasiPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edtKonfirmasiPassword.setTransformationMethod(null);
+                    edtKonfirmasiPassword.setSelection(edtKonfirmasiPassword.getText().length());
                     imgPasswordVisiblityKonfirmasi.setImageResource(R.drawable.ic_visibility_off_black_24dp);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    edtKonfirmasiPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edtKonfirmasiPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    edtKonfirmasiPassword.setSelection(edtKonfirmasiPassword.getText().length());
                     imgPasswordVisiblityKonfirmasi.setImageResource(R.drawable.ic_visibility_black_24dp);
                 }
                 return true;
@@ -209,9 +214,9 @@ public class AuthenticatePassword extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.layout_masukkan_password, null);
         builder.setView(view);
         builder.setCancelable(false);
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.show();
+        alertDialogPassword = builder.create();
+        alertDialogPassword.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialogPassword.show();
 
         TextView tvUserSaatIni = view.findViewById(R.id.tv_user_saat_ini);
         SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
@@ -229,7 +234,7 @@ public class AuthenticatePassword extends AppCompatActivity {
                     // TODO: Masuk main activity
                     Toast.makeText(context, "Login berhasil, selamat datang di Parenting Control",
                             Toast.LENGTH_LONG).show();
-                    alertDialog.dismiss();
+                    alertDialogPassword.dismiss();
                     SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean(Constant.IS_AUTHENTICATED, true);
@@ -250,14 +255,23 @@ public class AuthenticatePassword extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edtPassword.setTransformationMethod(null);
+                    edtPassword.setSelection(edtPassword.getText().length());
                     imgPasswordVisibility.setImageResource(R.drawable.ic_visibility_off_black_24dp);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edtPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    edtPassword.setSelection(edtPassword.getText().length());
                     imgPasswordVisibility.setImageResource(R.drawable.ic_visibility_black_24dp);
                 }
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        alertDialogPassword.dismiss();
+        alertDialogRegister.dismiss();
     }
 }

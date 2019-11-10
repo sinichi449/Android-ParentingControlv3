@@ -106,6 +106,10 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(ProfileActivity.this, "The user data is empty. You must relogin.", Toast.LENGTH_SHORT)
                     .show();
             mFirebaseAuth.signOut();
+            SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(Constant.IS_AUTHENTICATED);
+            editor.apply();
             Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
@@ -156,6 +160,10 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.menu_log_out:
+                        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove(Constant.IS_AUTHENTICATED);
+                        editor.apply();
                         Intent intent1 = new Intent(ProfileActivity.this, LoginActivity.class);
                         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                         firebaseAuth.signOut();

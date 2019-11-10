@@ -23,17 +23,27 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.activity.AuthenticatePassword;
 import com.sinichi.parentingcontrolv3.activity.LoginActivity;
-import com.sinichi.parentingcontrolv3.activity.MainActivity;
+import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
+import java.util.List;
+
 public class LoginAlt extends LoginActivity {
+    private List<UserModel> dataUser;
+    private UserModel userModel;
 
     public void checkUserCredential(Activity activity, Context context) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         if (user != null) {
-            Intent i = new Intent(context, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            Intent i = new Intent(context, MainActivity.class);
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            activity.startActivity(i);
+//            activity.finish();
+            Intent i = new Intent(context, AuthenticatePassword.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
             activity.startActivity(i);
             activity.finish();
         }
@@ -99,10 +109,15 @@ public class LoginAlt extends LoginActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            context.startActivity(new Intent(context, MainActivity.class)
+//                            context.startActivity(new Intent(context, MainActivity.class)
+//                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+//                                            Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                            activity.finish();
+                            context.startActivity(new Intent(context, AuthenticatePassword.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                             Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK));
                             activity.finish();
+
                         }
                     }
                 });

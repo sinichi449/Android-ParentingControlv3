@@ -62,7 +62,7 @@ public class DialogDataDiri {
                 .setCancelable(false);
         initComponents();
         onDialogPositiveButton();
-        onDialogNegativeButton();
+//        onDialogNegativeButton();
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
@@ -97,7 +97,7 @@ public class DialogDataDiri {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         btnSubmit = dialogView.findViewById(R.id.btn_submit);
-        btnAdminMode = dialogView.findViewById(R.id.btn_admin_mode);
+//        btnAdminMode = dialogView.findViewById(R.id.btn_admin_mode);
         spinnerTanggal = dialogView.findViewById(R.id.spinner_tanggal);
         spinnerBulan = dialogView.findViewById(R.id.spinner_bulan);
         spinnerTahun = dialogView.findViewById(R.id.spinner_tahun);
@@ -132,18 +132,18 @@ public class DialogDataDiri {
         });
     }
 
-    private void onDialogNegativeButton() {
-        btnAdminMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginActivity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
-                        Constant.RC_SIGN_IN);
-                ProgressDialog progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage("Connecting to Cloud...");
-                progressDialog.show();
-            }
-        });
-    }
+//    private void onDialogNegativeButton() {
+//        btnAdminMode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loginActivity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
+//                        Constant.RC_SIGN_IN);
+//                ProgressDialog progressDialog = new ProgressDialog(context);
+//                progressDialog.setMessage("Connecting to Cloud...");
+//                progressDialog.show();
+//            }
+//        });
+//    }
 
     private void putDataToSharedPrefs() {
         SharedPreferences.Editor editor = sharedPrefs.edit();

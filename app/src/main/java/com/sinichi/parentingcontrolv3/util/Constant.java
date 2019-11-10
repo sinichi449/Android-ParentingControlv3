@@ -38,4 +38,6 @@ public class Constant {
     public static final String LOCATION_TAG = "Location";
     public static final String JADWAL_SHOLAT_CHILD = "jadwalSholat";
     public static final String KEGIATAN_REF_CHILD = "data_kegiatan";
+    public static final String PASSWORD_CHILD = "password";
+    public static final String IS_AUTHENTICATED = "isAuthenticatedWithPassword";
 }

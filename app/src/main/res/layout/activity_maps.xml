@@ -18,6 +18,7 @@
         android:layout_marginLeft="-10dp"/>
 
     <TextView
+        android:id="@+id/tv_header_posisi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Posisi Anda Sekarang"

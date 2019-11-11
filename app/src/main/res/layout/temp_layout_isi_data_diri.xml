@@ -4,99 +4,122 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_rounded"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/layout_rounded">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageView
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:src="@drawable/bg2"
-            android:layout_marginStart="-100dp"
-            android:layout_marginEnd="-100dp"
-            android:layout_marginTop="-100dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/head"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:src="@drawable/bg2"
+                    android:layout_marginStart="-100dp"
+                    android:layout_marginEnd="-100dp"
+                    android:layout_marginTop="-100dp"/>
+
+            </LinearLayout>
 
 
-        <EditText
-            android:id="@+id/txt_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Masukkan nama"
-            android:layout_marginTop="8dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-        <Spinner
-            android:id="@+id/spinnner"
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
-
-        <EditText
-            android:id="@+id/edt_sekolah_pekerjaan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"/>
-
-        <EditText
-            android:id="@+id/txt_alamat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:hint="Masukkan alamat"
-            android:layout_marginTop="8dp"/>
-
-        <EditText
-            android:id="@+id/txt_no_telp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="Masukkan nomor telepon"
-            android:layout_marginTop="8dp"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/txt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="Masukkan nama"
+                    android:layout_marginTop="8dp"/>
 
                 <Spinner
-                    android:id="@+id/spinner_tanggal"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/spinnner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+
+                <EditText
+                    android:id="@+id/edt_sekolah_pekerjaan"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:inputType="text"/>
 
-                <Spinner
-                    android:id="@+id/spinner_bulan"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/txt_alamat"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/spinner_tanggal"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:inputType="textMultiLine"
+                    android:hint="Masukkan alamat"
+                    android:layout_marginTop="8dp"/>
 
-                <Spinner
-                    android:id="@+id/spinner_tahun"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/txt_no_telp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/spinner_bulan"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:inputType="phone"
+                    android:hint="Masukkan nomor telepon"
+                    android:layout_marginTop="8dp"/>
+
+                <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+                <!--            android:layout_width="wrap_content"-->
+                <!--            android:layout_height="wrap_content">-->
+
+                <!--                <Spinner-->
+                <!--                    android:id="@+id/spinner_tanggal"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent"/>-->
+
+                <!--                <Spinner-->
+                <!--                    android:id="@+id/spinner_bulan"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:layout_constraintStart_toEndOf="@id/spinner_tanggal"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--                <Spinner-->
+                <!--                    android:id="@+id/spinner_tahun"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    app:layout_constraintStart_toEndOf="@id/spinner_bulan"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-        <Button
-            android:id="@+id/btn_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit" />
+                <EditText
+                    android:id="@+id/edt_tanggal_lahir"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:hint="Contoh : 01-01-1990"
+                    android:maxLength="10"/>
 
-        <Button
-            android:id="@+id/btn_admin_mode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Admin Mode" />
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/colorSkyBlue"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginBottom="12dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
 

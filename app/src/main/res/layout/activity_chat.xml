@@ -16,62 +16,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="-10dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="-10dp"
-        android:background="@drawable/actbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:layout_marginStart="-10dp"-->
+<!--        android:layout_marginTop="-10dp"-->
+<!--        android:layout_marginEnd="-10dp"-->
+<!--        android:background="@color/colorSkyBlue"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--&lt;!&ndash;        <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="match_parent">&ndash;&gt;-->
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+<!--&lt;!&ndash;            <de.hdodenhof.circleimageview.CircleImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/img_a"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
 
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:foregroundGravity="center"/>
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginStart="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginLeft="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:foregroundGravity="center"/>&ndash;&gt;-->
 
-            <TextView
-                android:id="@+id/tv_nama"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/img_a"
-                android:text="Lorem ipsum dolor sit amet"
-                app:layout_constraintTop_toTopOf="@id/img_a"
-                app:layout_constraintBottom_toBottomOf="@id/img_a"
-                android:layout_marginLeft="10dp"/>
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/tv_nama"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintStart_toEndOf="@id/img_a"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:text="Lorem ipsum dolor sit amet"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="@id/img_a"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintBottom_toBottomOf="@id/img_a"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginLeft="10dp"/>&ndash;&gt;-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--&lt;!&ndash;        </androidx.constraintlayout.widget.ConstraintLayout>&ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Chat"-->
+<!--            android:textSize="20sp"-->
+<!--            android:gravity="center"-->
+<!--            android:textColor="@color/colorWhite" />-->
 
-    </androidx.appcompat.widget.Toolbar>
-
+<!--    </androidx.appcompat.widget.Toolbar>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:padding="8dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/constrainLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constrainLayout3"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TentangActivity">
+    tools:context=".activity.TentangActivity">
 
     <ImageView
         android:id="@+id/bg_us"

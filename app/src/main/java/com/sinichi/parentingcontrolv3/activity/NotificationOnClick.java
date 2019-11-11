@@ -2,6 +2,7 @@ package com.sinichi.parentingcontrolv3.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.model.DataModel;
+import com.sinichi.parentingcontrolv3.util.Constant;
 
 public class NotificationOnClick extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
@@ -40,9 +42,9 @@ public class NotificationOnClick extends AppCompatActivity {
         waktuSholat = getIntent().getStringExtra("notif_sholat");
         Log.e("Waktu", waktuSholat);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Lorem ipsum")
-                .setMessage("Apakah Anda sudah melakukan sholat " + waktuSholat + " ?\n\n WARNING: Apabila Anda klik cancel, maka data Anda tidak akan ditulis lagi dan dianggap tidak melakukan sholat tertentu!")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle("Perbarui data sholat")
+                .setMessage("Apakah kamu sudah melakukan sholat " + waktuSholat + " ?\n\n WARNING: Apabila kamu klik Tidak, maka tidak akan bisa diperbarui lagi dan dianggap tidak melakukan sholat tertentu.")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: Change the database
@@ -89,12 +91,33 @@ public class NotificationOnClick extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                        Intent intent = new Intent(NotificationOnClick.this, MainActivity.class);
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                        startActivity(intent);
+                        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        switch (waktuSholat.replace(" ", "")) { // Remove whitespace
+                            case "Subuh":
+                                editor.putBoolean(Constant.TIDAK_SHOLAT_SUBUH, true);
+                                break;
+                            case "Dhuhr":
+                                editor.putBoolean(Constant.TIDAK_SHOLAT_DHUHR, true);
+                                break;
+                            case "Ashar":
+                                editor.putBoolean(Constant.TIDAK_SHOLAT_ASHAR, true);
+                                break;
+                            case "Maghrib":
+                                editor.putBoolean(Constant.TIDAK_SHOLAT_MAGHRIB, true);
+                                break;
+                            case "Isya":
+                                editor.putBoolean(Constant.TIDAK_SHOLAT_ISYA, true);
+                                break;
+                        }
+                        editor.apply();
+
                         finish();
                     }
                 }).setCancelable(false);

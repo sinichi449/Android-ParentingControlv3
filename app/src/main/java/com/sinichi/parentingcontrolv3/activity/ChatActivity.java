@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.common.ChatAlt;
@@ -93,6 +93,10 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        setActionBarColor();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SetAppearance.setStatusBarColor(this, R.color.colorBlack);
+        }
         SetAppearance.hideNavigationBar(this);
         initComponents();
         setBottomNavigationAction(this, mBottomNavigation);
@@ -106,9 +110,9 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
 
         if (chatAlt.parseDataFromCloud() != null) {
             progressBar.setVisibility(View.GONE);
-            Log.e(Constant.TAG, "Data found in database");
+            Log.e(Constant.TAG, "DataSiswandi found in database");
         } else {
-            Log.e(Constant.TAG, "Data not found in database");
+            Log.e(Constant.TAG, "DataSiswandi not found in database");
         }
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -136,6 +140,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
         });
 
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageRecyclerView.setHasFixedSize(true);
 
         chatAlt.enableSendButtonOnUserTyping(mMessageEditText, mSendButton);
 
@@ -154,19 +159,10 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        initPubnub();
         createChannel();
 //        Intent intent = new Intent(this, FirebaseMessagingService.class);
 //        startService(intent);
 
-    }
-
-    private void initPubnub() {
-        PNConfiguration pnConfiguration = new PNConfiguration();
-        pnConfiguration.setPublishKey("pub-c-0c9db853-7f39-4610-a86e-7720d8908899");
-        pnConfiguration.setSubscribeKey("pub-c-0c9db853-7f39-4610-a86e-7720d8908899");
-        pnConfiguration.setSecure(false);
-        pubnub = new PubNub(pnConfiguration);
     }
 
 
@@ -259,6 +255,7 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onResume() {
         mFirebaseAdapter.startListening();
+        SetAppearance.hideNavigationBar(this);
         super.onResume();
     }
 
@@ -270,6 +267,17 @@ public class ChatActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(ChatActivity.this, "Google Play Service Error!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        SetAppearance.hideNavigationBar(this);
+    }
+
+    private void setActionBarColor() {
+        getSupportActionBar().setTitle("Chat");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorSkyBlue)));
     }
 
 }

@@ -91,9 +91,7 @@ public class StatisticFragment extends Fragment {
                 }
                 if (!available) {
                     // TODO: Add new data
-                    DataModel dataModel = new DataModel(date, day, month, year,
-                            false, false, false, false,
-                            false, false, false);
+                    DataModel dataModel = new DataModel(date, day, month, year, false, false, false, false, false, false, "", false, "");
                     kegiatanRef.push().setValue(dataModel);
                 }
             }

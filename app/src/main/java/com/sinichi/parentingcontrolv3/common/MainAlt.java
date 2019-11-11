@@ -79,7 +79,7 @@ public class MainAlt implements d {
                         }
                         dataViewHolder.tvJumlahSholat.setText(String.valueOf(jumlahSholat));
                         dataViewHolder.chkMembantuOrtu.setChecked(dataModel.isMembantuOrangTua());
-                        dataViewHolder.chkSekolah.setChecked(dataModel.isSekolah());
+                        dataViewHolder.chkSekolah.setChecked(dataModel.isLiterasi());
                         dataViewHolder.chkMembantuOrtu.setEnabled(false);
                         dataViewHolder.chkSekolah.setEnabled(false);
                     }
@@ -92,9 +92,14 @@ public class MainAlt implements d {
                     }
                 };
         localRecyclerView.setAdapter(mFirebaseAdapter);
-        localRecyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL,
-                true));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setStackFromEnd(true);
+        localRecyclerView.setLayoutManager(linearLayoutManager);
         localRecyclerView.setHasFixedSize(true);
+        localRecyclerView.scrollToPosition(0);
+        localRecyclerView.setItemViewCacheSize(30);
+        localRecyclerView.setDrawingCacheEnabled(true);
+        localRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     @Override

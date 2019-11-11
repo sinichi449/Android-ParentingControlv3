@@ -1,6 +1,7 @@
 package com.sinichi.parentingcontrolv3.common;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,17 +24,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sinichi.parentingcontrolv3.R;
+import com.sinichi.parentingcontrolv3.activity.AuthenticatePassword;
 import com.sinichi.parentingcontrolv3.activity.LoginActivity;
-import com.sinichi.parentingcontrolv3.activity.MainActivity;
+import com.sinichi.parentingcontrolv3.model.UserModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
+import java.util.List;
+
 public class LoginAlt extends LoginActivity {
+    private List<UserModel> dataUser;
+    private UserModel userModel;
+    private ProgressDialog progressDialog;
 
     public void checkUserCredential(Activity activity, Context context) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         if (user != null) {
-            Intent i = new Intent(context, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            Intent i = new Intent(context, MainActivity.class);
+//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            activity.startActivity(i);
+//            activity.finish();
+            Intent i = new Intent(context, AuthenticatePassword.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
             activity.startActivity(i);
             activity.finish();
         }
@@ -80,12 +92,17 @@ public class LoginAlt extends LoginActivity {
     public void getRequestCodeAndLogin(Context context, Activity activity, int requestCode, Intent data) {
         if (requestCode == Constant.RC_SIGN_IN) { // 9001 == 9001 true
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Menghubungkan dengan cloud");
+            progressDialog.show();
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 assert account != null;
                 firebaseAuthWithGoogle(context, this, account);
             } else {
                 Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         }
     }
@@ -97,12 +114,19 @@ public class LoginAlt extends LoginActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
+                            progressDialog.dismiss();
                             Toast.makeText(context, "Authentication Failed", Toast.LENGTH_SHORT).show();
                         } else {
-                            context.startActivity(new Intent(context, MainActivity.class)
+//                            context.startActivity(new Intent(context, MainActivity.class)
+//                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+//                                            Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                            activity.finish();
+                            progressDialog.dismiss();
+                            context.startActivity(new Intent(context, AuthenticatePassword.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
                                             Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK));
                             activity.finish();
+
                         }
                     }
                 });

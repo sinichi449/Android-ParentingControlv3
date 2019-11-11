@@ -1,8 +1,10 @@
-package com.sinichi.parentingcontrolv3;
+package com.sinichi.parentingcontrolv3.activity;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.sinichi.parentingcontrolv3.R;
 
 public class TentangActivity extends AppCompatActivity {
 

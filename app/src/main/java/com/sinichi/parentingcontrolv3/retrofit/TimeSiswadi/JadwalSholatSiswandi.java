@@ -1,8 +1,8 @@
-package com.sinichi.parentingcontrolv3.retrofit;
+package com.sinichi.parentingcontrolv3.retrofit.TimeSiswadi;
 
 import com.google.gson.annotations.SerializedName;
 
-public class JadwalSholat {
+public class JadwalSholatSiswandi {
     @SerializedName("Fajr")
     private String subuh;
 
@@ -18,7 +18,7 @@ public class JadwalSholat {
     @SerializedName("Isha")
     private String isya;
 
-    public JadwalSholat() {
+    public JadwalSholatSiswandi() {
 
     }
 

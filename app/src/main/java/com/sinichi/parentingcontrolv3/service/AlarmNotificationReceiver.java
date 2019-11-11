@@ -32,7 +32,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         builder.setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
                 .setContentTitle("Kamu belum " + waktuSholat + "?")
                 .setContentIntent(pendingIntent)
-                .setContentText("Klik notifikasi ini apabila sudah sholat " + waktuSholat)
+                .setAutoCancel(true)
+                .setContentText("Klik notifikasi ini HANYA JIKA sudah sholat " + waktuSholat)
                 .setDefaults(Notification.DEFAULT_LIGHTS |
                         Notification.DEFAULT_SOUND)
                 .setContentInfo("Info")

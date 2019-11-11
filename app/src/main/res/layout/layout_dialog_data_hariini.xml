@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/layout_rounded">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_header_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status Anda Hari ini"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/arial_rounded"
+            android:textSize="18sp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_status_sholat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/constraint_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp">
+
+        <CheckedTextView
+            android:id="@+id/chktv_subuh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subuh"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <CheckedTextView
+            android:id="@+id/chktv_dhuhur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dhuhur"
+            app:layout_constraintTop_toBottomOf="@id/chktv_subuh"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"/>
+
+        <CheckedTextView
+            android:id="@+id/chktv_ashar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ashar"
+            app:layout_constraintTop_toBottomOf="@id/chktv_dhuhur"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp"/>
+
+        <CheckedTextView
+            android:id="@+id/chktv_maghrib"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Maghrib"
+            app:layout_constraintTop_toBottomOf="@id/chktv_ashar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp"/>
+
+        <CheckedTextView
+            android:id="@+id/chktv_isya"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Isya'"
+            app:layout_constraintTop_toBottomOf="@id/chktv_maghrib"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_membantu_ortu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/constraint_status_sholat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp">
+
+        <CheckedTextView
+            android:id="@+id/chktv_membantu_ortu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Membantu Orang Tua"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/edt_deskripsi_membantu_ortu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/chktv_membantu_ortu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_literasi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/constraint_membantu_ortu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp">
+
+        <CheckedTextView
+            android:id="@+id/chktv_literasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Literasi"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <EditText
+            android:id="@+id/edt_deskripsi_literasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@id/chktv_literasi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -107,23 +107,27 @@ public class ChatAlt {
                     String incomingUsername = friendlyMessage.getName();
                     boolean pengirimSayaSendiri = incomingUsername.equals(currentUsername);
                     boolean pengirimOrangLain = !incomingUsername.equals(currentUsername);
-
+                    ConstraintSet constraintSet = new ConstraintSet();
+                    constraintSet.clone(viewHolder.constraintParent);
                     if (pengirimSayaSendiri) {
                         viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_outgoing_chat);
-                        ConstraintSet constraintSet = new ConstraintSet();
-                        constraintSet.clone(viewHolder.constraintParent);
+//                        constraintSet.clone(viewHolder.constraintParent);
 //                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.END, viewHolder.constraintParent.getId(), ConstraintSet.END);
+//                        constraintSet.clear(viewHolder.constraintLayout.getId(), ConstraintSet.START);
+//                        constraintSet.applyTo(viewHolder.constraintParent);
                         constraintSet.clear(viewHolder.constraintLayout.getId(), ConstraintSet.START);
-                        constraintSet.applyTo(viewHolder.constraintParent);
+                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.END, viewHolder.constraintParent.getId(), ConstraintSet.END);
                     }
                     if (pengirimOrangLain) {
                         viewHolder.constraintLayout.setBackgroundResource(R.drawable.bg_incoming_chat);
-                        ConstraintSet constraintSet = new ConstraintSet();
-                        constraintSet.clone(viewHolder.constraintParent);
+//                        constraintSet.clone(viewHolder.constraintParent);
 //                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.START, viewHolder.constraintParent.getId(), ConstraintSet.START);
+//                        constraintSet.clear(viewHolder.constraintLayout.getId(), ConstraintSet.END);
+//                        constraintSet.applyTo(viewHolder.constraintParent);
                         constraintSet.clear(viewHolder.constraintLayout.getId(), ConstraintSet.END);
-                        constraintSet.applyTo(viewHolder.constraintParent);
+                        constraintSet.connect(viewHolder.constraintLayout.getId(), ConstraintSet.START, viewHolder.constraintParent.getId(), ConstraintSet.START);
                     }
+                    constraintSet.applyTo(viewHolder.constraintParent);
 
                 } else if (friendlyMessage.getImageUrl() != null) {
                     String imageUrl = friendlyMessage.getImageUrl();

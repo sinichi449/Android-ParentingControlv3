@@ -3,12 +3,15 @@ package com.sinichi.parentingcontrolv3.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -82,11 +85,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SetAppearance.setExtendStatusBarWithView(this);
+//        SetAppearance.setExtendStatusBarWithView(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            SetAppearance.setStatusBarColor(this, R.color.colorBlack);
+        }
         SetAppearance.hideNavigationBar(this);
         setContentView(R.layout.activity_maps);
         turnOnGPS();
         initComponents();
+        setHeaderText();
         mapFragment.getMapAsync(this);
         SetAppearance.onBottomNavigationClick(this, this, bottomNavigationView, R.id.menu_map);
     }
@@ -221,6 +228,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (requestCode == Constant.GPS_REQUEST) {
                 isGPS = true;
             }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SetAppearance.hideNavigationBar(this);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        SetAppearance.hideNavigationBar(this);
+    }
+
+    private void setHeaderText() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
+        String username = sharedPreferences.getString(Constant.USERNAME, null);
+        TextView tvHeaderPosition = findViewById(R.id.tv_header_posisi);
+        String header = "";
+        if (username.equals(Constant.USER_ANAK)) {
+            header = "Posisi Kamu saat ini";
+            tvHeaderPosition.setText(header);
+        } else if (username.equals(Constant.USER_ORANG_TUA)) {
+            header = "Posisi Anak Anda saat ini";
+            tvHeaderPosition.setText(header);
         }
     }
 }

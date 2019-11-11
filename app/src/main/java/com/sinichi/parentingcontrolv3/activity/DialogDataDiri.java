@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,7 +29,7 @@ import com.sinichi.parentingcontrolv3.util.Constant;
 
 import static com.sinichi.parentingcontrolv3.activity.ProfileActivity.isValidTextView;
 
-public class DialogDataDiri {
+public class DialogDataDiri extends LoginActivity {
     private Context context;
     private LayoutInflater layoutInflater;
     private LoginActivity loginActivity;
@@ -39,7 +42,9 @@ public class DialogDataDiri {
     private Button btnSubmit, btnAdminMode;
     private Spinner spinner, spinnerTanggal, spinnerBulan, spinnerTahun;
     private AlertDialog.Builder builder;
+    private AlertDialog alertDialog;
     public ProgressDialog progressDialog;
+    private EditText edtTanggalLahir;
 
     public DialogDataDiri(Context context) {
         this.context = context;
@@ -58,17 +63,16 @@ public class DialogDataDiri {
     void launch() {
         builder = new AlertDialog.Builder(context);
         dialogView = layoutInflater.inflate(R.layout.temp_layout_isi_data_diri, null);
-        builder.setView(dialogView)
-                .setCancelable(false);
-        initComponents();
+        builder.setView(dialogView);
+        initComponent();
         onDialogPositiveButton();
-        onDialogNegativeButton();
-        AlertDialog alertDialog = builder.create();
+//        onDialogNegativeButton();
+        alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
 
-    private void initComponents() {
+    private void initComponent() {
         spinner = dialogView.findViewById(R.id.spinnner);
         ImageView imgDataDiri = dialogView.findViewById(R.id.head);
         Glide.with(dialogView)
@@ -97,11 +101,30 @@ public class DialogDataDiri {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         btnSubmit = dialogView.findViewById(R.id.btn_submit);
-        btnAdminMode = dialogView.findViewById(R.id.btn_admin_mode);
-        spinnerTanggal = dialogView.findViewById(R.id.spinner_tanggal);
-        spinnerBulan = dialogView.findViewById(R.id.spinner_bulan);
-        spinnerTahun = dialogView.findViewById(R.id.spinner_tahun);
+        edtTanggalLahir = dialogView.findViewById(R.id.edt_tanggal_lahir);
 
+        edtTanggalLahir.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // 01-01-1990
+                if (s.length() == 2) {
+                    edtTanggalLahir.append("-");
+                } else if (s.length() == 5) {
+                    edtTanggalLahir.append("-");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+//        btnAdminMode = dialogView.findViewById(R.id.btn_admin_mode);
 
     }
 
@@ -114,16 +137,18 @@ public class DialogDataDiri {
                 sekolahPekerjaan = tvSekolahPekerjaan.getText().toString();
                 nomorTelpon = tvNomorTelepon.getText().toString();
                 gender = spinner.getSelectedItem().toString();
+                tanggalLahir = edtTanggalLahir.getText().toString();
                 Log.e("Spinner", gender);
                 // TODO: Check user input
                 if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
-                        && isValidTextView(tvNomorTelepon) && isValidTextView(tvSekolahPekerjaan)) {
+                        && isValidTextView(tvNomorTelepon) && isValidTextView(tvSekolahPekerjaan) && isValidTextView(edtTanggalLahir)) {
                     putDataToSharedPrefs();
-                    progressDialog = new ProgressDialog(context);
-                    progressDialog.setMessage("Connecting to Cloud...");
-                    progressDialog.show();
+//                    progressDialog = new ProgressDialog(context);
+//                    progressDialog.setMessage("Connecting to Cloud...");
+//                    progressDialog.show();
                     Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     loginActivity.startActivityForResult(signIntent, Constant.RC_SIGN_IN);
+                    alertDialog.dismiss();
                 } else {
                     Toast.makeText(context, "Mohon isi kolom yang kosong", Toast.LENGTH_LONG)
                             .show();
@@ -132,18 +157,6 @@ public class DialogDataDiri {
         });
     }
 
-    private void onDialogNegativeButton() {
-        btnAdminMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginActivity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient),
-                        Constant.RC_SIGN_IN);
-                ProgressDialog progressDialog = new ProgressDialog(context);
-                progressDialog.setMessage("Connecting to Cloud...");
-                progressDialog.show();
-            }
-        });
-    }
 
     private void putDataToSharedPrefs() {
         SharedPreferences.Editor editor = sharedPrefs.edit();

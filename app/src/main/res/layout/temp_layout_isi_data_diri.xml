@@ -36,6 +36,14 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nama"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:layout_marginStart="5dp"/>
+
                 <EditText
                     android:id="@+id/txt_name"
                     android:layout_width="match_parent"
@@ -44,10 +52,42 @@
                     android:hint="Masukkan nama"
                     android:layout_marginTop="8dp"/>
 
-                <Spinner
-                    android:id="@+id/spinnner"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+                    android:layout_height="wrap_content"
+                    android:text="Jenis kelamin"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="12dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorBlack"/>
+
+                <RadioGroup
+                    android:id="@+id/radiogroup_Gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Laki-laki" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perempuan" />
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/tv_sekolah_pekerjaan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Status"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="5dp"/>
 
                 <EditText
                     android:id="@+id/edt_sekolah_pekerjaan"
@@ -55,13 +95,31 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Alamat rumah"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="5dp"/>
+
                 <EditText
                     android:id="@+id/txt_alamat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:hint="Masukkan alamat"
+                    android:hint="Masukkan Alamat"
                     android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nomor Telepon"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="5dp"/>
 
                 <EditText
                     android:id="@+id/txt_no_telp"
@@ -99,19 +157,29 @@
 
                 <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tanggal Lahir"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"/>
+
                 <EditText
                     android:id="@+id/edt_tanggal_lahir"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
                     android:hint="Contoh : 01-01-1990"
-                    android:maxLength="10"/>
+                    android:maxLength="10" />
 
                 <Button
                     android:id="@+id/btn_submit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Submit"
+                    android:text="Kirim data"
                     android:layout_marginTop="8dp"
                     android:background="@color/colorSkyBlue"
                     android:textColor="@color/colorWhite"

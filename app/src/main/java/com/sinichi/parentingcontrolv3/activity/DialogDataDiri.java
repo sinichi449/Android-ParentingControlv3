@@ -11,10 +11,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,13 +39,14 @@ public class DialogDataDiri extends LoginActivity {
             tanggalLahir;
     private SharedPreferences sharedPrefs;
     private View dialogView;
-    private TextView tvNama, tvAlamat, tvNomorTelepon, tvSekolahPekerjaan;
+    private TextView tvNama, tvAlamat, tvNomorTelepon, edtSekolahPekerjaan, tvSekolahPekerjaan;
     private Button btnSubmit, btnAdminMode;
     private Spinner spinner, spinnerTanggal, spinnerBulan, spinnerTahun;
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
     public ProgressDialog progressDialog;
     private EditText edtTanggalLahir;
+    private RadioGroup rgJenisKelamin;
 
     public DialogDataDiri(Context context) {
         this.context = context;
@@ -73,36 +75,32 @@ public class DialogDataDiri extends LoginActivity {
     }
 
     private void initComponent() {
-        spinner = dialogView.findViewById(R.id.spinnner);
         ImageView imgDataDiri = dialogView.findViewById(R.id.head);
         Glide.with(dialogView)
                 .load(R.drawable.bg2)
                 .into(imgDataDiri);
         tvNama = dialogView.findViewById(R.id.txt_name);
 
-        tvSekolahPekerjaan = dialogView.findViewById(R.id.edt_sekolah_pekerjaan);
+        tvSekolahPekerjaan = dialogView.findViewById(R.id.tv_sekolah_pekerjaan);
+        edtSekolahPekerjaan = dialogView.findViewById(R.id.edt_sekolah_pekerjaan);
         String username = loginActivity.username;
         String anak = Constant.USER_ANAK;
         String orangTua = Constant.USER_ORANG_TUA;
         if (!username.equals("") && username.equals(anak)) {
-            tvSekolahPekerjaan.setHint("Masukkan sekolah");
+            tvSekolahPekerjaan.setText("Asal sekolah");
+            edtSekolahPekerjaan.setHint("Masukkan sekolah");
         } else if (!username.equals("") && username.equals(orangTua)) {
-            tvSekolahPekerjaan.setHint("Masukkan pekerjaan");
+            tvSekolahPekerjaan.setText("Pekerjaan");
+            edtSekolahPekerjaan.setHint("Masukkan pekerjaan");
         } else {
             Log.e("TextViewSekolah", username);
         }
 
         tvAlamat = dialogView.findViewById(R.id.txt_alamat);
         tvNomorTelepon = dialogView.findViewById(R.id.txt_no_telp);
-
-        // Spinner string array
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-                R.array.jenis_kelamin, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        rgJenisKelamin = dialogView.findViewById(R.id.radiogroup_Gender);
         btnSubmit = dialogView.findViewById(R.id.btn_submit);
         edtTanggalLahir = dialogView.findViewById(R.id.edt_tanggal_lahir);
-
         edtTanggalLahir.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -133,15 +131,17 @@ public class DialogDataDiri extends LoginActivity {
             @Override
             public void onClick(View v) {
                 nama = tvNama.getText().toString();
+                int idRadioButtonJenisKelamin = rgJenisKelamin.getCheckedRadioButtonId();
+                RadioButton rbJenisKelamin = dialogView.findViewById(idRadioButtonJenisKelamin);
+                gender = rbJenisKelamin.getText().toString();
                 alamat = tvAlamat.getText().toString();
-                sekolahPekerjaan = tvSekolahPekerjaan.getText().toString();
+                sekolahPekerjaan = edtSekolahPekerjaan.getText().toString();
                 nomorTelpon = tvNomorTelepon.getText().toString();
-                gender = spinner.getSelectedItem().toString();
                 tanggalLahir = edtTanggalLahir.getText().toString();
-                Log.e("Spinner", gender);
                 // TODO: Check user input
                 if (isValidTextView(tvNama) && isValidTextView(tvAlamat) && isValidTextView(tvNomorTelepon)
-                        && isValidTextView(tvNomorTelepon) && isValidTextView(tvSekolahPekerjaan) && isValidTextView(edtTanggalLahir)) {
+                        && isValidTextView(tvNomorTelepon) && isValidTextView(edtSekolahPekerjaan) && isValidTextView(edtTanggalLahir)
+                        && rgJenisKelamin.getCheckedRadioButtonId() != -1) {
                     putDataToSharedPrefs();
 //                    progressDialog = new ProgressDialog(context);
 //                    progressDialog.setMessage("Connecting to Cloud...");

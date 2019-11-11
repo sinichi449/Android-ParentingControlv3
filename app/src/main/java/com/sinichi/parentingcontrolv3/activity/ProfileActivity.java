@@ -136,9 +136,13 @@ public class ProfileActivity extends AppCompatActivity {
     private void setSekolahOrPekerjaanIcon() {
         String username = sharedPreferences.getString(Constant.USERNAME, null);
         String userOrangTua = Constant.USER_ORANG_TUA;
+        String userAnak = Constant.USER_ANAK;
         if (username.equals(userOrangTua)) {
             ImageView imgSekolahOrPekerjaan = findViewById(R.id.img_sekolah);
             imgSekolahOrPekerjaan.setImageResource(R.drawable.kerja);
+        } else if (username.equals(userAnak)) {
+            ImageView imgSekolahOrPekerjaan = findViewById(R.id.img_sekolah);
+            imgSekolahOrPekerjaan.setImageResource(R.drawable.sekolah);
         }
     }
 

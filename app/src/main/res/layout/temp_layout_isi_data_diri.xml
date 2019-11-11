@@ -4,11 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_rounded">
+    android:background="@drawable/layout_rounded"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -18,14 +19,50 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/head"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:src="@drawable/bg2"
+                    android:layout_height="200dp"
+                    android:src="@drawable/bulet"
                     android:layout_marginStart="-100dp"
                     android:layout_marginEnd="-100dp"
-                    android:layout_marginTop="-100dp"/>
+                    android:layout_marginTop="-10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/welcome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Selamat Datang Di"
+                        android:fontFamily="@font/arial_rounded"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/head"
+                        app:layout_constraintBottom_toBottomOf="@id/head"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Parenting Control"
+                        android:fontFamily="@font/arial"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorBlue"
+                        app:layout_constraintTop_toBottomOf="@id/welcome"
+                        app:layout_constraintStart_toStartOf="@id/welcome"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 
@@ -42,7 +79,8 @@
                     android:text="Nama"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
-                    android:layout_marginStart="5dp"/>
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"/>
 
                 <EditText
                     android:id="@+id/txt_name"

@@ -9,18 +9,18 @@
     <ImageView
         android:id="@+id/bg_us"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="325dp"
         android:background="@drawable/bg_us"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="-25dp"
-        android:layout_marginEnd="-25dp"/>
+        android:layout_marginStart="-75dp"
+        android:layout_marginEnd="-75dp"/>
 
     <ImageView
         android:id="@+id/top_us"
-        android:layout_width="175dp"
-        android:layout_height="35dp"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
         android:background="@drawable/top_us"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,10 +34,11 @@
         android:text="Tentang Kami"
         android:fontFamily="@font/arial_rounded"
         android:textColor="@color/colorWhite"
+        android:textSize="16sp"
         app:layout_constraintTop_toTopOf="@+id/top_us"
         app:layout_constraintStart_toStartOf="@+id/top_us"
         app:layout_constraintEnd_toEndOf="@+id/top_us"
-        android:layout_marginTop="2dp"/>
+        android:layout_marginTop="7dp"/>
 
     <ImageView
         android:layout_width="300dp"
@@ -104,11 +105,43 @@
         android:id="@+id/gmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="bagusekasaputra460@gmail.com"
+        android:text="parentingcontrol8@gmail.com"
         android:textColor="@color/colorGrey"
         app:layout_constraintStart_toStartOf="@+id/cp"
         app:layout_constraintBottom_toBottomOf="@+id/img_contact"
         app:layout_constraintTop_toBottomOf="@+id/cp"/>
+
+    <ImageView
+        android:id="@+id/img_author"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/author"
+        app:layout_constraintTop_toBottomOf="@+id/img_contact"
+        app:layout_constraintStart_toStartOf="@+id/img_contact"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/auth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Author"
+        android:fontFamily="@font/arial"
+        android:textColor="@color/colorBlack"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/img_author"
+        app:layout_constraintTop_toTopOf="@+id/img_author"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="bagusekasaputra460@gmail.com"
+        android:textColor="@color/colorGrey"
+        app:layout_constraintStart_toStartOf="@+id/auth"
+        app:layout_constraintBottom_toBottomOf="@+id/img_author"
+        app:layout_constraintTop_toBottomOf="@+id/auth"
+
 
     <TextView
         android:id="@+id/saran"

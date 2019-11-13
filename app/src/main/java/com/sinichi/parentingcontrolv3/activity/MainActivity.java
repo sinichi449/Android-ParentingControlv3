@@ -51,6 +51,7 @@ import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.adapter.MainViewPagerAdapter;
 import com.sinichi.parentingcontrolv3.common.MainAlt;
 import com.sinichi.parentingcontrolv3.model.DataModel;
+import com.sinichi.parentingcontrolv3.service.AnakTelahSholatNotificationService;
 import com.sinichi.parentingcontrolv3.service.ChatNotificationReceiver;
 import com.sinichi.parentingcontrolv3.service.LocationService;
 import com.sinichi.parentingcontrolv3.util.Constant;
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 //        tabLayout.addOnTabSelectedListener(this);
         getNamaKota();
         startLocationService();
+        startAnakTelahSholatNotificationService();
         startChatService();
         // Get user
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -154,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
             flbAdd.setVisibility(View.GONE);
         }
         tabZeroView();
-
     }
 
     public void initComponents() {
@@ -198,6 +199,14 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LocationService.class);
             startService(intent);
             Log.e("Status", "User saat ini " + username);
+        }
+    }
+
+    private void startAnakTelahSholatNotificationService() {
+        String username = sharedPrefs.getString(Constant.USERNAME, null);
+        if (username.equals(Constant.USER_ORANG_TUA)) {
+            Intent intent = new Intent(this, AnakTelahSholatNotificationService.class);
+            startService(intent);
         }
     }
 

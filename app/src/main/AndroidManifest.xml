@@ -76,6 +76,9 @@
         <service
             android:name=".service.ChatNotificationReceiver"
             android:enabled="true" />
+        <service
+            android:name=".service.AnakTelahSholatNotificationService"
+            android:enabled="true" />
     </application>
 
 </manifest>

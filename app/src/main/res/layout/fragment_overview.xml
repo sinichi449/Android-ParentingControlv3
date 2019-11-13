@@ -482,7 +482,6 @@
                    android:fontFamily="@font/arial"
                    android:textColor="@color/colorBlack"
                    android:text="..."
-                   android:textSize="16sp"
                    app:layout_constraintStart_toStartOf="@id/guideline_vertical_kiri"
                    app:layout_constraintEnd_toEndOf="@id/guidline_vertical_kanan"
                    app:layout_constraintTop_toTopOf="@id/guideline_horizontal_atas"

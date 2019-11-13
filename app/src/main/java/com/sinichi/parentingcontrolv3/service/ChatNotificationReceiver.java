@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,19 +24,81 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sinichi.parentingcontrolv3.R;
 import com.sinichi.parentingcontrolv3.activity.ChatActivity;
+import com.sinichi.parentingcontrolv3.model.ChatModel;
 import com.sinichi.parentingcontrolv3.model.TextChatModel;
 import com.sinichi.parentingcontrolv3.util.Constant;
 
+import java.util.Calendar;
+
 public class ChatNotificationReceiver extends Service {
     private String username;
+    private DatabaseReference mDatabaseReference;
+    private FirebaseUser mFirebaseUser;
 
     @Override
     public void onCreate() {
         super.onCreate();
         SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFS, MODE_PRIVATE);
         username = sharedPreferences.getString(Constant.USERNAME, null);
-        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReference.child(mFirebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(Constant.MESSAGES_CHILD)) {
+                    listenChatChild();
+                } else {
+                    newChatChild();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(Constant.TAG, databaseError.getMessage());
+            }
+        });
+
+
+    }
+
+    private String getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        String jamStr, menitStr;
+        int jam = calendar.get(Calendar.HOUR_OF_DAY);
+        if (jam < 10) {
+            jamStr = "0" + jam;
+        } else {
+            jamStr = String.valueOf(jam);
+        }
+
+        int menit = calendar.get(Calendar.MINUTE);
+        if (menit < 10) {
+            menitStr = "0" + menit;
+        } else {
+            menitStr = String.valueOf(menit);
+        }
+        return jamStr + ":" + menitStr;
+    }
+
+    private void newChatChild() {
+        String userOrangTua = Constant.USER_ORANG_TUA;
+        String userAnak = Constant.USER_ANAK;
+        String reverseUsername;
+        ChatModel chatModel;
+        if (username.equals(userOrangTua)) {
+            reverseUsername = userAnak;
+            chatModel = new ChatModel("Hai! disini adalah tempat untuk melakukan pesan singkat kepada Orangtua/Anak, cukup ketikkan pesan yang Anda inginkan pada kolomnya dan klik send.\nSelamat menggunakan!",
+                    reverseUsername, null, null, getCurrentTime());
+        } else {
+            reverseUsername = userOrangTua;
+            chatModel = new ChatModel("Hai! disini adalah tempat untuk melakukan pesan singkat kepada Orangtua/Anak, cukup ketikkan pesan yang Anda inginkan pada kolomnya dan klik send.\nSelamat menggunakan!",
+                    reverseUsername, null, null, getCurrentTime());
+        }
+        mDatabaseReference.child(mFirebaseUser.getUid()).child(Constant.MESSAGES_CHILD).push().setValue(chatModel);
+    }
+
+
+    private void listenChatChild() {
         DatabaseReference messageRef = mDatabaseReference.child(mFirebaseUser.getUid()).child(Constant.MESSAGES_CHILD);
         messageRef.addValueEventListener(new ValueEventListener() {
             @Override

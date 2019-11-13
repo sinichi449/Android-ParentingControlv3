@@ -77,7 +77,7 @@ public class DialogDataDiri extends LoginActivity {
     private void initComponent() {
         ImageView imgDataDiri = dialogView.findViewById(R.id.head);
         Glide.with(dialogView)
-                .load(R.drawable.bg2)
+                .load(R.drawable.bulet)
                 .into(imgDataDiri);
         tvNama = dialogView.findViewById(R.id.txt_name);
 

@@ -58,7 +58,8 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.TentangActivity" />
+        <activity android:name=".activity.TentangActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
         <receiver
             android:name=".service.AlarmNotificationReceiver"

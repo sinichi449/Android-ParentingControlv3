@@ -140,7 +140,7 @@
         android:textColor="@color/colorGrey"
         app:layout_constraintStart_toStartOf="@+id/auth"
         app:layout_constraintBottom_toBottomOf="@+id/img_author"
-        app:layout_constraintTop_toBottomOf="@+id/auth"
+        app:layout_constraintTop_toBottomOf="@+id/auth" />
 
 
     <TextView

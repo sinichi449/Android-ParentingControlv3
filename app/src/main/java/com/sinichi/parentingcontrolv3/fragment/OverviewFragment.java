@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -91,7 +92,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     private String date, day, month, year, locality = "Jakarta", server;
     private TextView tvTanggal, tvHari, tvBulan, tvTahun,
             tvJumlahSholat;
-//    private TextView tvLokasi;
+    private TextView tvLokasi, tvSubuh, tvSyurooq, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
     private CheckBox chkMembantuOrtu, chkSekolah;
 //    private TextView tvSubuh, tvDhuhr, tvAshar, tvMaghrib, tvIsya;
     private SharedPreferences sharedPrefs;
@@ -107,6 +108,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     private String jamSekarang, menitSekarang, waktuSekarang;
     private String jamSubuh, jamSyurooq, jamDhuhr, jamAshar, jamMaghrib, jamIsya, waktuSubuh, waktuDhuhr, waktuAshar, waktuMaghrib, waktuIsya;
     private String formattedJam;
+    private boolean isLocalityAvaiable = false;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -117,7 +119,6 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                              Bundle savedInstanceState) {
         this.inflater = inflater;
         this.container = container;
-
         initComponents();
         listenDataFromCloud();
         getServer();
@@ -125,6 +126,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
         showTodayData();
         getQuotes();
         setOverviewOnClicks();
+        refreshOnSwipe();
 
         return root;
     }
@@ -132,7 +134,7 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     private void initComponents() {
         context = getContext();
         root = inflater.inflate(R.layout.fragment_overview, container, false);
-//        tvLokasi = root.findViewById(R.id.tv_lokasi);
+        tvLokasi = root.findViewById(R.id.tv_lokasi);
         tvTanggal = root.findViewById(R.id.tv_tanggal);
         tvHari = root.findViewById(R.id.tv_hari);
         tvBulan = root.findViewById(R.id.tv_bulan);
@@ -217,10 +219,12 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                         editorJadwal.putString(Constant.NAMA_KOTA, locality);
                         editorJadwal.apply();
                         Log.e(Constant.TAG, "Locality: " + a.get(0).getSubAdminArea());
+                        isLocalityAvaiable = true;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
+                    isLocalityAvaiable = false;
                     Toast.makeText(getContext(), "Akses lokasi terganggu, silakan aktifkan gps Anda lalu restart Aplikasi",
                             Toast.LENGTH_LONG).show();
                     locality = "Jakarta";
@@ -301,12 +305,12 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
                 DataSiswandi dataSiswandi = response.body();
                 JadwalSholatSiswandi jadwalSholatSiswandi = dataSiswandi.getJadwalSholatSiswandi();
                 if (jadwalSholatSiswandi != null) {
-                    TextView tvSubuh = root.findViewById(R.id.tv_subuh);
-                    TextView tvSyurooq = root.findViewById(R.id.tv_syurooq);
-                    TextView tvDhuhr = root.findViewById(R.id.tv_dhuhr);
-                    TextView tvAshar = root.findViewById(R.id.tv_ashar);
-                    TextView tvMaghrib = root.findViewById(R.id.tv_maghrib);
-                    TextView tvIsya = root.findViewById(R.id.tv_isya);
+                    tvSubuh = root.findViewById(R.id.tv_subuh);
+                    tvSyurooq = root.findViewById(R.id.tv_syurooq);
+                    tvDhuhr = root.findViewById(R.id.tv_dhuhr);
+                    tvAshar = root.findViewById(R.id.tv_ashar);
+                    tvMaghrib = root.findViewById(R.id.tv_maghrib);
+                    tvIsya = root.findViewById(R.id.tv_isya);
 
                     tvSubuh.setText(jadwalSholatSiswandi.getSubuh());
                     Log.e(Constant.TAG, jadwalSholatSiswandi.getSubuh());
@@ -349,13 +353,13 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
             public void onResponse(Call<JadwalSholatMuslimSalat> call, Response<JadwalSholatMuslimSalat> response) {
                 List<ItemMuslimSalat> itemMuslimSalats = response.body().getItemMuslimSalats();
                 if (itemMuslimSalats != null) {
-                    TextView tvLokasi = root.findViewById(R.id.tv_lokasi);
-                    TextView tvSubuh = root.findViewById(R.id.tv_subuh);
-                    TextView tvSyurooq = root.findViewById(R.id.tv_syurooq);
-                    TextView tvDhuhr = root.findViewById(R.id.tv_dhuhr);
-                    TextView tvAshar = root.findViewById(R.id.tv_ashar);
-                    TextView tvMaghrib = root.findViewById(R.id.tv_maghrib);
-                    TextView tvIsya = root.findViewById(R.id.tv_isya);
+                    tvLokasi = root.findViewById(R.id.tv_lokasi);
+                    tvSubuh = root.findViewById(R.id.tv_subuh);
+                    tvSyurooq = root.findViewById(R.id.tv_syurooq);
+                    tvDhuhr = root.findViewById(R.id.tv_dhuhr);
+                    tvAshar = root.findViewById(R.id.tv_ashar);
+                    tvMaghrib = root.findViewById(R.id.tv_maghrib);
+                    tvIsya = root.findViewById(R.id.tv_isya);
 
                     jamSubuh = formatTo24Hour(itemMuslimSalats.get(0).getSubuh());
                     jamSyurooq = formatTo24Hour(itemMuslimSalats.get(0).getSyurooq());
@@ -678,6 +682,39 @@ public class OverviewFragment extends Fragment implements ValueEventListener {
     public void onStop() {
         super.onStop();
         progressDialog.dismiss();
+    }
+
+    private void refreshOnSwipe() {
+        final SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                String lokasiSaatIni = sharedPrefs.getString(Constant.NAMA_KOTA, "Jakarta");
+                getLocalityName();
+                getServer();
+                if (server.equals("siswandi")) {
+                    getJadwalSholatSiswandi(lokasiSaatIni);
+                } else {
+                    getJadwalSholatMuslimSalat(lokasiSaatIni);
+                }
+
+                String subuh = sharedPrefs.getString(Constant.WAKTU_SUBUH, null);
+                String dhuhr = sharedPrefs.getString(Constant.WAKTU_DHUHR, null);
+                String ashar = sharedPrefs.getString(Constant.WAKTU_ASHAR, null);
+                String maghrib = sharedPrefs.getString(Constant.WAKTU_MAGHRIB, null);
+                String isya = sharedPrefs.getString(Constant.WAKTU_ISYA, null);
+
+                tvLokasi.setText(lokasiSaatIni);
+                tvSubuh.setText(subuh);
+                tvDhuhr.setText(dhuhr);
+                tvAshar.setText(ashar);
+                tvMaghrib.setText(maghrib);
+                tvIsya.setText(isya);
+
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
     }
 
 }

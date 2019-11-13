@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 final Context context = MainActivity.this;
                 final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
                 dialogBuilder.setView(dialogView);
-                dialogBuilder.setCancelable(false);
+//                dialogBuilder.setCancelable(false);
 
                 final RadioGroup rgMembantuOrtu = dialogView.findViewById(R.id.rg_membantu_ortu);
                 final RadioGroup rgLiterasi = dialogView.findViewById(R.id.rg_literasi);

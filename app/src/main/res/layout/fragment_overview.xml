@@ -9,6 +9,11 @@
     tools:context=".fragment.OverviewFragment"
     android:layout_marginBottom="?attr/actionBarSize">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -474,7 +479,7 @@
                    android:id="@+id/tv_quotes"
                    android:layout_width="0dp"
                    android:layout_height="wrap_content"
-                   android:fontFamily="@font/arial_narrow_7"
+                   android:fontFamily="@font/arial"
                    android:textColor="@color/colorBlack"
                    android:text="..."
                    android:textSize="16sp"
@@ -504,5 +509,6 @@
        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>
